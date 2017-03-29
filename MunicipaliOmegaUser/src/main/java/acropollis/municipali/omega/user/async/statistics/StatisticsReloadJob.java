@@ -35,7 +35,7 @@ public class StatisticsReloadJob {
                 statisitcs.get(article.getId()).put(question.getId(), new HashMap<>());
 
                 for (Answer answer : question.getAnswers()) {
-                    long votesAmount = userAnswerDao.countAnswersAmount(
+                    long votesAmount = userAnswerDao.countQuestionAnswersAmount(
                             article.getId(),
                             question.getId(),
                             answer.getId()

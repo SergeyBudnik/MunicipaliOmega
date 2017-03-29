@@ -17,4 +17,6 @@ public class UserAnswerModel {
     private UserAnswerModelId id;
     @Column(name = "ANSWER_ID")
     private long answerId;
+//    @Column(name = "CREATION_DATE")
+//    private long creationDate;
 }

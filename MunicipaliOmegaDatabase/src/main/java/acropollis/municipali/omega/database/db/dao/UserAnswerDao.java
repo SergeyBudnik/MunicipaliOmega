@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserAnswerDao extends JpaRepository<UserAnswerModel, UserAnswerModelId> {
     @Query(
@@ -15,7 +17,19 @@ public interface UserAnswerDao extends JpaRepository<UserAnswerModel, UserAnswer
             "a.id.questionId = :questionId and " +
             "a.answerId = :answerId"
     )
-    long countAnswersAmount(
+    long countQuestionAnswersAmount(
+            @Param("articleId") long articleId,
+            @Param("questionId") long questionId,
+            @Param("answerId") long answerId
+    );
+
+    @Query(
+            "select count(*) from UserAnswerModel a where " +
+            "a.id.articleId = :articleId and " +
+            "a.id.questionId = :questionId and " +
+            "a.answerId = :answerId"
+    )
+    long countStatistics(
             @Param("articleId") long articleId,
             @Param("questionId") long questionId,
             @Param("answerId") long answerId
