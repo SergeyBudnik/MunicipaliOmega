@@ -33,7 +33,7 @@ public class AllArticlesReloadJob {
     private long lastReloadDate = -1;
 
     @Scheduled(fixedDelay = 5 * 1000)
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = true)
     public void reload() {
         long newLastReloadDate = new Date().getTime();
 

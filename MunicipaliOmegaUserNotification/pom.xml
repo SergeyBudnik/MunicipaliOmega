@@ -11,10 +11,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>user</artifactId>
+    <artifactId>user.notification</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>MunicipaliOmegaAdmin</name>
+    <name>MunicipaliOmegaUserNotification</name>
 
     <dependencies>
         <dependency>
@@ -25,7 +25,7 @@
     </dependencies>
 
     <build>
-        <finalName>MunicipaliOmegaAdmin</finalName>
+        <finalName>MunicipaliOmegaUserNotification</finalName>
 
         <plugins>
             <plugin>
@@ -38,5 +38,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
