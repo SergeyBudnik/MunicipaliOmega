@@ -1,6 +1,5 @@
 package acropollis.municipali.omega.database.config;
 
-import acropollis.municipali.omega.common.config.PropertiesConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-import static acropollis.municipali.omega.common.config.PropertiesConfig.*;
+import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
 
 @Configuration
