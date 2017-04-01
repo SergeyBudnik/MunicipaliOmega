@@ -22,48 +22,48 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 @Qualifier(Qualifiers.REQUEST_VALIDATION)
 @Service
-public class ArticleRequestValidationRestServiceImpl implements ArticleRestService {
+public class AdminArticleRequestValidationRestServiceImpl implements AdminArticleRestService {
     @Qualifier(Qualifiers.REQUEST_PROCESSING)
     @Autowired
-    private ArticleRestService articleRestService;
+    private AdminArticleRestService adminArticleRestService;
 
     @Override
     public Collection<Article> getAllArticles(CustomerInfo user) {
-        return articleRestService.getAllArticles(user);
+        return adminArticleRestService.getAllArticles(user);
     }
 
     @Override
     public Article getArticle(CustomerInfo user, long id) {
-        return articleRestService.getArticle(user, id);
+        return adminArticleRestService.getArticle(user, id);
     }
 
     @Override
     public byte [] getArticleIcon(CustomerInfo user, long id, int size) {
-        return articleRestService.getArticleIcon(user, id, size);
+        return adminArticleRestService.getArticleIcon(user, id, size);
     }
 
     @Override
     public byte [] getAnswerIcon(CustomerInfo user, long articleId, long questionId, long answerId, int size) {
-        return articleRestService.getAnswerIcon(user, articleId, questionId, answerId, size);
+        return adminArticleRestService.getAnswerIcon(user, articleId, questionId, answerId, size);
     }
 
     @Override
     public long createArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
         checkArticleValid(articleWithIcon);
 
-        return articleRestService.createArticle(user, articleWithIcon);
+        return adminArticleRestService.createArticle(user, articleWithIcon);
     }
 
     @Override
     public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
         checkArticleValid(articleWithIcon);
 
-        articleRestService.updateArticle(user, articleWithIcon);
+        adminArticleRestService.updateArticle(user, articleWithIcon);
     }
 
     @Override
     public void deleteArticle(CustomerInfo user, long id) {
-        articleRestService.deleteArticle(user, id);
+        adminArticleRestService.deleteArticle(user, id);
     }
 
     private void checkArticleValid(ArticleWithIcon article) {

@@ -5,7 +5,7 @@ import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
 
 import java.util.Map;
 
-public interface BrandingRestService {
+public interface AdminBrandingRestService {
     byte [] getBackground(CustomerInfo user, int w, int h);
     void setBackground(CustomerInfo user, Map<Tuple<Integer, Integer>, byte[]> background);
 

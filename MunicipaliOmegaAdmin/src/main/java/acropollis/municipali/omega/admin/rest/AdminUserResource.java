@@ -2,8 +2,8 @@ package acropollis.municipali.omega.admin.rest;
 
 import acropollis.municipali.omega.admin.data.dto.user.UserDetailsInfo;
 import acropollis.municipali.omega.admin.data.dto.user.UserId;
-import acropollis.municipali.omega.admin.rest_service.user.UserRestService;
-import acropollis.municipali.omega.admin.service.authentication.AuthenticationService;
+import acropollis.municipali.omega.admin.rest_service.user.AdminUserRestService;
+import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "User", description = "PROTECTED")
-public class UserResource {
+public class AdminUserResource {
     @Autowired
-    private AuthenticationService authenticationService;
+    private AdminAuthenticationService adminAuthenticationService;
     @Autowired
-    private UserRestService userRestService;
+    private AdminUserRestService adminUserRestService;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public UserDetailsInfo getUser(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,
             @RequestBody UserId userId
     ) {
-        return userRestService.getUserDetails(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        return adminUserRestService.getUserDetails(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 userId
         );
     }

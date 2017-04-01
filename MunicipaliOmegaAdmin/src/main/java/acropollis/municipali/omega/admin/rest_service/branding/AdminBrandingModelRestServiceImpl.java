@@ -15,7 +15,7 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
-public class BrandingModelRestServiceImpl implements BrandingRestService {
+public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestService {
     @Autowired
     private StandaloneImageStorageService standaloneImageStorageService;
 

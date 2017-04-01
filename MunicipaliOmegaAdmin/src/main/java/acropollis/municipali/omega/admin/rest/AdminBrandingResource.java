@@ -2,8 +2,8 @@ package acropollis.municipali.omega.admin.rest;
 
 import acropollis.municipali.omega.common.dto.common.Tuple;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.admin.rest_service.branding.BrandingRestService;
-import acropollis.municipali.omega.admin.service.authentication.AuthenticationService;
+import acropollis.municipali.omega.admin.rest_service.branding.AdminBrandingRestService;
+import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,13 +16,13 @@ import java.util.Collections;
 @RestController
 @RequestMapping("/branding")
 @Api(tags = "Branding", description = "PROTECTED")
-public class BrandingResource {
+public class AdminBrandingResource {
     @Autowired
     @Qualifier(Qualifiers.REQUEST_PROCESSING)
-    private BrandingRestService brandingRestService;
+    private AdminBrandingRestService adminBrandingRestService;
     
     @Autowired
-    private AuthenticationService authenticationService;
+    private AdminAuthenticationService adminAuthenticationService;
     
     @RequestMapping(value = "/background/{w}/{h}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte [] getBackground(
@@ -30,8 +30,8 @@ public class BrandingResource {
             @PathVariable int w,
             @PathVariable int h
     ) {
-        return brandingRestService.getBackground(
-                authenticationService.getCustomerInfoOrThrow(authToken), w, h
+        return adminBrandingRestService.getBackground(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken), w, h
         );
     }
 
@@ -40,8 +40,8 @@ public class BrandingResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody byte [] background
     ) {
-        brandingRestService.setBackground(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        adminBrandingRestService.setBackground(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 Collections.singletonMap(new Tuple<>(-1, -1), background)
         );
     }
@@ -51,8 +51,8 @@ public class BrandingResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable int size
     ) {
-        return brandingRestService.getIcon(
-                authenticationService.getCustomerInfoOrThrow(authToken), size
+        return adminBrandingRestService.getIcon(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken), size
         );
     }
 
@@ -61,8 +61,8 @@ public class BrandingResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody byte [] icon
     ) {
-        brandingRestService.setIcon(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        adminBrandingRestService.setIcon(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 Collections.singletonMap(new Tuple<>(-1, -1), icon)
         );
     }

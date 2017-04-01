@@ -1,10 +1,10 @@
 package acropollis.municipali.omega.admin.rest;
 
 import acropollis.municipali.omega.admin.article.AddOrUpdateArticleRequest;
+import acropollis.municipali.omega.admin.rest_service.article.AdminArticleRestService;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.admin.rest_service.article.ArticleRestService;
-import acropollis.municipali.omega.admin.service.authentication.AuthenticationService;
+import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,19 +17,19 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/article")
 @Api(tags = "Article", description = "PROTECTED")
-public class ArticleResource {
+public class AdminArticleResource {
     @Autowired
     @Qualifier(Qualifiers.REQUEST_VALIDATION)
-    private ArticleRestService articleRestService;
+    private AdminArticleRestService adminArticleRestService;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private AdminAuthenticationService adminAuthenticationService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public Collection<Article> getAllArticles(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
-        return articleRestService.getAllArticles(authenticationService.getCustomerInfoOrThrow(authToken));
+        return adminArticleRestService.getAllArticles(adminAuthenticationService.getCustomerInfoOrThrow(authToken));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -37,8 +37,8 @@ public class ArticleResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
     ) {
-        return articleRestService.getArticle(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        return adminArticleRestService.getArticle(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 id
         );
     }
@@ -53,8 +53,8 @@ public class ArticleResource {
             @PathVariable long id,
             @PathVariable int size
     ) {
-        return articleRestService.getArticleIcon(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        return adminArticleRestService.getArticleIcon(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 id,
                 size
         );
@@ -72,8 +72,8 @@ public class ArticleResource {
             @PathVariable long answerId,
             @PathVariable int size
     ) {
-        return articleRestService.getAnswerIcon(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        return adminArticleRestService.getAnswerIcon(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 articleId,
                 questionId,
                 answerId,
@@ -86,8 +86,8 @@ public class ArticleResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody AddOrUpdateArticleRequest request
     ) {
-        return articleRestService.createArticle(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        return adminArticleRestService.createArticle(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 request.getArticle().toDto()
         );
     }
@@ -98,8 +98,8 @@ public class ArticleResource {
             @PathVariable long id,
             @RequestBody AddOrUpdateArticleRequest request
     ) {
-        articleRestService.updateArticle(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        adminArticleRestService.updateArticle(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 request.getArticle().toDto(id)
         );
     }
@@ -109,8 +109,8 @@ public class ArticleResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
     ) {
-        articleRestService.deleteArticle(
-                authenticationService.getCustomerInfoOrThrow(authToken),
+        adminArticleRestService.deleteArticle(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 id
         );
     }

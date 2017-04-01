@@ -27,7 +27,7 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
-public class ArticleModelRestServiceImpl implements ArticleRestService {
+public class AdminArticleModelRestServiceImpl implements AdminArticleRestService {
     @Autowired
     private ArticleDao articleDao;
     @Autowired

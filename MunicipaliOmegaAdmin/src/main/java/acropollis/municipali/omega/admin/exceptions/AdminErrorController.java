@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
-public class ErrorController {
+public class AdminErrorController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public void handleHttpMessageNotReadableException(HttpServletResponse response, Exception e) throws Exception {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

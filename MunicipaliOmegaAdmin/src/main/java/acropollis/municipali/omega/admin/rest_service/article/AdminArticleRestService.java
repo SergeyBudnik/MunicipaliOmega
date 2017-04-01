@@ -6,7 +6,7 @@ import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
 
 import java.util.Collection;
 
-public interface ArticleRestService {
+public interface AdminArticleRestService {
     Collection<Article> getAllArticles(CustomerInfo user);
     Article getArticle(CustomerInfo user, long id);
     byte [] getArticleIcon(CustomerInfo user, long id, int size);

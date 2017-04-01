@@ -17,14 +17,14 @@ import static acropollis.municipali.omega.common.utils.ImageUtils.*;
 
 @Service
 @Qualifier(Qualifiers.REQUEST_PROCESSING)
-public class BrandingRequestProcessingRestServiceImpl implements BrandingRestService {
+public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrandingRestService {
     @Autowired
     @Qualifier(Qualifiers.MODEL)
-    private BrandingRestService brandingRestService;
+    private AdminBrandingRestService adminBrandingRestService;
 
     @Override
     public byte [] getBackground(CustomerInfo user, int w, int h) {
-        return brandingRestService.getBackground(user, w, h);
+        return adminBrandingRestService.getBackground(user, w, h);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BrandingRequestProcessingRestServiceImpl implements BrandingRestSer
             processedBackground.put(new Tuple<>(1080, 1920), toBytes(scaleAndCropImage(src, 1080, 1920)));
             processedBackground.put(new Tuple<>(1440, 2560), toBytes(scaleAndCropImage(src, 1440, 2560)));
 
-            brandingRestService.setBackground(user, processedBackground);
+            adminBrandingRestService.setBackground(user, processedBackground);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +49,7 @@ public class BrandingRequestProcessingRestServiceImpl implements BrandingRestSer
 
     @Override
     public byte [] getIcon(CustomerInfo user, int size) {
-        return brandingRestService.getIcon(user, size);
+        return adminBrandingRestService.getIcon(user, size);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class BrandingRequestProcessingRestServiceImpl implements BrandingRestSer
             processedIcon.put(new Tuple<>(300, 300), toBytes(scaleImageByWidth(src, 300)));
             processedIcon.put(new Tuple<>(400, 400), toBytes(scaleImageByWidth(src, 400)));
 
-            brandingRestService.setIcon(user, processedIcon);
+            adminBrandingRestService.setIcon(user, processedIcon);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
