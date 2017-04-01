@@ -10,6 +10,6 @@ import java.util.List;
 public interface ArticleDao extends JpaRepository<ArticleModel, Long> {
     List<ArticleModel> findByIsDeleted(boolean isDeleted);
     List<ArticleModel> findByLastUpdateDateGreaterThan(long lastUpdateDate);
-    List<ArticleModel> findByReleaseDateLessThanEqualAndReleaseDateGreaterThanEqualAndIsDeleted(long from, long to, boolean isDeleted);
+    List<ArticleModel> findByReleaseDateLessThanAndReleaseDateGreaterThanEqualAndIsDeleted(long from, long to, boolean isDeleted);
     ArticleModel findOneByIdAndIsDeleted(long id, boolean isDeleted);
 }
