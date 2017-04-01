@@ -1,4 +1,4 @@
-package acropollis.municipali.omega;
+package acropollis.municipali.omega.tests;
 
 import acropollis.municipali.omega.user.config.UserDatabaseConfig;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +9,8 @@ import org.springframework.context.annotation.FilterType;
 @ComponentScan(
         basePackages = {
                 "acropollis.municipali.omega.admin",
-                "acropollis.municipali.omega.database"
+                "acropollis.municipali.omega.database",
+                "acropollis.municipali.omega.tests.steps"
         },
 
         excludeFilters = {

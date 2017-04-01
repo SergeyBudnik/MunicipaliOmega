@@ -43,7 +43,7 @@ public class AdminDatabaseConfig {
         Properties jpaProperties = new Properties();
 
         jpaProperties.put("hibernate.dialect", config.getString("database.dialect"));
-        jpaProperties.put("hibernate.hbm2ddl.auto", "update");//config.getString("database.startupAction"));
+        jpaProperties.put("hibernate.hbm2ddl.auto", config.getString("database.startupAction"));
         jpaProperties.put("hibernate.show_sql", config.getString("database.showSql"));
         jpaProperties.put("hibernate.format_sql", config.getString("database.formatSql"));
         jpaProperties.put("hibernate.id.new_generator_mappings", "false");
