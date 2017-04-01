@@ -5,7 +5,7 @@ import acropollis.municipali.omega.admin.data.dto.customer.Customer;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface CustomerService {
+public interface AdminCustomerService {
     Optional<Customer> getCustomer(String login);
     Optional<Customer> getCustomer(String login, String password);
     Collection<Customer> getAllCustomers();

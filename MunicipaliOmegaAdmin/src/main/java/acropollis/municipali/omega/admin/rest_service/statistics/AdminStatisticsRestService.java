@@ -5,6 +5,6 @@ import acropollis.municipali.omega.admin.data.request.GetStatisticsRequest;
 
 import java.util.Map;
 
-public interface StatisticsRestService {
+public interface AdminStatisticsRestService {
     Map<Long, Long> getStatistics(CustomerInfo customerInfo, GetStatisticsRequest request);
 }

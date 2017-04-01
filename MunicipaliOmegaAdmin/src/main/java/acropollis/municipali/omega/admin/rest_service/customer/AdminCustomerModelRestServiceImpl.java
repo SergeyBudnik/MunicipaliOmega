@@ -2,9 +2,9 @@ package acropollis.municipali.omega.admin.rest_service.customer;
 
 import acropollis.municipali.omega.admin.data.dto.customer.Customer;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.admin.service.customer.AdminCustomerService;
 import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.admin.service.customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
-public class CustomerModelRestServiceImpl implements CustomerRestService {
+public class AdminCustomerModelRestServiceImpl implements AdminCustomerRestService {
     @Autowired
-    private CustomerService customerService;
+    private AdminCustomerService adminCustomerService;
 
     @Override
     public CustomerInfo getCustomer(CustomerInfo user, String login) {
-        return customerService
+        return adminCustomerService
                 .getCustomer(login)
                 .map(Customer::getCustomerInfo)
                 .orElseThrow(() -> new EntityNotFoundException(""));
@@ -28,7 +28,7 @@ public class CustomerModelRestServiceImpl implements CustomerRestService {
 
     @Override
     public Collection<CustomerInfo> getAllCustomers(CustomerInfo user) {
-        return customerService
+        return adminCustomerService
                 .getAllCustomers()
                 .stream()
                 .map(Customer::getCustomerInfo)
@@ -37,16 +37,16 @@ public class CustomerModelRestServiceImpl implements CustomerRestService {
 
     @Override
     public void createCustomer(CustomerInfo user, Customer customer) {
-        customerService.createCustomer(customer);
+        adminCustomerService.createCustomer(customer);
     }
 
     @Override
     public void updateCustomer(CustomerInfo user, Customer customer) {
-        customerService.updateCustomer(customer);
+        adminCustomerService.updateCustomer(customer);
     }
 
     @Override
     public void deleteCustomer(CustomerInfo user, String login) {
-        customerService.deleteCustomer(login);
+        adminCustomerService.deleteCustomer(login);
     }
 }

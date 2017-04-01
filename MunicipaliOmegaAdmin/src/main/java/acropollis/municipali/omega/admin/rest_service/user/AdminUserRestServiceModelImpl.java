@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class UserRestServiceModelImpl implements UserRestService {
+public class AdminUserRestServiceModelImpl implements AdminUserRestService {
     @Autowired
     UserDao userDao;
 

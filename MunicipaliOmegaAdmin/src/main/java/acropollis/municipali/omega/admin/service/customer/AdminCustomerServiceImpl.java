@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class AdminCustomerServiceImpl implements AdminCustomerService {
     @Autowired
     private CustomerDao customerDao;
 

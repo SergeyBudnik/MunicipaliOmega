@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
-public class StatisticsModelRestService implements StatisticsRestService {
+public class AdminStatisticsModelRestService implements AdminStatisticsRestService {
     @Autowired
     private UserAnswerDao userAnswerDao;
 

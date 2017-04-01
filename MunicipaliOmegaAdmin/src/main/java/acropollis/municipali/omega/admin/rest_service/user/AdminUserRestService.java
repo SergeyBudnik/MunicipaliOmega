@@ -4,6 +4,6 @@ import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.data.dto.user.UserDetailsInfo;
 import acropollis.municipali.omega.admin.data.dto.user.UserId;
 
-public interface UserRestService {
+public interface AdminUserRestService {
     UserDetailsInfo getUserDetails(CustomerInfo customerInfo, UserId userId);
 }
