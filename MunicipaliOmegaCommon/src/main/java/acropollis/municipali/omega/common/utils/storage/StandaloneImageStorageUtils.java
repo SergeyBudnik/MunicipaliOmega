@@ -1,18 +1,15 @@
-package acropollis.municipali.omega.admin.service.image.standalone;
+package acropollis.municipali.omega.common.utils.storage;
 
 import acropollis.municipali.omega.common.dto.common.Tuple;
 import org.apache.commons.io.FileUtils;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-@Service
-public class StandaloneImageStorageServiceImpl implements StandaloneImageStorageService {
-    @Override
-    public Optional<byte[]> getImage(String location, int w, int h) {
+public class StandaloneImageStorageUtils {
+    public static Optional<byte[]> getImage(String location, int w, int h) {
         try {
             File f = getFile(location, w, h);
 
@@ -26,8 +23,7 @@ public class StandaloneImageStorageServiceImpl implements StandaloneImageStorage
         }
     }
 
-    @Override
-    public void saveImages(String location, Map<Tuple<Integer, Integer>, byte[]> image) {
+    public static void saveImages(String location, Map<Tuple<Integer, Integer>, byte[]> image) {
         try {
             File parent = getParent(location);
 
@@ -45,8 +41,7 @@ public class StandaloneImageStorageServiceImpl implements StandaloneImageStorage
         }
     }
 
-    @Override
-    public void removeImages(String location) {
+    public static void removeImages(String location) {
         try {
             File parent = getParent(location);
 
@@ -58,11 +53,11 @@ public class StandaloneImageStorageServiceImpl implements StandaloneImageStorage
         }
     }
 
-    private File getParent(String location) {
+    private static File getParent(String location) {
         return new File(location);
     }
 
-    private File getFile(String location, int w, int h) {
+    private static File getFile(String location, int w, int h) {
         return new File(getParent(location) + File.separator + w + "x" + h + ".png");
     }
 }

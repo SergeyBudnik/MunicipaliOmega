@@ -7,13 +7,13 @@ import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.question.QuestionModel;
 import acropollis.municipali.omega.database.db.model.article.question.answer.AnswerModel;
 import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.admin.service.image.entity.EntityImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -30,8 +30,6 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 public class AdminArticleModelRestServiceImpl implements AdminArticleRestService {
     @Autowired
     private ArticleDao articleDao;
-    @Autowired
-    private EntityImageStorageService entityImageStorageService;
 
     @Transactional(readOnly = true)
     @Override
@@ -64,7 +62,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
             throw new EntityNotFoundException("");
         }
 
-        Optional<byte []> icon = entityImageStorageService.getIcon(config.getString("images.articles"), id, size);
+        Optional<byte []> icon = EntityImageStorageUtils.getIcon(config.getString("images.articles"), id, size);
 
         if (icon.isPresent()) {
             return icon.get();
@@ -94,7 +92,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
             throw new EntityNotFoundException("");
         }
 
-        Optional<byte []> icon = entityImageStorageService.getIcon(config.getString("images.answers"), answerId, size);
+        Optional<byte []> icon = EntityImageStorageUtils.getIcon(config.getString("images.answers"), answerId, size);
 
         if (icon.isPresent()) {
             return icon.get();
@@ -146,7 +144,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     private void saveIcons(ArticleModel articleModel, ArticleWithIcon articleWithIcon) {
         if (!articleWithIcon.getIcon().isEmpty()) {
-            entityImageStorageService.saveImages(config.getString("images.articles"), articleModel.getId(), articleWithIcon.getIcon());
+            EntityImageStorageUtils.saveImages(config.getString("images.articles"), articleModel.getId(), articleWithIcon.getIcon());
         }
 
         int questionOrder = 0;
@@ -176,7 +174,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
                             .get();
 
                     if (!answerWithIcon.getIcon().isEmpty()) {
-                        entityImageStorageService.saveImages(config.getString("images.answers"), answerModel.getId(), answerWithIcon.getIcon());
+                        EntityImageStorageUtils.saveImages(config.getString("images.answers"), answerModel.getId(), answerWithIcon.getIcon());
                     }
                 }
 
@@ -188,11 +186,11 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
     }
 
     private void clearIcons(ArticleModel article) {
-        entityImageStorageService.removeImages(config.getString("images.articles"), article.getId());
+        EntityImageStorageUtils.removeImages(config.getString("images.articles"), article.getId());
 
         article.getQuestions().forEach(question ->
                 question.getAnswers().forEach(answer ->
-                        entityImageStorageService.removeImages(config.getString("images.answers"), answer.getId()))
+                        EntityImageStorageUtils.removeImages(config.getString("images.answers"), answer.getId()))
         );
     }
 }

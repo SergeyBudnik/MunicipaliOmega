@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.common.utils;
+package acropollis.municipali.omega.common.utils.common;
 
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;

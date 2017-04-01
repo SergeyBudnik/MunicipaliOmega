@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static acropollis.municipali.omega.common.utils.ImageUtils.*;
+import static acropollis.municipali.omega.common.utils.common.ImageUtils.*;
 
 @Service
 @Qualifier(Qualifiers.REQUEST_PROCESSING)

@@ -1,17 +1,14 @@
-package acropollis.municipali.omega.admin.service.image.entity;
+package acropollis.municipali.omega.common.utils.storage;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-@Service
-public class EntityImageStorageServiceImpl implements EntityImageStorageService {
-    @Override
-    public Optional<byte []> getIcon(String location, long entityId, int size) {
+public class EntityImageStorageUtils {
+    public static Optional<byte []> getIcon(String location, long entityId, int size) {
         try {
             File f = getFile(location, entityId, size);
 
@@ -25,8 +22,7 @@ public class EntityImageStorageServiceImpl implements EntityImageStorageService 
         }
     }
 
-    @Override
-    public void saveImages(String location, long entityId, Map<Integer, byte[]> icon) {
+    public static void saveImages(String location, long entityId, Map<Integer, byte[]> icon) {
         try {
             File parent = getParent(location, entityId);
 
@@ -44,8 +40,7 @@ public class EntityImageStorageServiceImpl implements EntityImageStorageService 
         }
     }
 
-    @Override
-    public void removeImages(String location, long entityId) {
+    public static void removeImages(String location, long entityId) {
         try {
             File parent = getParent(location, entityId);
 
@@ -57,11 +52,11 @@ public class EntityImageStorageServiceImpl implements EntityImageStorageService 
         }
     }
 
-    private File getParent(String location, long entityId) {
+    private static File getParent(String location, long entityId) {
         return new File(location + File.separator + entityId);
     }
 
-    private File getFile(String location, long entityId, int size) {
+    private static File getFile(String location, long entityId, int size) {
         return new File(getParent(location, entityId) + File.separator + size + ".png");
     }
 }

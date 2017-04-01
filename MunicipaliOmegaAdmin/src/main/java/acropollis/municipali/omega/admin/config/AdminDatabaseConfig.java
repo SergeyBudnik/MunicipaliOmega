@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.database.config;
+package acropollis.municipali.omega.admin.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -16,11 +16,10 @@ import java.util.Properties;
 
 import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
-
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("acropollis.municipali.omega.database.db.dao")
-public class DatabaseConfig {
+public class AdminDatabaseConfig {
     @Bean
     DataSource dataSource() {
         HikariConfig dataSourceConfig = new HikariConfig();
@@ -44,9 +43,10 @@ public class DatabaseConfig {
         Properties jpaProperties = new Properties();
 
         jpaProperties.put("hibernate.dialect", config.getString("database.dialect"));
-        jpaProperties.put("hibernate.hbm2ddl.auto", config.getString("database.startupAction"));
+        jpaProperties.put("hibernate.hbm2ddl.auto", "update");//config.getString("database.startupAction"));
         jpaProperties.put("hibernate.show_sql", config.getString("database.showSql"));
         jpaProperties.put("hibernate.format_sql", config.getString("database.formatSql"));
+        jpaProperties.put("hibernate.id.new_generator_mappings", "false");
 
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
