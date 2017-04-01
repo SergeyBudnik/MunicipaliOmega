@@ -1,12 +1,12 @@
 package acropollis.municipali.omega.admin.rest_service.article;
 
-import acropollis.municipali.omega.admin.data.dto.article.Article;
-import acropollis.municipali.omega.admin.data.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.TranslatedArticle;
-import acropollis.municipali.omega.admin.data.dto.article.question.QuestionWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.question.TranslatedQuestion;
-import acropollis.municipali.omega.admin.data.dto.article.question.answer.AnswerWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.question.answer.TranslatedAnswer;
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
+import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.TranslatedQuestion;
+import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.answer.TranslatedAnswer;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.common.dto.language.Language;
 import acropollis.municipali.omega.common.exceptions.EntityNotValidException;

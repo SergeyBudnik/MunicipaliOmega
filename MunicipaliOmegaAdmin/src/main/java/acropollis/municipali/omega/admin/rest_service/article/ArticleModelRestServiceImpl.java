@@ -2,10 +2,10 @@ package acropollis.municipali.omega.admin.rest_service.article;
 
 import acropollis.municipali.omega.admin.data.converters.article.ArticleDtoConverter;
 import acropollis.municipali.omega.admin.data.converters.article.ArticleModelConverter;
-import acropollis.municipali.omega.admin.data.dto.article.Article;
-import acropollis.municipali.omega.admin.data.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.question.QuestionWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.question.answer.AnswerWithIcon;
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;

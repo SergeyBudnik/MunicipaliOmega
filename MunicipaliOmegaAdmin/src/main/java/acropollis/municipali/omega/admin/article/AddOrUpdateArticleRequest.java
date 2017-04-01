@@ -1,13 +1,13 @@
 package acropollis.municipali.omega.admin.article;
 
 import acropollis.municipali.omega.common.dto.article.ArticleType;
-import acropollis.municipali.omega.admin.data.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.TranslatedArticle;
+import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
 import acropollis.municipali.omega.common.dto.article.question.QuestionAnswerType;
-import acropollis.municipali.omega.admin.data.dto.article.question.QuestionWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.question.TranslatedQuestion;
-import acropollis.municipali.omega.admin.data.dto.article.question.answer.AnswerWithIcon;
-import acropollis.municipali.omega.admin.data.dto.article.question.answer.TranslatedAnswer;
+import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.TranslatedQuestion;
+import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.answer.TranslatedAnswer;
 import acropollis.municipali.omega.common.dto.language.Language;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.admin.data.dto.article.question;
+package acropollis.municipali.omega.common.dto.article.question;
 
 import lombok.Data;
 

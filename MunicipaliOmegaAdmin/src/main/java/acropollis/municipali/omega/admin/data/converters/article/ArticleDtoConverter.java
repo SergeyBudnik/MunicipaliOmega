@@ -1,8 +1,8 @@
 package acropollis.municipali.omega.admin.data.converters.article;
 
-import acropollis.municipali.omega.admin.data.dto.article.Article;
-import acropollis.municipali.omega.admin.data.dto.article.question.Question;
-import acropollis.municipali.omega.admin.data.dto.article.question.answer.Answer;
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.question.Question;
+import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleCategoriesModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleModel;

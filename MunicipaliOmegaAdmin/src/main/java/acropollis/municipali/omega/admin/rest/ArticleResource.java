@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.admin.rest;
 
 import acropollis.municipali.omega.admin.article.AddOrUpdateArticleRequest;
-import acropollis.municipali.omega.admin.data.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.article.ArticleRestService;
 import acropollis.municipali.omega.admin.service.authentication.AuthenticationService;

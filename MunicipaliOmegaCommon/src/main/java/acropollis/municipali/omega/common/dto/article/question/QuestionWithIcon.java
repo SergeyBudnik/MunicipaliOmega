@@ -1,7 +1,6 @@
-package acropollis.municipali.omega.admin.data.dto.article.question;
+package acropollis.municipali.omega.common.dto.article.question;
 
-import acropollis.municipali.omega.admin.data.dto.article.question.answer.AnswerWithIcon;
-import acropollis.municipali.omega.common.dto.article.question.QuestionAnswerType;
+import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
 import acropollis.municipali.omega.common.dto.language.Language;
 import lombok.Data;
 
