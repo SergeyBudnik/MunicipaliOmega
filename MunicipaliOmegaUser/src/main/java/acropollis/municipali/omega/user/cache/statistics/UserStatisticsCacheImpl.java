@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class StatisticsCacheImpl implements StatisticsCache {
+public class UserStatisticsCacheImpl implements UserStatisticsCache {
     private Map<Long, Map<Long, Map<Long, Long>>> statisticsCache = new ConcurrentHashMap<>();
 
     @Override

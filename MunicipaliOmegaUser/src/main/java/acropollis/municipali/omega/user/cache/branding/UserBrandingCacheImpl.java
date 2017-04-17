@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class BrandingCacheImpl implements BrandingCache {
+public class UserBrandingCacheImpl implements UserBrandingCache {
     private Map<Tuple<Integer, Integer>, byte []> background = new HashMap<>();
     private Map<Tuple<Integer, Integer>, byte []> icon = new HashMap<>();
 

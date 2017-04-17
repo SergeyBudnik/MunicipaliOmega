@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.async.article;
 
-import acropollis.municipali.omega.user.cache.article.all.AllArticlesCache;
+import acropollis.municipali.omega.user.cache.article.all.UserAllArticlesCache;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.data.dto.article.ArticleWithIcon;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class VisibleArticlesReloadJob {
     @Autowired
     private VisibleArticlesCache visibleArticlesCache;
     @Autowired
-    private AllArticlesCache allArticlesCache;
+    private UserAllArticlesCache userAllArticlesCache;
 
     @Scheduled(fixedRate = 5 * 1000)
     public void reload() {
@@ -24,7 +24,7 @@ public class VisibleArticlesReloadJob {
 
         Collection<ArticleWithIcon> visibleArticles = new ArrayList<>();
 
-        for (ArticleWithIcon article : allArticlesCache.getAllArticles()) {
+        for (ArticleWithIcon article : userAllArticlesCache.getAllArticles()) {
             boolean isVisible = article.getReleaseDate() <= currentDate;
 
             if (isVisible) {

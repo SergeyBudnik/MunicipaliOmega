@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class UserCacheImpl implements UserCache {
+public class UserUserCacheImpl implements UserUserCache {
     private Map<UserId, User> usersCache = new ConcurrentHashMap<>();
 
     @Override

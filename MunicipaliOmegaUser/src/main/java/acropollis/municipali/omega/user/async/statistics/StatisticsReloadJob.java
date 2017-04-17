@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.user.async.statistics;
 
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
-import acropollis.municipali.omega.user.cache.statistics.StatisticsCache;
+import acropollis.municipali.omega.user.cache.statistics.UserStatisticsCache;
 import acropollis.municipali.omega.user.data.dto.article.Article;
 import acropollis.municipali.omega.user.data.dto.article.question.Question;
 import acropollis.municipali.omega.user.data.dto.article.question.answer.Answer;
@@ -21,7 +21,7 @@ public class StatisticsReloadJob {
     @Autowired
     private VisibleArticlesCache articlesCache;
     @Autowired
-    private StatisticsCache statisticsCache;
+    private UserStatisticsCache userStatisticsCache;
 
     @Scheduled(fixedRate = 5 * 1000)
     @Transactional(readOnly = true)
@@ -46,6 +46,6 @@ public class StatisticsReloadJob {
             }
         }
 
-        statisticsCache.set(statisitcs);
+        userStatisticsCache.set(statisitcs);
     }
 }

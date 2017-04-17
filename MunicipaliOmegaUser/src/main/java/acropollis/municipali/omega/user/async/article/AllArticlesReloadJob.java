@@ -3,7 +3,7 @@ package acropollis.municipali.omega.user.async.article;
 import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
-import acropollis.municipali.omega.user.cache.article.all.AllArticlesCache;
+import acropollis.municipali.omega.user.cache.article.all.UserAllArticlesCache;
 import acropollis.municipali.omega.user.data.dto.article.Article;
 import acropollis.municipali.omega.user.data.dto.article.ArticleWithIcon;
 import acropollis.municipali.omega.user.data.dto.article.question.Question;
@@ -27,7 +27,7 @@ public class AllArticlesReloadJob {
     private ArticleDao articleDao;
 
     @Autowired
-    private AllArticlesCache allArticlesCache;
+    private UserAllArticlesCache userAllArticlesCache;
 
     private long lastReloadDate = -1;
 
@@ -42,7 +42,7 @@ public class AllArticlesReloadJob {
 
         for (ArticleModel articleModel : articlesModels) {
             if (articleModel.isDeleted()) {
-                allArticlesCache.removeArticle(articleModel.getId());
+                userAllArticlesCache.removeArticle(articleModel.getId());
             } else {
                 Article article = convert(articleModel);
 
@@ -51,7 +51,7 @@ public class AllArticlesReloadJob {
                         getAnswersIcons(article)
                 );
 
-                allArticlesCache.addArticle(articleWithIcon);
+                userAllArticlesCache.addArticle(articleWithIcon);
             }
         }
 

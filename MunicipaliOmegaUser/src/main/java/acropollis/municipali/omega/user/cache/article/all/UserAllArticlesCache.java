@@ -4,7 +4,7 @@ import acropollis.municipali.omega.user.data.dto.article.ArticleWithIcon;
 
 import java.util.Collection;
 
-public interface AllArticlesCache {
+public interface UserAllArticlesCache {
     Collection<ArticleWithIcon> getAllArticles();
     void addArticle(ArticleWithIcon article);
     void removeArticle(long id);
