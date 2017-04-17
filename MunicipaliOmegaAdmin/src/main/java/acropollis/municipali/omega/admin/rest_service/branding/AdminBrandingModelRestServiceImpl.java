@@ -11,33 +11,50 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
+import static acropollis.municipali.omega.common.utils.storage.StandaloneImageStorageUtils.*;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
 public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestService {
     @Override
     public byte [] getBackground(CustomerInfo user, int w, int h) {
-        return StandaloneImageStorageUtils
-                .getImage(config.getString("images.branding-background"), w, h)
+        return
+                getImage(getBackgroundLocation(), w, h)
                 .orElseThrow(() -> new EntityNotFoundException(""));
     }
 
     @Override
     public void setBackground(CustomerInfo user, Map<Tuple<Integer, Integer>, byte[]> background) {
-        StandaloneImageStorageUtils
-                .saveImages(config.getString("images.branding-background"), background);
+        saveImages(getBackgroundLocation(), background);
+    }
+
+    @Override
+    public void removeBackground(CustomerInfo user) {
+        removeImages(getBackgroundLocation());
     }
 
     @Override
     public byte [] getIcon(CustomerInfo user, int size) {
-        return StandaloneImageStorageUtils
-                .getImage(config.getString("images.branding-icon"), size, size)
+        return
+                getImage(getIconLocation(), size, size)
                 .orElseThrow(() -> new EntityNotFoundException(""));
     }
 
     @Override
     public void setIcon(CustomerInfo user, Map<Tuple<Integer, Integer>, byte []> icon) {
-        StandaloneImageStorageUtils
-                .saveImages(config.getString("images.branding-icon"), icon);
+        saveImages(getIconLocation(), icon);
+    }
+
+    @Override
+    public void removeIcon(CustomerInfo user) {
+        removeImages(getIconLocation());
+    }
+
+    private String getIconLocation() {
+        return config.getString("images.branding-icon");
+    }
+
+    private String getBackgroundLocation() {
+        return config.getString("images.branding-background");
     }
 }

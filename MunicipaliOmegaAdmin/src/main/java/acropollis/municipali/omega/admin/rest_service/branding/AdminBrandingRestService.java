@@ -8,7 +8,9 @@ import java.util.Map;
 public interface AdminBrandingRestService {
     byte [] getBackground(CustomerInfo user, int w, int h);
     void setBackground(CustomerInfo user, Map<Tuple<Integer, Integer>, byte[]> background);
+    void removeBackground(CustomerInfo user);
 
     byte [] getIcon(CustomerInfo user, int size);
     void setIcon(CustomerInfo user, Map<Tuple<Integer, Integer>, byte[]> icon);
+    void removeIcon(CustomerInfo user);
 }

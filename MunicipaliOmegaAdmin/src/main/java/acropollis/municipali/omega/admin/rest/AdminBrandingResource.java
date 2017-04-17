@@ -46,6 +46,15 @@ public class AdminBrandingResource {
         );
     }
 
+    @RequestMapping(value = "/background", method = RequestMethod.DELETE)
+    public void removeBackground(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
+    ) {
+        adminBrandingRestService.removeBackground(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken)
+        );
+    }
+
     @RequestMapping(value = "/icon/{size}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte [] getIcon(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
@@ -64,6 +73,15 @@ public class AdminBrandingResource {
         adminBrandingRestService.setIcon(
                 adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 Collections.singletonMap(new Tuple<>(-1, -1), icon)
+        );
+    }
+
+    @RequestMapping(value = "/icon", method = RequestMethod.DELETE)
+    public void removeIcon(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
+    ) {
+        adminBrandingRestService.removeIcon(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken)
         );
     }
 }

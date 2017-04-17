@@ -48,6 +48,11 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
     }
 
     @Override
+    public void removeBackground(CustomerInfo user) {
+        adminBrandingRestService.removeBackground(user);
+    }
+
+    @Override
     public byte [] getIcon(CustomerInfo user, int size) {
         return adminBrandingRestService.getIcon(user, size);
     }
@@ -70,6 +75,11 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void removeIcon(CustomerInfo user) {
+        adminBrandingRestService.removeIcon(user);
     }
 }
 
