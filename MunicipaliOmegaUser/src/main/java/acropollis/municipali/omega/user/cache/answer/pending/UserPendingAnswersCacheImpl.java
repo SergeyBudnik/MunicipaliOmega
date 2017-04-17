@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Service
-public class PendingAnswersCacheImpl implements PendingAnswersCache {
+public class UserPendingAnswersCacheImpl implements UserPendingAnswersCache {
     private List<UserAnswer> answers = new ArrayList<>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();

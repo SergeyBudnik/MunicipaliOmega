@@ -4,7 +4,7 @@ import acropollis.municipali.omega.user.data.dto.answer.UserAnswer;
 
 import java.util.Optional;
 
-public interface PendingAnswersCache {
+public interface UserPendingAnswersCache {
     void addAnswer(UserAnswer answer);
     Optional<UserAnswer> getAndRemoveNextAnswer();
 }

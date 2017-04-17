@@ -2,9 +2,9 @@ package acropollis.municipali.omega.user.rest_service.answer;
 
 import acropollis.municipali.omega.common.exceptions.CredentialsViolationException;
 import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
-import acropollis.municipali.omega.user.cache.answer.pending.PendingAnswersCache;
+import acropollis.municipali.omega.user.cache.answer.pending.UserPendingAnswersCache;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
-import acropollis.municipali.omega.user.cache.statistics.StatisticsCache;
+import acropollis.municipali.omega.user.cache.statistics.UserStatisticsCache;
 import acropollis.municipali.omega.user.data.dto.answer.UserAnswer;
 import acropollis.municipali.omega.user.data.dto.article.Article;
 import acropollis.municipali.omega.user.data.dto.article.question.Question;
@@ -19,9 +19,9 @@ public class AnswerRestServiceImpl implements AnswerRestService {
     private VisibleArticlesCache visibleArticlesCache;
 
     @Autowired
-    private PendingAnswersCache pendingAnswersCache;
+    private UserPendingAnswersCache userPendingAnswersCache;
     @Autowired
-    private StatisticsCache statisticsCache;
+    private UserStatisticsCache userStatisticsCache;
 
     @Override
     public Map<Long, Long> getAnswerStatistics(long articleId, long questionId) {
@@ -40,11 +40,11 @@ public class AnswerRestServiceImpl implements AnswerRestService {
             throw new CredentialsViolationException("");
         }
 
-        return statisticsCache.get(articleId, questionId);
+        return userStatisticsCache.get(articleId, questionId);
     }
 
     @Override
     public void answer(UserAnswer answer) {
-        pendingAnswersCache.addAnswer(answer);
+        userPendingAnswersCache.addAnswer(answer);
     }
 }

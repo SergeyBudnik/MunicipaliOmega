@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class AllArticlesCacheImpl implements AllArticlesCache {
+public class UserAllArticlesCacheImpl implements UserAllArticlesCache {
     private Map<Long, ArticleWithIcon> cache = new ConcurrentHashMap<>();
 
     @Override

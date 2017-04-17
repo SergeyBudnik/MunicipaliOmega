@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.async.answer;
 
-import acropollis.municipali.omega.user.cache.answer.pending.PendingAnswersCache;
+import acropollis.municipali.omega.user.cache.answer.pending.UserPendingAnswersCache;
 import acropollis.municipali.omega.user.data.converter.answer.UserAnswerDtoConverter;
 import acropollis.municipali.omega.user.data.dto.answer.UserAnswer;
 import acropollis.municipali.omega.database.db.dao.UserAnswerDao;
@@ -20,7 +20,7 @@ public class PendingAnswersPersistJob {
     private UserAnswerDao userAnswerDao;
 
     @Autowired
-    private PendingAnswersCache pendingAnswersCache;
+    private UserPendingAnswersCache userPendingAnswersCache;
 
     @Scheduled(fixedDelay = 5 * 1000)
     @Transactional(readOnly = false)
@@ -28,7 +28,7 @@ public class PendingAnswersPersistJob {
         List<UserAnswerModel> answersToPersist = new ArrayList<>();
 
         for (int i = 0; i < 100; i++) {
-            Optional<UserAnswer> answer = pendingAnswersCache.getAndRemoveNextAnswer();
+            Optional<UserAnswer> answer = userPendingAnswersCache.getAndRemoveNextAnswer();
 
             if (!answer.isPresent()) {
                 break;
