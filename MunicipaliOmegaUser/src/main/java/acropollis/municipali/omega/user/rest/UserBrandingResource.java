@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/branding")
 @Api(tags = "Branding", description = " ")
-public class BrandingResource {
+public class UserBrandingResource {
     @Autowired
     private BrandingRestService brandingRestService;
 

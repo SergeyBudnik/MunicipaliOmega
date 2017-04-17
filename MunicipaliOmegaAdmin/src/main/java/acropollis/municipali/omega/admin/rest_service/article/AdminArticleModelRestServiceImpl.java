@@ -8,6 +8,7 @@ import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
+import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.question.QuestionModel;
@@ -62,7 +63,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
             throw new EntityNotFoundException("");
         }
 
-        Optional<byte []> icon = EntityImageStorageUtils.getIcon(config.getString("images.articles"), id, size);
+        Optional<byte []> icon = EntityImageStorageUtils.getImage(config.getString("images.articles"), id, size, size);
 
         if (icon.isPresent()) {
             return icon.get();
@@ -92,7 +93,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
             throw new EntityNotFoundException("");
         }
 
-        Optional<byte []> icon = EntityImageStorageUtils.getIcon(config.getString("images.answers"), answerId, size);
+        Optional<byte []> icon = EntityImageStorageUtils.getImage(config.getString("images.answers"), answerId, size, size);
 
         if (icon.isPresent()) {
             return icon.get();
@@ -144,7 +145,11 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     private void saveIcons(ArticleModel articleModel, ArticleWithIcon articleWithIcon) {
         if (!articleWithIcon.getIcon().isEmpty()) {
-            EntityImageStorageUtils.saveImages(config.getString("images.articles"), articleModel.getId(), articleWithIcon.getIcon());
+            EntityImageStorageUtils.saveImages(
+                    config.getString("images.articles"),
+                    articleModel.getId(),
+                    SquareImageAdapter.pack(articleWithIcon.getIcon())
+            );
         }
 
         int questionOrder = 0;
@@ -174,7 +179,11 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
                             .get();
 
                     if (!answerWithIcon.getIcon().isEmpty()) {
-                        EntityImageStorageUtils.saveImages(config.getString("images.answers"), answerModel.getId(), answerWithIcon.getIcon());
+                        EntityImageStorageUtils.saveImages(
+                                config.getString("images.answers"),
+                                answerModel.getId(),
+                                SquareImageAdapter.pack(answerWithIcon.getIcon())
+                        );
                     }
                 }
 

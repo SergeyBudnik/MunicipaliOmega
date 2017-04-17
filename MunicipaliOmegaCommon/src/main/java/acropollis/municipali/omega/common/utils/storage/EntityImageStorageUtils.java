@@ -1,16 +1,18 @@
 package acropollis.municipali.omega.common.utils.storage;
 
+import acropollis.municipali.omega.common.dto.common.Tuple;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class EntityImageStorageUtils {
-    public static Optional<byte []> getIcon(String location, long entityId, int size) {
+    public static Optional<byte []> getImage(String location, long entityId, int w, int h) {
         try {
-            File f = getFile(location, entityId, size);
+            File f = getFile(location, entityId, w, h);
 
             if (f.exists()) {
                 return Optional.of(FileUtils.readFileToByteArray(f));
@@ -22,7 +24,41 @@ public class EntityImageStorageUtils {
         }
     }
 
-    public static void saveImages(String location, long entityId, Map<Integer, byte[]> icon) {
+    public static Optional<Map<Tuple<Integer, Integer>, byte []>> getImages(String location, long entityId) {
+        try {
+            File parent = getParent(location, entityId);
+
+            if (parent.exists()) {
+                Map<Tuple<Integer, Integer>, byte []> icons = new HashMap<>();
+
+                File [] children = parent.listFiles();
+
+                if (children != null) {
+                    for (File child : children) {
+                        byte [] icon = FileUtils.readFileToByteArray(child);
+
+                        if (icon != null) {
+                            String fileName = child.getName().substring(0, child.getName().length() - ".png".length());
+                            String [] sizeParts = fileName.split("x");
+
+                            icons.put(new Tuple<>(
+                                    Integer.parseInt(sizeParts[0]),
+                                    Integer.parseInt(sizeParts[1])
+                            ), icon);
+                        }
+                    }
+                }
+
+                return Optional.of(icons);
+            } else {
+                return Optional.empty();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(); /* ToDo */
+        }
+    }
+
+    public static void saveImages(String location, long entityId, Map<Tuple<Integer, Integer>, byte[]> image) {
         try {
             File parent = getParent(location, entityId);
 
@@ -32,8 +68,11 @@ public class EntityImageStorageUtils {
                 }
             }
 
-            for (Integer iconSize : icon.keySet()) {
-                FileUtils.writeByteArrayToFile(getFile(location, entityId, iconSize), icon.get(iconSize));
+            for (Tuple<Integer, Integer> imageSize : image.keySet()) {
+                FileUtils.writeByteArrayToFile(
+                        getFile(location, entityId, imageSize.getX(), imageSize.getY()),
+                        image.get(imageSize)
+                );
             }
         } catch (IOException e) {
             throw new RuntimeException(); /* ToDo */
@@ -56,7 +95,7 @@ public class EntityImageStorageUtils {
         return new File(location + File.separator + entityId);
     }
 
-    private static File getFile(String location, long entityId, int size) {
-        return new File(getParent(location, entityId) + File.separator + size + ".png");
+    private static File getFile(String location, long entityId, int w, int h) {
+        return new File(getParent(location, entityId) + File.separator + w + "x" + h + ".png");
     }
 }

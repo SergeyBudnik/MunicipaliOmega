@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,6 +16,40 @@ public class StandaloneImageStorageUtils {
 
             if (f.exists()) {
                 return Optional.of(FileUtils.readFileToByteArray(f));
+            } else {
+                return Optional.empty();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(); /* ToDo */
+        }
+    }
+
+    public static Optional<Map<Tuple<Integer, Integer>, byte []>> getImages(String location) {
+        try {
+            File parent = getParent(location);
+
+            if (parent.exists()) {
+                Map<Tuple<Integer, Integer>, byte []> icons = new HashMap<>();
+
+                File [] children = parent.listFiles();
+
+                if (children != null) {
+                    for (File child : children) {
+                        byte [] icon = FileUtils.readFileToByteArray(child);
+
+                        if (icon != null) {
+                            String fileName = child.getName().substring(0, child.getName().length() - ".png".length());
+                            String [] sizeParts = fileName.split("x");
+
+                            icons.put(new Tuple<>(
+                                    Integer.parseInt(sizeParts[0]),
+                                    Integer.parseInt(sizeParts[1])
+                            ), icon);
+                        }
+                    }
+                }
+
+                return Optional.of(icons);
             } else {
                 return Optional.empty();
             }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/report")
 @Api(tags = "Report", description = " ")
-public class ReportResource {
+public class UserReportResource {
     @Data
     public static class PostReportRequest {
         @NonNull private Report report;

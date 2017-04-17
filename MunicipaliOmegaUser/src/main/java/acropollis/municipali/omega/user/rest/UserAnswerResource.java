@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/answer")
 @Api(tags = "Answers", description = " ")
-public class AnswerResource {
+public class UserAnswerResource {
     @Autowired
     private AnswerRestService answerRestService;
 

@@ -15,7 +15,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/article")
 @Api(tags = "Articles", description = " ")
-public class ArticleResource {
+public class UserArticleResource {
     @Autowired
     private ArticleRestService articleRestService;
 

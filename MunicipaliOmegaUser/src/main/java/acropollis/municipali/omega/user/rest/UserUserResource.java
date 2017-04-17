@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "User", description = " ")
-public class UserResource {
+public class UserUserResource {
     @Autowired
     private UserRestService userRestService;
 
