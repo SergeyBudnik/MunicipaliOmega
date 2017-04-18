@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.admin.data.request;
+package acropollis.municipali.omega.admin.data.request.statistics;
 
 import acropollis.municipali.omega.common.dto.user.UserGender;
 import lombok.Data;
