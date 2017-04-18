@@ -5,20 +5,16 @@ import acropollis.municipali.omega.admin.data.request.statistics.GetStatisticsRe
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.statistics.AdminStatisticsRestService;
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
+import acropollis.municipali.omega.admin.service.csv.answer.AdminCsvAnswerService;
 import acropollis.municipali.omega.common.dto.answer.UserAnswer;
-import acropollis.municipali.omega.common.utils.csv.CsvUtils;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +28,8 @@ public class AdminStatisticsResource {
 
     @Autowired
     private AdminAuthenticationService adminAuthenticationService;
+    @Autowired
+    private AdminCsvAnswerService adminCsvAnswerService;
 
     @RequestMapping(value = "/filtered", method = RequestMethod.POST)
     public Map<Long, Long> getStatistics(
@@ -55,22 +53,6 @@ public class AdminStatisticsResource {
                 request
         );
 
-        response.getWriter().print(CsvUtils.produce(
-                Arrays.asList("Name", "Gender", "Email", "Date Of Birth", "Article Id", "Question Id", "Answer Id"),
-                userAnswers,
-                userAnswer -> {
-                    List<String> res = new ArrayList<>();
-
-                    res.add(userAnswer.getUser().getUserDetailsInfo().getName());
-                    res.add(String.valueOf(userAnswer.getUser().getUserDetailsInfo().getUserGender()));
-                    res.add(userAnswer.getUser().getUserDetailsInfo().getEmail());
-                    res.add(userAnswer.getUser().getUserDetailsInfo().getDateOfBirth() == null ? null : new SimpleDateFormat("dd.MM.yyyy").format(userAnswer.getUser().getUserDetailsInfo().getDateOfBirth()));
-                    res.add(String.valueOf(userAnswer.getArticleId()));
-                    res.add(String.valueOf(userAnswer.getQuestionId()));
-                    res.add(String.valueOf(userAnswer.getAnswerId()));
-
-                    return res;
-                }
-        ));
+        response.getWriter().print(adminCsvAnswerService.produce(userAnswers));
     }
 }
