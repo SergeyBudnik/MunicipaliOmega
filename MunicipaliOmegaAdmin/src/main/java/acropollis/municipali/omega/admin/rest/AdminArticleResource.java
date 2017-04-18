@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.admin.rest;
 
-import acropollis.municipali.omega.admin.article.AddOrUpdateArticleRequest;
+import acropollis.municipali.omega.admin.data.request.article.AddOrUpdateArticleRequest;
 import acropollis.municipali.omega.admin.rest_service.article.AdminArticleRestService;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;

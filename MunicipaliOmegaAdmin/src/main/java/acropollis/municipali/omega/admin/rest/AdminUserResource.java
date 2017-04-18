@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.admin.rest;
 
-import acropollis.municipali.omega.admin.data.dto.user.UserDetailsInfo;
-import acropollis.municipali.omega.admin.data.dto.user.UserId;
+import acropollis.municipali.omega.common.dto.user.UserDetailsInfo;
+import acropollis.municipali.omega.common.dto.user.UserId;
 import acropollis.municipali.omega.admin.rest_service.user.AdminUserRestService;
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import io.swagger.annotations.Api;

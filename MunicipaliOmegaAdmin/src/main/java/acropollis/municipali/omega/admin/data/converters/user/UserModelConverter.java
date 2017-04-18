@@ -1,8 +1,8 @@
 package acropollis.municipali.omega.admin.data.converters.user;
 
-import acropollis.municipali.omega.admin.data.dto.user.User;
-import acropollis.municipali.omega.admin.data.dto.user.UserDetailsInfo;
-import acropollis.municipali.omega.admin.data.dto.user.UserId;
+import acropollis.municipali.omega.common.dto.user.User;
+import acropollis.municipali.omega.common.dto.user.UserDetailsInfo;
+import acropollis.municipali.omega.common.dto.user.UserId;
 import acropollis.municipali.omega.database.db.model.user.UserIdModel;
 import acropollis.municipali.omega.database.db.model.user.UserModel;
 

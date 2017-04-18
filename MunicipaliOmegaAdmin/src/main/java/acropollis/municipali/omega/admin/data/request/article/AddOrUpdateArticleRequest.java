@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.admin.article;
+package acropollis.municipali.omega.admin.data.request.article;
 
 import acropollis.municipali.omega.common.dto.article.ArticleType;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;

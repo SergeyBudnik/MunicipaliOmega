@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class UserModel {
     @EmbeddedId
     @Delegate
-    private UserIdModel id;
+    private UserIdModel id = new UserIdModel();
     @Column(name = "AUTH_TOKEN")
     private String authToken;
     @Column(name = "NAME")
