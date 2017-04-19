@@ -17,21 +17,19 @@ public interface UserAnswerDao extends JpaRepository<UserAnswerModel, UserAnswer
             "a.id.questionId = :questionId and " +
             "a.answerId = :answerId"
     )
-    long countQuestionAnswersAmount(
+    long countUserAnswersAmountByArticleIdAndQuestionIdAndAnswerId(
             @Param("articleId") long articleId,
             @Param("questionId") long questionId,
             @Param("answerId") long answerId
     );
 
     @Query(
-            "select count(*) from UserAnswerModel a where " +
+            "select a from UserAnswerModel a where " +
             "a.id.articleId = :articleId and " +
-            "a.id.questionId = :questionId and " +
-            "a.answerId = :answerId"
+            "a.id.questionId = :questionId"
     )
-    long countStatistics(
+    List<UserAnswerModel> getUserAnswersByArticleIdAndQuestionId(
             @Param("articleId") long articleId,
-            @Param("questionId") long questionId,
-            @Param("answerId") long answerId
+            @Param("questionId") long questionId
     );
 }

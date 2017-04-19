@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class GetStatisticsRequest {
+public class GetCollapsedStatisticsRequest {
     @Data
     public static class QuestionCriteria {
         private long articleId;
