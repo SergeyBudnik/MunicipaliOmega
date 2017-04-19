@@ -1,7 +1,9 @@
 package acropollis.municipali.omega.admin.rest;
 
+import acropollis.municipali.omega.admin.data.dto.statistics.csv.UserAnswerStatisticsCsvRow;
+import acropollis.municipali.omega.admin.data.request.statistics.GetCollapsedStatisticsRequest;
 import acropollis.municipali.omega.admin.data.request.statistics.GetFullStatisticsRequest;
-import acropollis.municipali.omega.admin.data.request.statistics.GetStatisticsRequest;
+import acropollis.municipali.omega.admin.data.request.statistics.GetQuestionStatisticsRequest;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.statistics.AdminStatisticsRestService;
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
@@ -31,10 +33,10 @@ public class AdminStatisticsResource {
     @Autowired
     private AdminCsvAnswerService adminCsvAnswerService;
 
-    @RequestMapping(value = "/filtered", method = RequestMethod.POST)
-    public Map<Long, Long> getStatistics(
+    @RequestMapping(value = "/json/article/collapsed", method = RequestMethod.POST)
+    public Map<Long, Long> getCollapsedStatisticsJson(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @RequestBody GetStatisticsRequest request) {
+            @RequestBody GetCollapsedStatisticsRequest request) {
 
         return adminStatisticsRestService.getStatistics(
                 adminAuthenticationService.getCustomerInfoOrThrow(authToken),
@@ -42,17 +44,33 @@ public class AdminStatisticsResource {
         );
     }
 
-    @RequestMapping(value = "/full", method = RequestMethod.POST, produces = "text/csv")
+    @RequestMapping(value = "/csv/full", method = RequestMethod.POST, produces = "text/csv")
     public void getFullStatisticsAsCsv(
             HttpServletResponse response,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody GetFullStatisticsRequest request
     ) throws IOException {
-        List<UserAnswer> userAnswers = adminStatisticsRestService.getFullStatistics(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                request
-        );
+        List<UserAnswerStatisticsCsvRow> userAnswers = adminStatisticsRestService
+                .getFullStatisticsAsCsv(
+                        null,//adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                        request
+                );
 
         response.getWriter().print(adminCsvAnswerService.produce(userAnswers));
+    }
+
+    @RequestMapping(value = "/csv/question", method = RequestMethod.POST, produces = "text/csv")
+    public void getQuestionStatisticsAsCsv(
+            HttpServletResponse response,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
+            @RequestBody GetQuestionStatisticsRequest request
+    ) throws IOException {
+        List<UserAnswerStatisticsCsvRow> rows = adminStatisticsRestService
+                .getQuestionStatisticsAsCsv(
+                        null,//adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                        request
+                );
+
+        response.getWriter().print(adminCsvAnswerService.produce(rows));
     }
 }
