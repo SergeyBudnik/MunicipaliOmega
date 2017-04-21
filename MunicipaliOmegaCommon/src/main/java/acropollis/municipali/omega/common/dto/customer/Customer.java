@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.admin.data.dto.customer;
+package acropollis.municipali.omega.common.dto.customer;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.admin.rest_service.customer;
 
-import acropollis.municipali.omega.admin.data.dto.customer.Customer;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.Customer;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 
 import java.util.Collection;
 

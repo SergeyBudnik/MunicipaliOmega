@@ -1,205 +1,90 @@
 package acropollis.municipali.omega.admin.rest_service.article;
 
-import acropollis.municipali.omega.admin.data.converters.article.ArticleDtoConverter;
-import acropollis.municipali.omega.admin.data.converters.article.ArticleModelConverter;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
-import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
-import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
-import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
-import acropollis.municipali.omega.database.db.dao.ArticleDao;
-import acropollis.municipali.omega.database.db.model.article.ArticleModel;
-import acropollis.municipali.omega.database.db.model.article.question.QuestionModel;
-import acropollis.municipali.omega.database.db.model.article.question.answer.AnswerModel;
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
-import acropollis.municipali.omega.admin.rest_service.Qualifiers;
+import acropollis.municipali.omega.common.dto.article.question.Question;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
+import acropollis.municipali.omega.database.db.exceptions.EntityDoesNotExist;
+import acropollis.municipali.omega.database.db.service.answer.AnswerService;
+import acropollis.municipali.omega.database.db.service.article.ArticleService;
+import acropollis.municipali.omega.database.db.service.question.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
 public class AdminArticleModelRestServiceImpl implements AdminArticleRestService {
     @Autowired
-    private ArticleDao articleDao;
+    private ArticleService articleService;
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private AnswerService answerService;
 
     @Transactional(readOnly = true)
     @Override
     public Collection<Article> getAllArticles(CustomerInfo user) {
-        return articleDao
-                .findByIsDeleted(false)
-                .stream()
-                .map(ArticleModelConverter::convert)
-                .collect(Collectors.toList());
+        return articleService.getAll();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Article getArticle(CustomerInfo user, long id) {
-        ArticleModel articleModel = articleDao.findOneByIdAndIsDeleted(id, false);
-
-        if (articleModel == null) {
-            throw new EntityNotFoundException("");
-        }
-
-        return ArticleModelConverter.convert(articleModel);
+        return articleService
+                .get(id)
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Transactional(readOnly = true)
     @Override
     public byte [] getArticleIcon(CustomerInfo user, long id, int size) {
-        ArticleModel article = articleDao.findOneByIdAndIsDeleted(id, false);
-
-        if (article == null) {
-            throw new EntityNotFoundException("");
-        }
-
-        Optional<byte []> icon = EntityImageStorageUtils.getImage(config.getString("images.articles"), id, size, size);
-
-        if (icon.isPresent()) {
-            return icon.get();
-        } else {
-            throw new EntityNotFoundException("");
-        }
+        return articleService
+                .getIcon(id, size)
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Transactional(readOnly = true)
     @Override
     public byte [] getAnswerIcon(CustomerInfo user, long articleId, long questionId, long answerId, int size) {
-        ArticleModel article = articleDao.findOneByIdAndIsDeleted(articleId, false);
+        Question question = articleService
+                .get(articleId)
+                .flatMap(article -> questionService.get(article, questionId))
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
 
-        if (article == null) {
-            throw new EntityNotFoundException("");
-        }
-
-        Optional<QuestionModel> question = article.getQuestions().stream().filter(it -> it.getId() == questionId).findAny();
-
-        if (!question.isPresent()) {
-            throw new EntityNotFoundException("");
-        }
-
-        Optional<AnswerModel> answer = question.get().getAnswers().stream().filter(it -> it.getId() == answerId).findAny();
-
-        if (!answer.isPresent()) {
-            throw new EntityNotFoundException("");
-        }
-
-        Optional<byte []> icon = EntityImageStorageUtils.getImage(config.getString("images.answers"), answerId, size, size);
-
-        if (icon.isPresent()) {
-            return icon.get();
-        } else {
-            throw new EntityNotFoundException("");
-        }
+        return answerService
+                .getIcon(question, answerId, size)
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Transactional(readOnly = false)
     @Override
     public long createArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
-        ArticleModel articleModel = articleDao.save(ArticleDtoConverter.convert(articleWithIcon.withoutIcon(), false));
-
-        saveIcons(articleModel, articleWithIcon);
-
-        return articleModel.getId();
+        return articleService.create(articleWithIcon);
     }
 
     @Transactional(readOnly = false)
     @Override
     public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
-        ArticleModel oldArticleModel = articleDao.findOneByIdAndIsDeleted(articleWithIcon.getId(), false);
-
-        if (oldArticleModel == null) {
-            throw new EntityNotFoundException("");
+        try {
+            articleService.update(articleWithIcon);
+        } catch (EntityDoesNotExist e) {
+            throw new HttpEntityNotFoundException("");
         }
-
-        ArticleModel newArticleModel = articleDao.save(ArticleDtoConverter.convert(articleWithIcon.withoutIcon(), false));
-
-        clearIcons(oldArticleModel);
-        saveIcons(newArticleModel, articleWithIcon);
     }
 
     @Transactional(readOnly = false)
     @Override
     public void deleteArticle(CustomerInfo user, long id) {
-        ArticleModel articleModel = articleDao.findOneByIdAndIsDeleted(id, false);
-
-        if (articleModel == null) {
-            throw new EntityNotFoundException("");
+        try {
+            articleService.delete(id);
+        } catch (EntityDoesNotExist e) {
+            throw new HttpEntityNotFoundException("");
         }
-
-        clearIcons(articleModel);
-
-        articleModel.setDeleted(true);
-        articleModel.getQuestions().clear();
-        articleModel.getTranslatedArticles().clear();
-    }
-
-    private void saveIcons(ArticleModel articleModel, ArticleWithIcon articleWithIcon) {
-        if (!articleWithIcon.getIcon().isEmpty()) {
-            EntityImageStorageUtils.saveImages(
-                    config.getString("images.articles"),
-                    articleModel.getId(),
-                    SquareImageAdapter.pack(articleWithIcon.getIcon())
-            );
-        }
-
-        int questionOrder = 0;
-
-        for (QuestionWithIcon question : articleWithIcon.getQuestions()) {
-            int currentQuestionOrder = questionOrder;
-
-            QuestionModel questionModel = articleModel
-                    .getQuestions()
-                    .stream()
-                    .filter(it -> it.getOrder() == currentQuestionOrder)
-                    .findAny()
-                    .get();
-
-            int answerOrder = 0;
-
-            for (AnswerWithIcon answerWithIcon : question.getAnswers()) {
-                if (answerWithIcon != null) {
-                    int currentAnswerOrder = answerOrder;
-
-                    AnswerModel answerModel = questionModel
-                            .getAnswers()
-                            .stream()
-                            .filter(it -> it != null)
-                            .filter(it -> it.getOrder() == currentAnswerOrder)
-                            .findAny()
-                            .get();
-
-                    if (!answerWithIcon.getIcon().isEmpty()) {
-                        EntityImageStorageUtils.saveImages(
-                                config.getString("images.answers"),
-                                answerModel.getId(),
-                                SquareImageAdapter.pack(answerWithIcon.getIcon())
-                        );
-                    }
-                }
-
-                answerOrder++;
-            }
-
-            questionOrder++;
-        }
-    }
-
-    private void clearIcons(ArticleModel article) {
-        EntityImageStorageUtils.removeImages(config.getString("images.articles"), article.getId());
-
-        article.getQuestions().forEach(question ->
-                question.getAnswers().forEach(answer ->
-                        EntityImageStorageUtils.removeImages(config.getString("images.answers"), answer.getId()))
-        );
     }
 }

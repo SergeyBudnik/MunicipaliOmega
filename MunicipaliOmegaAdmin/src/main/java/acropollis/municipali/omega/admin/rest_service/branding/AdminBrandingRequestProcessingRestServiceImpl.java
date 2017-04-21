@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.admin.rest_service.branding;
 
 import acropollis.municipali.omega.common.dto.common.Tuple;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

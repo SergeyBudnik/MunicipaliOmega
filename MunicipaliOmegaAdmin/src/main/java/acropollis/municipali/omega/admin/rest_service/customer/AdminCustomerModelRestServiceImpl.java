@@ -1,9 +1,9 @@
 package acropollis.municipali.omega.admin.rest_service.customer;
 
-import acropollis.municipali.omega.admin.data.dto.customer.Customer;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.Customer;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.service.customer.AdminCustomerService;
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +23,7 @@ public class AdminCustomerModelRestServiceImpl implements AdminCustomerRestServi
         return adminCustomerService
                 .getCustomer(login)
                 .map(Customer::getCustomerInfo)
-                .orElseThrow(() -> new EntityNotFoundException(""));
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Override

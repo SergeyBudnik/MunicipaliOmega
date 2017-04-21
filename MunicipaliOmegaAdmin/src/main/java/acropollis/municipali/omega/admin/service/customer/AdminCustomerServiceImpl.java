@@ -1,11 +1,11 @@
 package acropollis.municipali.omega.admin.service.customer;
 
-import acropollis.municipali.omega.admin.data.converters.customer.CustomerDtoConverter;
-import acropollis.municipali.omega.admin.data.converters.customer.CustomerModelConverter;
-import acropollis.municipali.omega.admin.data.dto.customer.Customer;
+import acropollis.municipali.omega.common.exceptions.HttpEntityAlreadyExistsException;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
+import acropollis.municipali.omega.database.db.converters.customer.CustomerDtoConverter;
+import acropollis.municipali.omega.database.db.converters.customer.CustomerModelConverter;
+import acropollis.municipali.omega.common.dto.customer.Customer;
 import acropollis.municipali.omega.database.db.dao.CustomerDao;
-import acropollis.municipali.omega.common.exceptions.EntityAlreadyExistsException;
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +48,7 @@ public class AdminCustomerServiceImpl implements AdminCustomerService {
     @Override
     public void createCustomer(Customer customer) {
         if (customerDao.exists(customer.getLogin())) {
-            throw new EntityAlreadyExistsException("");
+            throw new HttpEntityAlreadyExistsException("");
         }
 
         customerDao.save(CustomerDtoConverter.convert(customer));
@@ -58,7 +58,7 @@ public class AdminCustomerServiceImpl implements AdminCustomerService {
     @Override
     public void updateCustomer(Customer customer) {
         if (!customerDao.exists(customer.getLogin())) {
-            throw new EntityNotFoundException("");
+            throw new HttpEntityNotFoundException("");
         }
 
         customerDao.save(CustomerDtoConverter.convert(customer));
@@ -68,7 +68,7 @@ public class AdminCustomerServiceImpl implements AdminCustomerService {
     @Override
     public void deleteCustomer(String login) {
         if (!customerDao.exists(login)) {
-            throw new EntityNotFoundException("");
+            throw new HttpEntityNotFoundException("");
         }
 
         customerDao.delete(login);

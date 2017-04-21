@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.rest_service.branding;
 
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.user.cache.branding.UserBrandingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +12,11 @@ public class BrandingRestServiceImpl implements BrandingRestService {
 
     @Override
     public byte [] getIcon(int size) {
-        return userBrandingCache.getIcon(size).orElseThrow(() -> new EntityNotFoundException(""));
+        return userBrandingCache.getIcon(size).orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Override
     public byte [] getBackground(int w, int h) {
-        return userBrandingCache.getBackground(w, h).orElseThrow(() -> new EntityNotFoundException(""));
+        return userBrandingCache.getBackground(w, h).orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 }

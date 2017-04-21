@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.admin.service.customer;
 
-import acropollis.municipali.omega.admin.data.dto.customer.Customer;
+import acropollis.municipali.omega.common.dto.customer.Customer;
 
 import java.util.Collection;
 import java.util.Optional;

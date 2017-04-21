@@ -2,7 +2,7 @@ package acropollis.municipali.omega.admin.rest_service.article;
 
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 
 import java.util.Collection;
 

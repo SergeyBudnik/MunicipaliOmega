@@ -1,33 +1,29 @@
 package acropollis.municipali.omega.admin.rest_service.statistics;
 
-import acropollis.municipali.omega.admin.data.converters.answer.UserAnswerModelConverter;
-import acropollis.municipali.omega.admin.data.converters.article.ArticleModelConverter;
-import acropollis.municipali.omega.admin.data.converters.user.UserModelConverter;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.data.dto.statistics.csv.UserAnswerStatisticsCsvRow;
 import acropollis.municipali.omega.admin.data.request.statistics.GetCollapsedStatisticsRequest;
 import acropollis.municipali.omega.admin.data.request.statistics.GetFullStatisticsRequest;
 import acropollis.municipali.omega.admin.data.request.statistics.GetQuestionStatisticsRequest;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.common.dto.answer.UserAnswer;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
 import acropollis.municipali.omega.common.dto.user.User;
-import acropollis.municipali.omega.common.exceptions.EntityIllegalStateException;
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
-import acropollis.municipali.omega.database.db.dao.ArticleDao;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
+import acropollis.municipali.omega.database.db.converters.user.UserModelConverter;
 import acropollis.municipali.omega.database.db.dao.UserAnswerDao;
 import acropollis.municipali.omega.database.db.dao.UserDao;
 import acropollis.municipali.omega.database.db.model.answer.UserAnswerModel;
-import acropollis.municipali.omega.database.db.model.user.UserModel;
+import acropollis.municipali.omega.database.db.service.answer.AnswerService;
+import acropollis.municipali.omega.database.db.service.article.ArticleService;
+import acropollis.municipali.omega.database.db.service.question.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
@@ -37,7 +33,11 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
     @Autowired
     private UserDao userDao;
     @Autowired
-    private ArticleDao articleDao;
+    private ArticleService articleService;
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private AnswerService answerService;
 
     @Transactional(readOnly = true)
     @Override
@@ -68,9 +68,17 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
         List<UserAnswerStatisticsCsvRow> rows = new ArrayList<>();
 
         for (UserAnswerModel userAnswerModel : userAnswerModels) {
-            Article article = getArticleById(userAnswerModel.getArticleId());
-            Question question = getQuestionById(article, userAnswerModel.getQuestionId());
-            Answer answer = getAnswerById(question, userAnswerModel.getAnswerId());
+            Article article = articleService
+                    .get(userAnswerModel.getArticleId())
+                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
+
+            Question question = questionService
+                    .get(article, userAnswerModel.getQuestionId())
+                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
+
+            Answer answer = answerService
+                    .get(question, userAnswerModel.getAnswerId())
+                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
 
             Optional<User> user = getUserByAuthToken(userAnswerModel.getUserAuthToken());
 
@@ -93,8 +101,13 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
             CustomerInfo customerInfo,
             GetQuestionStatisticsRequest request
     ) {
-        Article article = getArticleById(request.getArticleId());
-        Question question = getQuestionById(article, request.getQuestionId());
+        Article article = articleService
+                .get(request.getArticleId())
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
+
+        Question question = questionService
+                .get(article, request.getQuestionId())
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
 
         List<UserAnswerModel> userAnswerModels = userAnswerDao.getUserAnswersByArticleIdAndQuestionId(
                 request.getArticleId(),
@@ -106,7 +119,9 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
         for (UserAnswerModel userAnswerModel : userAnswerModels) {
             Optional<User> user = getUserByAuthToken(userAnswerModel.getUserAuthToken());
 
-            Answer answer = getAnswerById(question, userAnswerModel.getAnswerId());
+            Answer answer = answerService
+                    .get(question, userAnswerModel.getAnswerId())
+                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
 
             UserAnswerStatisticsCsvRow userAnswerStatisticsCsvRow = new UserAnswerStatisticsCsvRow();
 
@@ -119,31 +134,6 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
         }
 
         return rows;
-    }
-
-    private Article getArticleById(long id) {
-        return Optional
-                .ofNullable(articleDao.findOne(id))
-                .map(ArticleModelConverter::convert)
-                .orElseThrow(() -> new EntityNotFoundException(""));
-    }
-
-    private Question getQuestionById(Article article, long id) {
-        return article
-                .getQuestions()
-                .stream()
-                .filter(it -> it.getId().equals(id))
-                .findAny()
-                .orElseThrow(() -> new EntityNotFoundException(""));
-    }
-
-    private Answer getAnswerById(Question question, long answerId) {
-        return question
-                .getAnswers()
-                .stream()
-                .filter(it -> it.getId().equals(answerId))
-                .findAny()
-                .orElseThrow(() -> new EntityIllegalStateException(""));
     }
 
     private Optional<User> getUserByAuthToken(String authToken) {
