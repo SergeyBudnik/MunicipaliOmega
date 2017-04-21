@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.admin.service.authentication;
 
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerCredentials;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerToken;
 
 import java.util.Optional;

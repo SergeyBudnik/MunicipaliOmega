@@ -1,10 +1,9 @@
 package acropollis.municipali.omega.admin.rest_service.branding;
 
 import acropollis.municipali.omega.common.dto.common.Tuple;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.common.utils.storage.StandaloneImageStorageUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     public byte [] getBackground(CustomerInfo user, int w, int h) {
         return
                 getImage(getBackgroundLocation(), w, h)
-                .orElseThrow(() -> new EntityNotFoundException(""));
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Override
@@ -37,7 +36,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     public byte [] getIcon(CustomerInfo user, int size) {
         return
                 getImage(getIconLocation(), size, size)
-                .orElseThrow(() -> new EntityNotFoundException(""));
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Override

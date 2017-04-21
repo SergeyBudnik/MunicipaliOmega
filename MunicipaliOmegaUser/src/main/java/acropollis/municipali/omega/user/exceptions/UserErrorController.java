@@ -15,31 +15,31 @@ public class UserErrorController {
         response.getWriter().println(e.getMessage());
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler(HttpEntityNotFoundException.class)
     public void handleEntityNotFound(HttpServletResponse response, Exception e) throws Exception {
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.getWriter().println(e.getMessage());
     }
 
-    @ExceptionHandler(EntityAlreadyExistsException.class)
+    @ExceptionHandler(HttpEntityAlreadyExistsException.class)
     public void handleEntityAlreadyExists(HttpServletResponse response, Exception e) throws Exception {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.getWriter().println(e.getMessage());
     }
 
-    @ExceptionHandler(EntityIllegalStateException.class)
+    @ExceptionHandler(HttpEntityIllegalStateException.class)
     public void handleEntityIllegalState(HttpServletResponse response, Exception e) throws Exception {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.getWriter().println(e.getMessage());
     }
 
-    @ExceptionHandler(EntityNotValidException.class)
+    @ExceptionHandler(HttpEntityNotValidException.class)
     public void handleEntityNotValid(HttpServletResponse response, Exception e) throws Exception {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.getWriter().println(e.getMessage());
     }
 
-    @ExceptionHandler(CredentialsViolationException.class)
+    @ExceptionHandler(HttpCredentialsViolationException.class)
     public void handleCredentialsViolation(HttpServletResponse response, Exception e) throws Exception {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getWriter().println(e.getMessage());

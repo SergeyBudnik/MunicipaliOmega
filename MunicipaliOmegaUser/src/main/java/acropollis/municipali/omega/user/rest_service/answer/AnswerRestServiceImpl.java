@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.user.rest_service.answer;
 
-import acropollis.municipali.omega.common.exceptions.CredentialsViolationException;
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
+import acropollis.municipali.omega.common.exceptions.HttpCredentialsViolationException;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.user.cache.answer.pending.UserPendingAnswersCache;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.cache.statistics.UserStatisticsCache;
@@ -27,17 +27,17 @@ public class AnswerRestServiceImpl implements AnswerRestService {
     public Map<Long, Long> getAnswerStatistics(long articleId, long questionId) {
         Article article = visibleArticlesCache
                 .getArticle(articleId)
-                .orElseThrow(() -> new EntityNotFoundException(""));
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
 
         Question question = article
                 .getQuestions()
                 .stream()
                 .filter(it -> it.getId() == questionId)
                 .findAny()
-                .orElseThrow(() -> new EntityNotFoundException(""));
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
 
         if (!question.isShowResult()) {
-            throw new CredentialsViolationException("");
+            throw new HttpCredentialsViolationException("");
         }
 
         return userStatisticsCache.get(articleId, questionId);

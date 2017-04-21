@@ -7,9 +7,9 @@ import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.TranslatedQuestion;
 import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.answer.TranslatedAnswer;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.common.dto.language.Language;
-import acropollis.municipali.omega.common.exceptions.EntityNotValidException;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotValidException;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -68,15 +68,15 @@ public class AdminArticleRequestValidationRestServiceImpl implements AdminArticl
 
     private void checkArticleValid(ArticleWithIcon article) {
         if (article.getType() == null) {
-            throw new EntityNotValidException("'article.type' can't be null");
+            throw new HttpEntityNotValidException("'article.type' can't be null");
         }
 
         if (article.getTranslatedArticle() == null) {
-            throw new EntityNotValidException("'article.translatedArticle' can't be null");
+            throw new HttpEntityNotValidException("'article.translatedArticle' can't be null");
         }
 
         if (article.getQuestions() == null) {
-            throw new EntityNotValidException("'article.question' can't be null");
+            throw new HttpEntityNotValidException("'article.question' can't be null");
         }
 
         article.getTranslatedArticle().forEach((language, translatedArticle) ->
@@ -88,39 +88,39 @@ public class AdminArticleRequestValidationRestServiceImpl implements AdminArticl
 
     private void checkTranslatedArticleValid(TranslatedArticle translatedArticle, Language language) {
         if (translatedArticle == null) {
-            throw new EntityNotValidException("'article.translatedArticle[%s]' can't be null", language);
+            throw new HttpEntityNotValidException("'article.translatedArticle[%s]' can't be null", language);
         }
 
         if (isNullOrEmpty(translatedArticle.getTitle())) {
-            throw new EntityNotValidException("'article.translatedArticle[%s].title' can't be null", language);
+            throw new HttpEntityNotValidException("'article.translatedArticle[%s].title' can't be null", language);
         }
 
         if (isNullOrEmpty(translatedArticle.getText())) {
-            throw new EntityNotValidException("'article.translatedArticle[%s].text' can't be null", language);
+            throw new HttpEntityNotValidException("'article.translatedArticle[%s].text' can't be null", language);
         }
 
         for (String category : translatedArticle.getCategories()) {
             if (isNullOrEmpty(category)) {
-                throw new EntityNotValidException("'article.translatedArticle[%s].category' can't be null", language);
+                throw new HttpEntityNotValidException("'article.translatedArticle[%s].category' can't be null", language);
             }
         }
     }
 
     private void checkQuestionValid(QuestionWithIcon question) {
         if (question == null) {
-            throw new EntityNotValidException("'article.question' can't be null");
+            throw new HttpEntityNotValidException("'article.question' can't be null");
         }
 
         if (question.getTranslatedQuestion() == null) {
-            throw new EntityNotValidException("'article.question.translatedQuestion' can't be null");
+            throw new HttpEntityNotValidException("'article.question.translatedQuestion' can't be null");
         }
 
         if (question.getAnswerType() == null) {
-            throw new EntityNotValidException("'article.question.answerType' can't be null");
+            throw new HttpEntityNotValidException("'article.question.answerType' can't be null");
         }
 
         if (question.getAnswers() == null) {
-            throw new EntityNotValidException("'article.question.answers' can't be null");
+            throw new HttpEntityNotValidException("'article.question.answers' can't be null");
         }
 
         question.getTranslatedQuestion().forEach((language, translatedQuestion) ->
@@ -144,21 +144,21 @@ public class AdminArticleRequestValidationRestServiceImpl implements AdminArticl
 
     private void checkTranslatedQuestionValid(TranslatedQuestion translatedQuestion, Language language) {
         if (translatedQuestion == null) {
-            throw new EntityNotValidException("'article.question.translatedQuestion[%s]' can't be null", language);
+            throw new HttpEntityNotValidException("'article.question.translatedQuestion[%s]' can't be null", language);
         }
 
         if (isNullOrEmpty(translatedQuestion.getText())) {
-            throw new EntityNotValidException("'article.question.translatedQuestion[%s].text' can't be null", language);
+            throw new HttpEntityNotValidException("'article.question.translatedQuestion[%s].text' can't be null", language);
         }
     }
 
     private void checkAnswerValid(AnswerWithIcon answer) {
         if (answer == null) {
-            throw new EntityNotValidException("'article.question.answer' can't be null");
+            throw new HttpEntityNotValidException("'article.question.answer' can't be null");
         }
 
         if (answer.getTranslatedAnswer() == null) {
-            throw new EntityNotValidException("'article.question.answer.translatedAnswer' can't be null");
+            throw new HttpEntityNotValidException("'article.question.answer.translatedAnswer' can't be null");
         }
 
         answer.getTranslatedAnswer().forEach((language, translatedAnswer) ->
@@ -168,17 +168,17 @@ public class AdminArticleRequestValidationRestServiceImpl implements AdminArticl
 
     private void checkTranslatedAnswerValid(TranslatedAnswer translatedAnswer, Language language) {
         if (translatedAnswer == null) {
-            throw new EntityNotValidException("'article.question.answer.translatedAnswer[%s]' can't be null", language);
+            throw new HttpEntityNotValidException("'article.question.answer.translatedAnswer[%s]' can't be null", language);
         }
 
         if (isNullOrEmpty(translatedAnswer.getText())) {
-            throw new EntityNotValidException("'article.question.answer.translatedAnswer[%s].text' can't be null", language);
+            throw new HttpEntityNotValidException("'article.question.answer.translatedAnswer[%s].text' can't be null", language);
         }
     }
 
     private void checkFivePointsQuestionValid(QuestionWithIcon question) {
         if (question.getAnswers().size() != 5) {
-            throw new EntityNotValidException("'article.question' of 'five points' type must have 5 non-null answers");
+            throw new HttpEntityNotValidException("'article.question' of 'five points' type must have 5 non-null answers");
         }
 
         Function<Integer, Boolean> isAnswerEmpty = index -> question.getAnswers().get(index).getTranslatedAnswer().isEmpty();
@@ -191,7 +191,7 @@ public class AdminArticleRequestValidationRestServiceImpl implements AdminArticl
                 isAnswerNonEmpty.apply(3) ||
                 isAnswerEmpty.apply(4)
         ) {
-            throw new EntityNotValidException(
+            throw new HttpEntityNotValidException(
                     "'article.question.answer[0, 4]' should be non-null and not empty. " +
                     "'article.question.answer[1, 2, 3]' should be non-null and empty."
             );
@@ -200,25 +200,25 @@ public class AdminArticleRequestValidationRestServiceImpl implements AdminArticl
 
     private void checkDychotomousQuestionValid(QuestionWithIcon question) {
         if (question.getAnswers().size() != 2) {
-            throw new EntityNotValidException("'article.question' of 'dychotomous' type must have 2 non-null answers");
+            throw new HttpEntityNotValidException("'article.question' of 'dychotomous' type must have 2 non-null answers");
         }
 
         Function<Integer, Boolean> isAnswerEmpty = index -> question.getAnswers().get(index).getTranslatedAnswer().isEmpty();
 
         if (isAnswerEmpty.apply(0) || isAnswerEmpty.apply(1)) {
-            throw new EntityNotValidException("'article.question.answer's of 'dychotomous' type must have 2 non-null answers");
+            throw new HttpEntityNotValidException("'article.question.answer's of 'dychotomous' type must have 2 non-null answers");
         }
     }
 
     private void checkThreeVariantsQuestionsValid(QuestionWithIcon question) {
         if (question.getAnswers().size() != 3) {
-            throw new EntityNotValidException("'article.question' of 'three variants' type must have 3 non-null answers");
+            throw new HttpEntityNotValidException("'article.question' of 'three variants' type must have 3 non-null answers");
         }
 
         Function<Integer, Boolean> isAnswerEmpty = index -> question.getAnswers().get(index).getTranslatedAnswer().isEmpty();
 
         if (isAnswerEmpty.apply(0) || isAnswerEmpty.apply(1) || isAnswerEmpty.apply(2)) {
-            throw new EntityNotValidException("'article.question.answer's of 'three variants' type must have 3 non-null answers");
+            throw new HttpEntityNotValidException("'article.question.answer's of 'three variants' type must have 3 non-null answers");
         }
     }
 }

@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.rest_service.article;
 
-import acropollis.municipali.omega.common.exceptions.EntityNotFoundException;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.data.dto.article.Article;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,13 @@ public class ArticleRestServiceImpl implements ArticleRestService {
     public byte [] getArticleIcon(long articleId, int size) {
         return visibleArticlesCache
                 .getArticleIcon(articleId, size)
-                .orElseThrow(() -> new EntityNotFoundException(""));
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Override
     public byte [] getAnswerIcon(long articleId, long questionId, long answerId, int size) {
         return visibleArticlesCache
                 .getAnswerIcon(articleId, questionId, answerId, size)
-                .orElseThrow(() -> new EntityNotFoundException(""));
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 }

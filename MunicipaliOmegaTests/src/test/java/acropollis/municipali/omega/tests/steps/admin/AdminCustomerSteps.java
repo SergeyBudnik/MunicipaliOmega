@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.tests.steps.admin;
 
-import acropollis.municipali.omega.admin.data.dto.customer.Customer;
+import acropollis.municipali.omega.common.dto.customer.Customer;
 import acropollis.municipali.omega.admin.service.customer.AdminCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

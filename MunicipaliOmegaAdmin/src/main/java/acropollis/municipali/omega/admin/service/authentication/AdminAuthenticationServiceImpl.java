@@ -1,11 +1,11 @@
 package acropollis.municipali.omega.admin.service.authentication;
 
-import acropollis.municipali.omega.admin.data.dto.customer.Customer;
+import acropollis.municipali.omega.common.dto.customer.Customer;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerCredentials;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.data.dto.customer.CustomerToken;
 import acropollis.municipali.omega.admin.service.customer.AdminCustomerService;
-import acropollis.municipali.omega.common.exceptions.CredentialsViolationException;
+import acropollis.municipali.omega.common.exceptions.HttpCredentialsViolationException;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,7 +76,7 @@ public class AdminAuthenticationServiceImpl implements AdminAuthenticationServic
 
     @Override
     public CustomerInfo getCustomerInfoOrThrow(String token) {
-        return getCustomerInfo(token).orElseThrow(() -> new CredentialsViolationException(""));
+        return getCustomerInfo(token).orElseThrow(() -> new HttpCredentialsViolationException(""));
     }
 
     private String generateAuthToken() {
