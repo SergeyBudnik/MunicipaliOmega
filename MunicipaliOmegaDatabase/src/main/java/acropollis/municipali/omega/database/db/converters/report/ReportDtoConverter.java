@@ -1,6 +1,6 @@
-package acropollis.municipali.omega.user.data.converter.report;
+package acropollis.municipali.omega.database.db.converters.report;
 
-import acropollis.municipali.omega.user.data.dto.report.Report;
+import acropollis.municipali.omega.common.dto.report.Report;
 import acropollis.municipali.omega.database.db.model.report.ReportModel;
 
 public class ReportDtoConverter {

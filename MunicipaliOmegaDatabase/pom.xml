@@ -25,7 +25,7 @@
     </dependencies>
 
     <build>
-        <finalName>MunicipaliOmegaUser</finalName>
+        <finalName>MunicipaliOmegaDatabase</finalName>
 
         <plugins>
             <plugin>
