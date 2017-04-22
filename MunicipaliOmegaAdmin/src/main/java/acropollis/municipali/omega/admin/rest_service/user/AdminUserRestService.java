@@ -1,9 +1,8 @@
 package acropollis.municipali.omega.admin.rest_service.user;
 
 import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
-import acropollis.municipali.omega.common.dto.user.UserDetailsInfo;
-import acropollis.municipali.omega.common.dto.user.UserId;
+import acropollis.municipali.omega.common.dto.user.User;
 
 public interface AdminUserRestService {
-    UserDetailsInfo getUserDetails(CustomerInfo customerInfo, UserId userId);
+    User getUserDetails(CustomerInfo customerInfo, String userAuthToken);
 }

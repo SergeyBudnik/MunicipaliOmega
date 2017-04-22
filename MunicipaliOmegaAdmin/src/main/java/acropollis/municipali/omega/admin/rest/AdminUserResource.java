@@ -1,9 +1,8 @@
 package acropollis.municipali.omega.admin.rest;
 
-import acropollis.municipali.omega.common.dto.user.UserDetailsInfo;
-import acropollis.municipali.omega.common.dto.user.UserId;
 import acropollis.municipali.omega.admin.rest_service.user.AdminUserRestService;
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
+import acropollis.municipali.omega.common.dto.user.User;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,14 +17,14 @@ public class AdminUserResource {
     @Autowired
     private AdminUserRestService adminUserRestService;
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public UserDetailsInfo getUser(
+    @RequestMapping(value = "/{userAuthToken}", method = RequestMethod.GET)
+    public User getUser(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,
-            @RequestBody UserId userId
+            @PathVariable String userAuthToken
     ) {
         return adminUserRestService.getUserDetails(
                 adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                userId
+                userAuthToken
         );
     }
 }
