@@ -34,12 +34,12 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
 
             Map<Tuple<Integer, Integer>, byte []> processedBackground = new HashMap<>();
 
-            processedBackground.put(new Tuple<>( 240,  320), toBytes(scaleAndCropImage(src,  240,  320)));
-            processedBackground.put(new Tuple<>( 320,  480), toBytes(scaleAndCropImage(src,  320,  480)));
-            processedBackground.put(new Tuple<>( 480,  800), toBytes(scaleAndCropImage(src,  480,  800)));
-            processedBackground.put(new Tuple<>( 768, 1280), toBytes(scaleAndCropImage(src,  768, 1280)));
-            processedBackground.put(new Tuple<>(1080, 1920), toBytes(scaleAndCropImage(src, 1080, 1920)));
-            processedBackground.put(new Tuple<>(1440, 2560), toBytes(scaleAndCropImage(src, 1440, 2560)));
+            processedBackground.put(new Tuple<>( 240,  320), toBytes(scaleAndCropImage(src,  120,  160)));
+            processedBackground.put(new Tuple<>( 320,  480), toBytes(scaleAndCropImage(src,  160,  240)));
+            processedBackground.put(new Tuple<>( 480,  800), toBytes(scaleAndCropImage(src,  240,  400)));
+            processedBackground.put(new Tuple<>( 768, 1280), toBytes(scaleAndCropImage(src,  384, 640)));
+            processedBackground.put(new Tuple<>(1080, 1920), toBytes(scaleAndCropImage(src, 540, 960)));
+            processedBackground.put(new Tuple<>(1440, 2560), toBytes(scaleAndCropImage(src, 720, 1280)));
 
             adminBrandingRestService.setBackground(user, processedBackground);
         } catch (IOException e) {
