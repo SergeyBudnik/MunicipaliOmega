@@ -44,7 +44,7 @@ public class AdminReportResource {
         );
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    @RequestMapping(value = "/{id}/photo", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte [] getReportPhoto(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id

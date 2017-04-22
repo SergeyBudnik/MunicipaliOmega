@@ -9,10 +9,12 @@ import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.converters.article.ArticleDtoConverter;
 import acropollis.municipali.omega.database.db.converters.article.ArticleModelConverter;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
+import acropollis.municipali.omega.database.db.dao.ArticleToReleasePushRecordDao;
 import acropollis.municipali.omega.database.db.exceptions.EntityDoesNotExist;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.question.QuestionModel;
 import acropollis.municipali.omega.database.db.model.article.question.answer.AnswerModel;
+import acropollis.municipali.omega.database.db.model.push.ArticleToReleasePushRecordModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleDao articleDao;
+    @Autowired
+    private ArticleToReleasePushRecordDao articleToReleasePushRecordDao;
 
     @Override
     public List<Article> getAll() {
@@ -51,6 +55,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public long create(ArticleWithIcon articleWithIcon) {
         ArticleModel articleModel = articleDao.save(ArticleDtoConverter.convert(articleWithIcon.withoutIcon(), false));
+
+        ArticleToReleasePushRecordModel articleToReleasePushRecordModel = new ArticleToReleasePushRecordModel(); {
+            articleToReleasePushRecordModel.setArticleId(articleModel.getId());
+        }
+
+        articleToReleasePushRecordDao.save(articleToReleasePushRecordModel);
 
         saveIcons(articleModel, articleWithIcon);
 
@@ -85,6 +95,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleModel.setDeleted(true);
         articleModel.getQuestions().clear();
         articleModel.getTranslatedArticles().clear();
+
+        articleToReleasePushRecordDao.delete(articleId);
     }
 
     private void clearIcons(ArticleModel article) {

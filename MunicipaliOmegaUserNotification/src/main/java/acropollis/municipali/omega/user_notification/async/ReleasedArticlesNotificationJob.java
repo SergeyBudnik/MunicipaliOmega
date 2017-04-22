@@ -1,11 +1,10 @@
 package acropollis.municipali.omega.user_notification.async;
 
+import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.language.Language;
-import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.dao.UserDao;
 import acropollis.municipali.omega.database.db.model.user.UserModel;
-import acropollis.municipali.omega.user_notification.converter.article.ArticleModelConverter;
-import acropollis.municipali.omega.user_notification.dto.article.Article;
+import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -22,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,14 +45,14 @@ public class ReleasedArticlesNotificationJob {
     private static final String SERVER_KEY = "AAAAKOSHdJU:APA91bFw9odWdNDl1sUJZygtClYqrgbQTjVDVDALGV2AHITEYPSRpBX5kMxgflutZUzoSr3NO6jl8VyAFq6lYoswzdpX6jeE523vOfB1X_7v1e2xNQ0KoQ2gyg1vUMFmHYofpseEskp9";
 
     @Autowired
-    private ArticleDao articleDao;
+    private ArticleReleasePushService articleReleasePushService;
     @Autowired
     private UserDao userDao; /* Read from cache */
 
     private long lastReloadDate = -1;
 
     @Scheduled(fixedDelay = 5 * 1000)
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public void reload() {
         long currentDate = new Date().getTime();
 
@@ -60,14 +60,13 @@ public class ReleasedArticlesNotificationJob {
             Collection<String> gmsTokens =
                     userDao.findAll().stream().map(UserModel::getGmsToken).collect(Collectors.toList());
 
-            articleDao
-                    .findByReleaseDateLessThanAndReleaseDateGreaterThanEqualAndIsDeleted(lastReloadDate, currentDate, false)
-                    .stream()
-                    .map(ArticleModelConverter::convert)
-                    .forEach(it ->
-                            gmsTokens
-                                    .forEach(gmsToken -> sendPush(it, gmsToken))
-                    );
+            List<Article> articles = articleReleasePushService.getArticlesToRelease(currentDate);
+
+            articles.forEach(it -> {
+                //gmsTokens.forEach(gmsToken -> sendPush(it, gmsToken));
+
+                articleReleasePushService.delete(it.getId());
+            });
         }
 
         lastReloadDate = currentDate;
