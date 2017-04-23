@@ -68,26 +68,32 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
         List<UserAnswerStatisticsCsvRow> rows = new ArrayList<>();
 
         for (UserAnswerModel userAnswerModel : userAnswerModels) {
-            Article article = articleService
-                    .get(userAnswerModel.getArticleId())
-                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
+            Optional<Article> article = articleService.get(userAnswerModel.getArticleId());
 
-            Question question = questionService
-                    .get(article, userAnswerModel.getQuestionId())
-                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
+            if (!article.isPresent()) {
+                continue;
+            }
 
-            Answer answer = answerService
-                    .get(question, userAnswerModel.getAnswerId())
-                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
+            Optional<Question> question = questionService.get(article.get(), userAnswerModel.getQuestionId());
+
+            if (!question.isPresent()) {
+                continue;
+            }
+
+            Optional<Answer> answer = answerService.get(question.get(), userAnswerModel.getAnswerId());
+
+            if (!answer.isPresent()) {
+                continue;
+            }
 
             Optional<User> user = getUserByAuthToken(userAnswerModel.getUserAuthToken());
 
             UserAnswerStatisticsCsvRow userAnswerStatisticsCsvRow = new UserAnswerStatisticsCsvRow();
 
             userAnswerStatisticsCsvRow.setUser(user);
-            userAnswerStatisticsCsvRow.setArticle(article);
-            userAnswerStatisticsCsvRow.setQuestion(question);
-            userAnswerStatisticsCsvRow.setAnswer(answer);
+            userAnswerStatisticsCsvRow.setArticle(article.get());
+            userAnswerStatisticsCsvRow.setQuestion(question.get());
+            userAnswerStatisticsCsvRow.setAnswer(answer.get());
 
             rows.add(userAnswerStatisticsCsvRow);
         }
@@ -119,16 +125,18 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
         for (UserAnswerModel userAnswerModel : userAnswerModels) {
             Optional<User> user = getUserByAuthToken(userAnswerModel.getUserAuthToken());
 
-            Answer answer = answerService
-                    .get(question, userAnswerModel.getAnswerId())
-                    .orElseThrow(() -> new HttpEntityNotFoundException(""));
+            Optional<Answer> answer = answerService.get(question, userAnswerModel.getAnswerId());
+
+            if (!answer.isPresent()) {
+                continue;
+            }
 
             UserAnswerStatisticsCsvRow userAnswerStatisticsCsvRow = new UserAnswerStatisticsCsvRow();
 
             userAnswerStatisticsCsvRow.setUser(user);
             userAnswerStatisticsCsvRow.setArticle(article);
             userAnswerStatisticsCsvRow.setQuestion(question);
-            userAnswerStatisticsCsvRow.setAnswer(answer);
+            userAnswerStatisticsCsvRow.setAnswer(answer.get());
 
             rows.add(userAnswerStatisticsCsvRow);
         }
