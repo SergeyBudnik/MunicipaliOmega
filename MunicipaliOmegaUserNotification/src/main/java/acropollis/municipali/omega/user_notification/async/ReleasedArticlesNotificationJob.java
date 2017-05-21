@@ -63,7 +63,7 @@ public class ReleasedArticlesNotificationJob {
             List<Article> articles = articleReleasePushService.getArticlesToRelease(currentDate);
 
             articles.forEach(it -> {
-                //gmsTokens.forEach(gmsToken -> sendPush(it, gmsToken));
+                gmsTokens.forEach(gmsToken -> sendPush(it, gmsToken));
 
                 articleReleasePushService.delete(it.getId());
             });

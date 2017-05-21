@@ -96,7 +96,9 @@ public class ArticleServiceImpl implements ArticleService {
         articleModel.getQuestions().clear();
         articleModel.getTranslatedArticles().clear();
 
-        articleToReleasePushRecordDao.delete(articleId);
+        if (articleToReleasePushRecordDao.exists(articleId)) {
+            articleToReleasePushRecordDao.delete(articleId);
+        }
     }
 
     private void clearIcons(ArticleModel article) {
