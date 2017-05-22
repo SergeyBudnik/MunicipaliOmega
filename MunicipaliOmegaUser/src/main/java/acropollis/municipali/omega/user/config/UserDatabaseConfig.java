@@ -48,6 +48,10 @@ public class UserDatabaseConfig {
         jpaProperties.put("hibernate.format_sql", config.getString("database.formatSql"));
         jpaProperties.put("hibernate.id.new_generator_mappings", "false");
 
+        jpaProperties.put("hibernate.connection.CharSet", "utf8");
+        jpaProperties.put("hibernate.connection.characterEncoding", "utf8");
+        jpaProperties.put("hibernate.connection.useUnicode", "true");
+
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
         return entityManagerFactoryBean;

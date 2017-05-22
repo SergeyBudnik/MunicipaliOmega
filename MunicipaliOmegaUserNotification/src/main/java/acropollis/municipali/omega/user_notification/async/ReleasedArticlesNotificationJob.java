@@ -11,6 +11,7 @@ import com.sun.jersey.api.client.WebResource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,7 +34,7 @@ public class ReleasedArticlesNotificationJob {
         @NoArgsConstructor
         @AllArgsConstructor
         @lombok.Data
-        public static class Data {
+        static class Data {
             private String title;
             private String text;
         }
@@ -44,23 +45,37 @@ public class ReleasedArticlesNotificationJob {
 
     private static final String SERVER_KEY = "AAAAKOSHdJU:APA91bFw9odWdNDl1sUJZygtClYqrgbQTjVDVDALGV2AHITEYPSRpBX5kMxgflutZUzoSr3NO6jl8VyAFq6lYoswzdpX6jeE523vOfB1X_7v1e2xNQ0KoQ2gyg1vUMFmHYofpseEskp9";
 
-    @Autowired
-    private ArticleReleasePushService articleReleasePushService;
-    @Autowired
-    private UserDao userDao; /* Read from cache */
+    private static final Logger log = Logger.getLogger(ReleasedArticlesNotificationJob.class);
+
+    private final ArticleReleasePushService articleReleasePushService;
+    private final UserDao userDao; /* Read from cache */
 
     private long lastReloadDate = -1;
 
+    @Autowired
+    public ReleasedArticlesNotificationJob(ArticleReleasePushService articleReleasePushService, UserDao userDao) {
+        this.articleReleasePushService = articleReleasePushService;
+        this.userDao = userDao;
+    }
+
     @Scheduled(fixedDelay = 5 * 1000)
-    @Transactional(readOnly = false)
+    @Transactional
     public void reload() {
         long currentDate = new Date().getTime();
+
+        log.info("Started push notification job");
 
         if (lastReloadDate != -1) {
             Collection<String> gmsTokens =
                     userDao.findAll().stream().map(UserModel::getGmsToken).collect(Collectors.toList());
 
             List<Article> articles = articleReleasePushService.getArticlesToRelease(currentDate);
+
+            log.info(String.format(
+                    "Notifying %d users about %d new articles",
+                    gmsTokens.size(),
+                    articles.size()
+            ));
 
             articles.forEach(it -> {
                 gmsTokens.forEach(gmsToken -> sendPush(it, gmsToken));
