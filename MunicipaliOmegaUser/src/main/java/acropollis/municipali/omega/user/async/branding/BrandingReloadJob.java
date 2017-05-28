@@ -21,12 +21,12 @@ public class BrandingReloadJob {
     @Scheduled(fixedDelay = 5 * 1000)
     public void reload() {
         Optional<Map<Tuple<Integer, Integer>, byte []>> background = StandaloneImageStorageUtils
-                .getImages(config.getString("images.branding-background"));
+                .getImages(config.getImagesBrandingBackgroundLocation().getValue());
 
         userBrandingCache.setBackground(background.orElse(new HashMap<>()));
 
         Optional<Map<Tuple<Integer, Integer>, byte []>> icon = StandaloneImageStorageUtils
-                .getImages(config.getString("images.branding-icon"));
+                .getImages(config.getImagesBrandingIconLocation().getValue());
 
         userBrandingCache.setIcon(icon.orElse(new HashMap<>()));
     }

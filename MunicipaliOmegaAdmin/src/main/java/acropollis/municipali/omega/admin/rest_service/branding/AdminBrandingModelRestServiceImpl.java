@@ -50,10 +50,10 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     }
 
     private String getIconLocation() {
-        return config.getString("images.branding-icon");
+        return config.getImagesBrandingIconLocation().getValue();
     }
 
     private String getBackgroundLocation() {
-        return config.getString("images.branding-background");
+        return config.getImagesBrandingBackgroundLocation().getValue();
     }
 }

@@ -60,8 +60,11 @@ public class AllArticlesReloadJob {
 
     private Map<Integer, byte []> getArticleIcons(Article article) {
         return SquareImageAdapter.unpack(
-                getImages(config.getString("images.articles"), article.getId())
-                        .orElseGet(HashMap::new)
+                getImages(
+                        config.getImagesArticlesIconsLocation().getValue(),
+                        article.getId()
+                )
+                .orElseGet(HashMap::new)
         );
     }
 
@@ -77,7 +80,8 @@ public class AllArticlesReloadJob {
                     .forEach(answer -> {
                             Map<Integer, byte[]> answerIcons = SquareImageAdapter
                                     .unpack(
-                                            getImages(config.getString("images.answers"), answer.getId())
+                                            getImages(
+                                                    config.getImagesAnswersIconsLocation().getValue(), answer.getId())
                                                     .orElseGet(HashMap::new)
                                     );
 

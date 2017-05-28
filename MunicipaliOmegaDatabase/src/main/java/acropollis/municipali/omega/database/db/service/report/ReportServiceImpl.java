@@ -1,6 +1,5 @@
 package acropollis.municipali.omega.database.db.service.report;
 
-import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.report.Report;
 import acropollis.municipali.omega.common.dto.user.User;
 import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
@@ -16,6 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static acropollis.municipali.omega.common.config.PropertiesConfig.*;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -42,7 +43,7 @@ public class ReportServiceImpl implements ReportService {
     public Optional<byte []> getPhoto(long id) {
         return EntityImageStorageUtils
                 .getImage(
-                        PropertiesConfig.config.getString("images.reports"),
+                        config.getImagesReportsLocation().getValue(),
                         id,
                         -1, -1
                 );
@@ -54,7 +55,7 @@ public class ReportServiceImpl implements ReportService {
 
         EntityImageStorageUtils
                 .saveImages(
-                        PropertiesConfig.config.getString("images.reports"),
+                        config.getImagesReportsLocation().getValue(),
                         id,
                         SquareImageAdapter.pack(Collections.singletonMap(-1, reportImage))
                 );
@@ -66,7 +67,7 @@ public class ReportServiceImpl implements ReportService {
 
         EntityImageStorageUtils
                 .removeImages(
-                        PropertiesConfig.config.getString("images.reports"),
+                        config.getImagesReportsLocation().getValue(),
                         id
                 );
     }
