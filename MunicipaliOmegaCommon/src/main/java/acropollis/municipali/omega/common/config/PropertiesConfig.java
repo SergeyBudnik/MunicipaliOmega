@@ -11,10 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PropertiesConfig {
-    //public static Config config;
-    public static SmartConfig config = SmartConfigProperties.getConfig("dev");
+    public static SmartConfig config;
 
     static {
+        config = SmartConfigProperties.getConfig("dev");
+
         String configHome = System.getenv("CONFIG_HOME");
 
         if (configHome == null) {
@@ -26,7 +27,11 @@ public class PropertiesConfig {
                 File.separator + (isJUnitTest() ? "municipali-omega-test" : "municipali-omega") +
                 File.separator + "application.conf";
 
-        //config = ConfigFactory.parseFile(new File(configFilePath));
+        Config instanceConfig = ConfigFactory.parseFile(new File(configFilePath));
+
+        config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
+        config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
+        config.getDatabasePassword().override(instanceConfig.getString("database.password"));
     }
 
     public static Language getLanguage() {
