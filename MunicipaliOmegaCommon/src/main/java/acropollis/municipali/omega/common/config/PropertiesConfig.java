@@ -1,5 +1,8 @@
 package acropollis.municipali.omega.common.config;
 
+import acropollis.municipali.omega.common.dto.language.Language;
+import com.bdev.smart.config.SmartConfig;
+import com.bdev.smart.config.SmartConfigProperties;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -8,7 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PropertiesConfig {
-    public static Config config;
+    //public static Config config;
+    public static SmartConfig config = SmartConfigProperties.getConfig("dev");
 
     static {
         String configHome = System.getenv("CONFIG_HOME");
@@ -22,7 +26,11 @@ public class PropertiesConfig {
                 File.separator + (isJUnitTest() ? "municipali-omega-test" : "municipali-omega") +
                 File.separator + "application.conf";
 
-        config = ConfigFactory.parseFile(new File(configFilePath));
+        //config = ConfigFactory.parseFile(new File(configFilePath));
+    }
+
+    public static Language getLanguage() {
+        return Language.fromName(config.getLanguage().getValue());
     }
 
     /* ToDo: move somewhere */

@@ -1,6 +1,7 @@
 package acropollis.municipali.omega.admin.service.csv.answer;
 
 import acropollis.municipali.omega.admin.data.dto.statistics.csv.UserAnswerStatisticsCsvRow;
+import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.dto.article.question.QuestionAnswerType;
 import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static acropollis.municipali.omega.common.config.PropertiesConfig.*;
 
 @Service
 public class AdminCsvAnswerServiceImpl implements AdminCsvAnswerService {
@@ -56,8 +59,8 @@ public class AdminCsvAnswerServiceImpl implements AdminCsvAnswerService {
                             .orElse("?")
                     );
 
-                    res.add(row.getArticle().getTranslatedArticle().get(Language.ENGLISH).getTitle());
-                    res.add(row.getQuestion().getTranslatedQuestion().get(Language.ENGLISH).getText());
+                    res.add(row.getArticle().getTranslatedArticle().get(getLanguage()).getTitle());
+                    res.add(row.getQuestion().getTranslatedQuestion().get(getLanguage()).getText());
                     res.add(getAnswerText(row.getQuestion(), row.getAnswer()));
 
                     return res;
@@ -71,7 +74,7 @@ public class AdminCsvAnswerServiceImpl implements AdminCsvAnswerService {
                 return getFivePointsAnswerText(question, answer);
             case DYCHOTOMOUS:
             case THREE_VARIANTS:
-                return answer.getTranslatedAnswer().get(Language.ENGLISH).getText();
+                return answer.getTranslatedAnswer().get(getLanguage()).getText();
         }
 
         throw new RuntimeException("Unsupported question answer type");

@@ -25,6 +25,11 @@ public class AnswerServiceImpl implements AnswerService {
             return Optional.empty();
         }
 
-        return EntityImageStorageUtils.getImage(config.getString("images.answers"), answerId, size, size);
+        return EntityImageStorageUtils.getImage(
+                config.getImagesAnswersIconsLocation().getValue(),
+                answerId,
+                size,
+                size
+        );
     }
 }
