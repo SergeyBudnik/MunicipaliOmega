@@ -14,20 +14,9 @@ public class PropertiesConfig {
     public static SmartConfig config;
 
     static {
-        config = SmartConfigProperties.getConfig("dev");
+        Config instanceConfig = getInstanceConfig();
 
-        String configHome = System.getenv("CONFIG_HOME");
-
-        if (configHome == null) {
-            configHome = System.getProperty("CONFIG_HOME");
-        }
-
-        String configFilePath =
-                configHome +
-                File.separator + (isJUnitTest() ? "municipali-omega-test" : "municipali-omega") +
-                File.separator + "application.conf";
-
-        Config instanceConfig = ConfigFactory.parseFile(new File(configFilePath));
+        config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
 
         config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
@@ -36,6 +25,21 @@ public class PropertiesConfig {
 
     public static Language getLanguage() {
         return Language.fromName(config.getLanguage().getValue());
+    }
+
+    private static Config getInstanceConfig() {
+        String configHome = System.getenv("CONFIG_HOME");
+
+        if (configHome == null) {
+            configHome = System.getProperty("CONFIG_HOME");
+        }
+
+        String configFilePath =
+                configHome +
+                        File.separator + (isJUnitTest() ? "municipali-omega-test" : "municipali-omega") +
+                        File.separator + "application.conf";
+
+        return ConfigFactory.parseFile(new File(configFilePath));
     }
 
     /* ToDo: move somewhere */
