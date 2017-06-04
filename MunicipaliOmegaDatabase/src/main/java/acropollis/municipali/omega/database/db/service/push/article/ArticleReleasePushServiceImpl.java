@@ -31,14 +31,11 @@ public class ArticleReleasePushServiceImpl implements ArticleReleasePushService 
         List<Article> articlesToRelease = new ArrayList<>();
 
         for (Long articleId : articlesIdsToRelease) {
-            Optional<Article> article = Optional
+            Optional
                     .ofNullable(articleDao.findOne(articleId))
                     .filter(it -> !it.isDeleted())
-                    .map(ArticleModelConverter::convert);
-
-            if (article.isPresent()) {
-                articlesToRelease.add(article.get());
-            }
+                    .map(ArticleModelConverter::convert)
+                    .ifPresent(articlesToRelease::add);
         }
 
         return articlesToRelease;
