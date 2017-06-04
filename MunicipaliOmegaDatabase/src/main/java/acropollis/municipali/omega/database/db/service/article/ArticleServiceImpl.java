@@ -65,7 +65,9 @@ public class ArticleServiceImpl implements ArticleService {
             articleToReleasePushRecordModel.setArticleId(articleModel.getId());
         }
 
-        articleToReleasePushRecordDao.save(articleToReleasePushRecordModel);
+        if (articleModel.isSendPushOnRelease()) {
+            articleToReleasePushRecordDao.save(articleToReleasePushRecordModel);
+        }
 
         saveIcons(articleModel, articleWithIcon);
 

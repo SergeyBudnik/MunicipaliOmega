@@ -55,7 +55,7 @@ public class ReleasedArticlesNotificationJob {
     private long lastReloadDate = -1;
 
     @Scheduled(fixedDelay = 5 * 1000)
-    @Transactional(readOnly = false)
+    @Transactional
     public void reload() {
         long currentDate = new Date().getTime();
 
