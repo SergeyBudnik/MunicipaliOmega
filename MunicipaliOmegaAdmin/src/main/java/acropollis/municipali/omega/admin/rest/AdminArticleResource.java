@@ -25,14 +25,14 @@ public class AdminArticleResource {
     @Autowired
     private AdminAuthenticationService adminAuthenticationService;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping("")
     public Collection<Article> getAllArticles(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
         return adminArticleRestService.getAllArticles(adminAuthenticationService.getCustomerInfoOrThrow(authToken));
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public Article getArticle(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
@@ -43,9 +43,8 @@ public class AdminArticleResource {
         );
     }
 
-    @RequestMapping(
+    @GetMapping(
             value = "/{id}/icon/{size}",
-            method = RequestMethod.GET,
             produces = MediaType.IMAGE_PNG_VALUE
     )
     public byte [] getArticleIcon(
@@ -60,9 +59,8 @@ public class AdminArticleResource {
         );
     }
 
-    @RequestMapping(
+    @GetMapping(
             value = "/{articleId}/question/{questionId}/answer/{answerId}/icon/{size}",
-            method = RequestMethod.GET,
             produces = MediaType.IMAGE_PNG_VALUE
     )
     public byte [] getAnswerIcon(
@@ -81,7 +79,7 @@ public class AdminArticleResource {
         );
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping("")
     public long createArticle(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody AddOrUpdateArticleRequest request
@@ -92,7 +90,7 @@ public class AdminArticleResource {
         );
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PutMapping("/{id}")
     public void updateArticle(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id,
@@ -104,7 +102,7 @@ public class AdminArticleResource {
         );
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
     public void deleteArticle(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
