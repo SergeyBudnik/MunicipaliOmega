@@ -16,6 +16,11 @@
     <version>1.0-SNAPSHOT</version>
     <name>MunicipaliOmegaCommon</name>
 
+    <properties>
+        <smart.config.properties>${project.basedir}/src/main/resources/smart-config-configuration.conf</smart.config.properties>
+        <smart.config.dimensions>${project.basedir}/src/main/resources/smart-config-dimensions.conf</smart.config.dimensions>
+    </properties>
+
     <build>
         <finalName>MunicipaliOmegaCommon</finalName>
 
@@ -27,6 +32,20 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.sergeybudnik</groupId>
+                <artifactId>smart.config</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>jenesis4java</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

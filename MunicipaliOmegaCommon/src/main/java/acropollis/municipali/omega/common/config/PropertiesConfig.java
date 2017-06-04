@@ -1,5 +1,8 @@
 package acropollis.municipali.omega.common.config;
 
+import acropollis.municipali.omega.common.dto.language.Language;
+import com.bdev.smart.config.SmartConfig;
+import com.bdev.smart.config.SmartConfigProperties;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -8,9 +11,23 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PropertiesConfig {
-    public static Config config;
+    public static SmartConfig config;
 
     static {
+        Config instanceConfig = getInstanceConfig();
+
+        config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
+
+        config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
+        config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
+        config.getDatabasePassword().override(instanceConfig.getString("database.password"));
+    }
+
+    public static Language getLanguage() {
+        return Language.fromName(config.getLanguage().getValue());
+    }
+
+    private static Config getInstanceConfig() {
         String configHome = System.getenv("CONFIG_HOME");
 
         if (configHome == null) {
@@ -19,10 +36,10 @@ public class PropertiesConfig {
 
         String configFilePath =
                 configHome +
-                File.separator + (isJUnitTest() ? "municipali-omega-test" : "municipali-omega") +
-                File.separator + "application.conf";
+                        File.separator + (isJUnitTest() ? "municipali-omega-test" : "municipali-omega") +
+                        File.separator + "application.conf";
 
-        config = ConfigFactory.parseFile(new File(configFilePath));
+        return ConfigFactory.parseFile(new File(configFilePath));
     }
 
     /* ToDo: move somewhere */

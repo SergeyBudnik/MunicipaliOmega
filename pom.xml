@@ -186,5 +186,11 @@
             <artifactId>javassist</artifactId>
             <version>3.21.0-GA</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.sergeybudnik</groupId>
+            <artifactId>smart.config.data</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 </project>

@@ -49,7 +49,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Optional<byte[]> getIcon(long articleId, int size) {
-        return EntityImageStorageUtils.getImage(config.getString("images.articles"), articleId, size, size);
+        return EntityImageStorageUtils.getImage(
+                config.getImagesAnswersIconsLocation().getValue(),
+                articleId,
+                size,
+                size
+        );
     }
 
     @Override
@@ -60,7 +65,9 @@ public class ArticleServiceImpl implements ArticleService {
             articleToReleasePushRecordModel.setArticleId(articleModel.getId());
         }
 
-        articleToReleasePushRecordDao.save(articleToReleasePushRecordModel);
+        if (articleModel.isSendPushOnRelease()) {
+            articleToReleasePushRecordDao.save(articleToReleasePushRecordModel);
+        }
 
         saveIcons(articleModel, articleWithIcon);
 
@@ -102,18 +109,25 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private void clearIcons(ArticleModel article) {
-        EntityImageStorageUtils.removeImages(config.getString("images.articles"), article.getId());
+        EntityImageStorageUtils.removeImages(
+                config.getImagesArticlesIconsLocation().getValue(),
+                article.getId()
+        );
 
         article.getQuestions().forEach(question ->
                         question.getAnswers().forEach(answer ->
-                                EntityImageStorageUtils.removeImages(config.getString("images.answers"), answer.getId()))
+                                EntityImageStorageUtils.removeImages(
+                                        config.getImagesAnswersIconsLocation().getValue(),
+                                        answer.getId()
+                                )
+                        )
         );
     }
 
     private void saveIcons(ArticleModel articleModel, ArticleWithIcon articleWithIcon) {
         if (!articleWithIcon.getIcon().isEmpty()) {
             EntityImageStorageUtils.saveImages(
-                    config.getString("images.articles"),
+                    config.getImagesArticlesIconsLocation().getValue(),
                     articleModel.getId(),
                     SquareImageAdapter.pack(articleWithIcon.getIcon())
             );
@@ -147,7 +161,7 @@ public class ArticleServiceImpl implements ArticleService {
 
                     if (!answerWithIcon.getIcon().isEmpty()) {
                         EntityImageStorageUtils.saveImages(
-                                config.getString("images.answers"),
+                                config.getImagesAnswersIconsLocation().getValue(),
                                 answerModel.getId(),
                                 SquareImageAdapter.pack(answerWithIcon.getIcon())
                         );

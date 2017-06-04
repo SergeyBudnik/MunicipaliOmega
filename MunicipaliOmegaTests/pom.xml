@@ -17,12 +17,16 @@
             <groupId>acropollis.municipali.omega</groupId>
             <artifactId>admin</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <classifier>classes</classifier>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>acropollis.municipali.omega</groupId>
             <artifactId>user</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <classifier>classes</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

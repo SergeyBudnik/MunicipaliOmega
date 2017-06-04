@@ -1,5 +1,6 @@
 package acropollis.municipali.omega.user_notification.async;
 
+import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.language.Language;
 import acropollis.municipali.omega.database.db.dao.UserDao;
@@ -24,6 +25,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static acropollis.municipali.omega.common.config.PropertiesConfig.*;
 
 @Service
 public class ReleasedArticlesNotificationJob {
@@ -94,8 +97,8 @@ public class ReleasedArticlesNotificationJob {
             ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
                     gmsToken,
                     new ReleaseArticlePushNotificationPayload.Data(
-                            article.getTranslatedArticle().get(Language.ENGLISH).getTitle(),
-                            article.getTranslatedArticle().get(Language.ENGLISH).getText()
+                            article.getTranslatedArticle().get(getLanguage()).getTitle(),
+                            article.getTranslatedArticle().get(getLanguage()).getText()
                     )
             );
 
