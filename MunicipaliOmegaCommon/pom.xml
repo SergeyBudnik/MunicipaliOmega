@@ -38,6 +38,14 @@
                 <groupId>com.github.sergeybudnik</groupId>
                 <artifactId>smart.config</artifactId>
                 <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>jenesis4java</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
