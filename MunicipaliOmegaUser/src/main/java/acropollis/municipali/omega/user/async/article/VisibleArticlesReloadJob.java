@@ -25,7 +25,9 @@ public class VisibleArticlesReloadJob {
         Collection<ArticleWithIcon> visibleArticles = new ArrayList<>();
 
         for (ArticleWithIcon article : userAllArticlesCache.getAllArticles()) {
-            boolean isVisible = article.getReleaseDate() <= currentDate;
+            boolean isVisible =
+                    article.getReleaseDate() <= currentDate &&
+                    currentDate <= article.getExpirationDate();
 
             if (isVisible) {
                 visibleArticles.add(article);
