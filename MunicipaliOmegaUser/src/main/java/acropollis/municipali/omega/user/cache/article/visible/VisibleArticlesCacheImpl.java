@@ -1,14 +1,11 @@
 package acropollis.municipali.omega.user.cache.article.visible;
 
-import acropollis.municipali.omega.user.data.dto.article.Article;
-import acropollis.municipali.omega.user.data.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.user.data.dto.article.question.QuestionWithIcon;
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -65,7 +62,7 @@ public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
                 question
                         .getAnswers()
                         .stream()
-                        .filter(answer -> answer != null)
+                        .filter(Objects::nonNull)
                         .filter(answer -> answer.getIcon() != null)
                         .filter(answer -> !answer.getIcon().isEmpty())
                         .forEach(answer -> questionIconsCache.put(answer.getId(), answer.getIcon()));

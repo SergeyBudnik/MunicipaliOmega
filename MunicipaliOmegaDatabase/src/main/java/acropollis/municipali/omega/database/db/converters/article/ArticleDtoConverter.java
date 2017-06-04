@@ -39,7 +39,7 @@ public class ArticleDtoConverter {
         return articleModel;
     }
 
-    public static List<TranslatedArticleModel> getTranslatedArticle(Article article, ArticleModel articleModel) {
+    private static List<TranslatedArticleModel> getTranslatedArticle(Article article, ArticleModel articleModel) {
         List<TranslatedArticleModel> translatedArticlesModels = new ArrayList<>();
 
         article.getTranslatedArticle().forEach((language, translatedArticle) -> {
@@ -95,7 +95,7 @@ public class ArticleDtoConverter {
         return questionModel;
     }
 
-    public static List<TranslatedQuestionModel> getTranslatedQuestion(Question question, QuestionModel questionModel) {
+    private static List<TranslatedQuestionModel> getTranslatedQuestion(Question question, QuestionModel questionModel) {
         List<TranslatedQuestionModel> translatedQuestionsModels = new ArrayList<>();
 
         question.getTranslatedQuestion().forEach((language, translatedQuestion) -> {
@@ -123,7 +123,7 @@ public class ArticleDtoConverter {
         return answerModel;
     }
 
-    public static List<TranslatedAnswerModel> getTranslatedAnswer(Answer answer, AnswerModel answerModel) {
+    private static List<TranslatedAnswerModel> getTranslatedAnswer(Answer answer, AnswerModel answerModel) {
         List<TranslatedAnswerModel> translatedAnswerModels = new ArrayList<>();
 
         answer.getTranslatedAnswer().forEach((language, translatedAnswer) -> {

@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.rest_service.article;
 
-import acropollis.municipali.omega.user.data.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.Article;
 
 import java.util.Collection;
 

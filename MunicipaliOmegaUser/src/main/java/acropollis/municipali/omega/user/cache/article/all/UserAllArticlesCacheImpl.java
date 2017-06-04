@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.cache.article.all;
 
-import acropollis.municipali.omega.user.data.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

@@ -24,7 +24,7 @@ public class AdminBrandingResource {
     @Autowired
     private AdminAuthenticationService adminAuthenticationService;
     
-    @RequestMapping(value = "/background/{w}/{h}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/background/{w}/{h}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte [] getBackground(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable int w,
@@ -35,7 +35,7 @@ public class AdminBrandingResource {
         );
     }
 
-    @RequestMapping(value = "/background", method = RequestMethod.POST, consumes = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/background", consumes = MediaType.TEXT_PLAIN_VALUE)
     public void setBackground(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody byte [] background
@@ -46,7 +46,7 @@ public class AdminBrandingResource {
         );
     }
 
-    @RequestMapping(value = "/background", method = RequestMethod.DELETE)
+    @DeleteMapping("/background")
     public void removeBackground(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
@@ -55,7 +55,7 @@ public class AdminBrandingResource {
         );
     }
 
-    @RequestMapping(value = "/icon/{size}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/icon/{size}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte [] getIcon(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable int size
@@ -65,7 +65,7 @@ public class AdminBrandingResource {
         );
     }
 
-    @RequestMapping(value = "/icon", method = RequestMethod.POST, consumes = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/icon", consumes = MediaType.TEXT_PLAIN_VALUE)
     public void setIcon(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody byte [] icon
@@ -76,7 +76,7 @@ public class AdminBrandingResource {
         );
     }
 
-    @RequestMapping(value = "/icon", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/icon")
     public void removeIcon(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {

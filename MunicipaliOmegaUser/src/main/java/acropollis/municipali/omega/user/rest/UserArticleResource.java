@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.rest;
 
-import acropollis.municipali.omega.user.data.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.user.rest_service.article.ArticleRestService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

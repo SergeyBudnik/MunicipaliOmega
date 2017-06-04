@@ -1,25 +1,22 @@
 package acropollis.municipali.omega.user.async.article;
 
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.user.cache.article.all.UserAllArticlesCache;
-import acropollis.municipali.omega.user.data.dto.article.Article;
-import acropollis.municipali.omega.user.data.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.user.data.dto.article.question.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 import static acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils.getImages;
-import static acropollis.municipali.omega.user.data.converter.article.ArticleModelConverter.convert;
+import static acropollis.municipali.omega.database.db.converters.article.ArticleModelConverter.convert;
 
 @Service
 public class AllArticlesReloadJob {
@@ -76,7 +73,7 @@ public class AllArticlesReloadJob {
 
             question.getAnswers()
                     .stream()
-                    .filter(answer -> answer != null)
+                    .filter(Objects::nonNull)
                     .forEach(answer -> {
                             Map<Integer, byte[]> answerIcons = SquareImageAdapter
                                     .unpack(

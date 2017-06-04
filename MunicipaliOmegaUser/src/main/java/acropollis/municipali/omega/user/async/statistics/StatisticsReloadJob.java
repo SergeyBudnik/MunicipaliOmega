@@ -1,10 +1,10 @@
 package acropollis.municipali.omega.user.async.statistics;
 
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.question.Question;
+import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.cache.statistics.UserStatisticsCache;
-import acropollis.municipali.omega.user.data.dto.article.Article;
-import acropollis.municipali.omega.user.data.dto.article.question.Question;
-import acropollis.municipali.omega.user.data.dto.article.question.answer.Answer;
 import acropollis.municipali.omega.database.db.dao.UserAnswerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,13 +26,13 @@ public class StatisticsReloadJob {
     @Scheduled(fixedRate = 5 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
-        Map<Long, Map<Long, Map<Long, Long>>> statisitcs = new HashMap<>();
+        Map<Long, Map<Long, Map<Long, Long>>> statistics = new HashMap<>();
 
         for (Article article : articlesCache.getArticles()) {
-            statisitcs.put(article.getId(), new HashMap<>());
+            statistics.put(article.getId(), new HashMap<>());
 
             for (Question question : article.getQuestions()) {
-                statisitcs.get(article.getId()).put(question.getId(), new HashMap<>());
+                statistics.get(article.getId()).put(question.getId(), new HashMap<>());
 
                 for (Answer answer : question.getAnswers()) {
                     long votesAmount = userAnswerDao.countUserAnswersAmountByArticleIdAndQuestionIdAndAnswerId(
@@ -41,11 +41,11 @@ public class StatisticsReloadJob {
                             answer.getId()
                     );
 
-                    statisitcs.get(article.getId()).get(question.getId()).put(answer.getId(), votesAmount);
+                    statistics.get(article.getId()).get(question.getId()).put(answer.getId(), votesAmount);
                 }
             }
         }
 
-        userStatisticsCache.set(statisitcs);
+        userStatisticsCache.set(statistics);
     }
 }
