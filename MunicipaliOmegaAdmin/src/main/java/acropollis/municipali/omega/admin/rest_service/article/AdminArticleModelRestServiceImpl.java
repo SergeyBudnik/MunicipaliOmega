@@ -62,13 +62,13 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     @Override
     public long createArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
         return articleService.create(articleWithIcon);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     @Override
     public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
         try {
@@ -78,7 +78,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
         }
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     @Override
     public void deleteArticle(CustomerInfo user, long id) {
         try {

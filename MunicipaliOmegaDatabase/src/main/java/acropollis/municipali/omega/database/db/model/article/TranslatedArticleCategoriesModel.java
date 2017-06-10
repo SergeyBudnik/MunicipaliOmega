@@ -19,5 +19,4 @@ public class TranslatedArticleCategoriesModel {
 
     @Column(name = "CATEGORY_TEXT", length = 64)
     private String text;
-
 }

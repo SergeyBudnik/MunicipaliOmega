@@ -76,16 +76,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void update(ArticleWithIcon article) throws EntityDoesNotExist {
-        Optional<ArticleModel> oldArticleOptional = Optional
-                .ofNullable(articleDao.findOneByIdAndIsDeleted(article.getId(), false));
-
-        if (!oldArticleOptional.isPresent()) {
-            throw new EntityDoesNotExist();
-        }
+        ArticleModel oldArticleOptional = Optional
+                .ofNullable(articleDao.findOneByIdAndIsDeleted(article.getId(), false))
+                .orElseThrow(EntityDoesNotExist::new);
 
         ArticleModel newArticle = articleDao.save(ArticleDtoConverter.convert(article.withoutIcon(), false));
 
-        clearIcons(oldArticleOptional.get());
+        clearIcons(oldArticleOptional);
         saveIcons(newArticle, article);
     }
 

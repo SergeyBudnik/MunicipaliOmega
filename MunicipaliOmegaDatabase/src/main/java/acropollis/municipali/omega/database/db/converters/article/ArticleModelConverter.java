@@ -16,6 +16,7 @@ import acropollis.municipali.omega.database.db.model.article.question.answer.Ans
 import acropollis.municipali.omega.database.db.model.article.question.answer.TranslatedAnswerModel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -32,7 +33,7 @@ public class ArticleModelConverter {
                 articleModel
                         .getQuestions()
                         .stream()
-                        .sorted((q1, q2) -> Integer.compare(q1.getOrder(), q2.getOrder()))
+                        .sorted(Comparator.comparingInt(QuestionModel::getOrder))
                         .map(ArticleModelConverter::convert)
                         .collect(Collectors.toList())
         );
@@ -84,8 +85,8 @@ public class ArticleModelConverter {
                 .getAnswers()
                 .stream()
                 .map(AnswerModel::getOrder)
-                .max((o1, o2) -> o1.compareTo(o2))
-                .orElseGet(() -> -1);
+                .max(Integer::compareTo)
+                .orElse(-1);
 
         question.setAnswers(new ArrayList<>());
 

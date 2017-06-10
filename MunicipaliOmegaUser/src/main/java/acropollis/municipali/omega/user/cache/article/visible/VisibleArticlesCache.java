@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.user.cache.article.visible;
 
-import acropollis.municipali.omega.user.data.dto.article.Article;
-import acropollis.municipali.omega.user.data.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
 
 import java.util.Collection;
 import java.util.Optional;

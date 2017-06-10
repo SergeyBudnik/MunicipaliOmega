@@ -5,11 +5,9 @@ import acropollis.municipali.omega.database.db.model.answer.UserAnswerModelId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface UserAnswerDao extends JpaRepository<UserAnswerModel, UserAnswerModelId> {
     @Query(
             "select count(*) from UserAnswerModel a where " +

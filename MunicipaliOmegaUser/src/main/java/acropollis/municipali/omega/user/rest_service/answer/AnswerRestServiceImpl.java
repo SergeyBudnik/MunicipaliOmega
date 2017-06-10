@@ -1,13 +1,13 @@
 package acropollis.municipali.omega.user.rest_service.answer;
 
+import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.exceptions.HttpCredentialsViolationException;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.user.cache.answer.pending.UserPendingAnswersCache;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.cache.statistics.UserStatisticsCache;
 import acropollis.municipali.omega.user.data.dto.answer.UserAnswer;
-import acropollis.municipali.omega.user.data.dto.article.Article;
-import acropollis.municipali.omega.user.data.dto.article.question.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
