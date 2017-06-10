@@ -2,7 +2,7 @@ package acropollis.municipali.omega.admin.rest;
 
 import acropollis.municipali.omega.admin.rest_service.configuration.AdminConfigurationRestService;
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
-import acropollis.municipali.omega.common.dto.language.Language;
+import acropollis.municipali.omega.common.dto.configuration.LanguageConfiguration;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,10 +21,19 @@ public class AdminConfigurationResource {
     private AdminAuthenticationService adminAuthenticationService;
 
     @GetMapping("/language")
-    public Language getLanguage(
+    public LanguageConfiguration getInterfaceLanguage(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
-        return adminConfigurationRestService.getLanguage(
+        return adminConfigurationRestService.getInterfaceLanguage(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken)
+        );
+    }
+
+    @GetMapping("/language/platform")
+    public LanguageConfiguration getPlatformLanguage(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
+    ) {
+        return adminConfigurationRestService.getPlatformLanguage(
                 adminAuthenticationService.getCustomerInfoOrThrow(authToken)
         );
     }
