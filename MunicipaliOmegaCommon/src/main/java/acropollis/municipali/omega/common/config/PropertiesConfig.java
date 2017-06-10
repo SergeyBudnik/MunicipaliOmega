@@ -1,6 +1,7 @@
 package acropollis.municipali.omega.common.config;
 
 import acropollis.municipali.omega.common.dto.language.Language;
+import acropollis.municipali.omega.common.env.Environment;
 import com.bdev.smart.config.SmartConfig;
 import com.bdev.smart.config.SmartConfigProperties;
 import com.typesafe.config.Config;
@@ -17,6 +18,12 @@ public class PropertiesConfig {
         Config instanceConfig = getInstanceConfig();
 
         config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
+
+        if (!Environment.isTest()) {
+            config.getConnectionHost().override(instanceConfig.getString("connection.host"));
+            config.getConnectionUsername().override(instanceConfig.getString("connection.username"));
+            config.getConnectionPassword().override(instanceConfig.getString("connection.password"));
+        }
 
         config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
@@ -36,23 +43,9 @@ public class PropertiesConfig {
 
         String configFilePath =
                 configHome +
-                        File.separator + (isJUnitTest() ? "municipali-omega-test" : "municipali-omega") +
+                        File.separator + (Environment.isTest() ? "municipali-omega-test" : "municipali-omega") +
                         File.separator + "application.conf";
 
         return ConfigFactory.parseFile(new File(configFilePath));
-    }
-
-    /* ToDo: move somewhere */
-    private static boolean isJUnitTest() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        List<StackTraceElement> list = Arrays.asList(stackTrace);
-
-        for (StackTraceElement element : list) {
-            if (element.getClassName().startsWith("org.junit.")) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
