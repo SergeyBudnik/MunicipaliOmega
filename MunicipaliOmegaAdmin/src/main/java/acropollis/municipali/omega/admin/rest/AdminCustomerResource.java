@@ -48,7 +48,7 @@ public class AdminCustomerResource {
             @RequestBody Customer customer
     ) {
         adminCustomerRestService.createCustomer(
-                null,//authenticationService.getCustomerInfoOrThrow(authToken),
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                 customer
         );
     }
