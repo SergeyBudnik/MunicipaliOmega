@@ -1,12 +1,15 @@
 package acropollis.municipali.omega.admin.rest;
 
+import acropollis.municipali.omega.admin.data.request.category.AddOrUpdateCategoryRequest;
+import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.category.AdminCategoryRestService;
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import acropollis.municipali.omega.common.dto.category.Category;
-import acropollis.municipali.omega.common.dto.category.CategoryWithIcon;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +21,7 @@ public class AdminCategoriesResource {
     @Autowired
     private AdminAuthenticationService adminAuthenticationService;
 
+    @Qualifier(Qualifiers.REQUEST_VALIDATION)
     @Autowired
     private AdminCategoryRestService adminCategoryRestService;
 
@@ -25,7 +29,9 @@ public class AdminCategoriesResource {
     public List<Category> getAllCategories(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
-        return null;
+        return adminCategoryRestService.getAllCategories(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken)
+        );
     }
 
     @GetMapping("/{id}")
@@ -33,24 +39,49 @@ public class AdminCategoriesResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
     ) {
-        return null;
+        return adminCategoryRestService.getCategory(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                id
+        );
+    }
+
+    @GetMapping(
+            value = "/{id}/icon/{size}",
+            produces = MediaType.IMAGE_PNG_VALUE
+    )
+    public byte [] getCategoryIcon(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
+            @PathVariable long id,
+            @PathVariable int size
+    ) {
+        return adminCategoryRestService.getCategoryIcon(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                id,
+                size
+        );
     }
 
     @PostMapping("")
     public long createCategory(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @RequestBody CategoryWithIcon categoryWithIcon
+            @RequestBody AddOrUpdateCategoryRequest request
     ) {
-        return 0;
+        return adminCategoryRestService.createCategory(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                request.toCategory()
+        );
     }
 
     @PutMapping("/{id}")
-    public long updateCategory(
+    public void updateCategory(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id,
-            @RequestBody CategoryWithIcon categoryWithIcon
+            @RequestBody AddOrUpdateCategoryRequest request
     ) {
-        return 0;
+        adminCategoryRestService.updateCategory(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                request.toCategory(id)
+        );
     }
 
     @DeleteMapping("/{id}")
@@ -58,6 +89,9 @@ public class AdminCategoriesResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
     ) {
-
+        adminCategoryRestService.deleteCategory(
+                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                id
+        );
     }
 }

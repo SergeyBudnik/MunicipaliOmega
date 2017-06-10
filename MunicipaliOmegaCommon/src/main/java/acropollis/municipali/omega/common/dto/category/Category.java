@@ -9,4 +9,7 @@ import java.util.Map;
 public class Category {
     private Long id;
     private Map<Language, TranslatedCategory> translatedCategory;
+    private boolean isClickable;
+    private long creationDate;
+    private long lastUpdateDate;
 }

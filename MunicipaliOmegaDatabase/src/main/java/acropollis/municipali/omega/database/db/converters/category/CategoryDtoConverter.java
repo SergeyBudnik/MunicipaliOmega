@@ -13,6 +13,9 @@ public class CategoryDtoConverter {
 
         categoryModel.setId(category.getId());
         categoryModel.setTranslatedCategories(convert(category, categoryModel));
+        categoryModel.setClickable(category.isClickable());
+        categoryModel.setCreationDate(category.getCreationDate());
+        categoryModel.setLastUpdateDate(category.getLastUpdateDate());
 
         return categoryModel;
     }

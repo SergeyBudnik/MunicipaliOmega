@@ -7,9 +7,27 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImageUtils {
     private static final String IMAGE_FORMAT_PNG = "png";
+
+    public static Map<Integer, byte []> resizeImages(byte [] src, int... sizes) {
+        Map<Integer, byte []> dest = new HashMap<>();
+
+        if (src != null) {
+            try {
+                for (int size : sizes) {
+                    dest.put(size, toBytes(scaleImageByWidth(fromBytes(src), size)));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+        }
+
+        return dest;
+    }
 
     public static BufferedImage scaleImageByWidth(BufferedImage src, int width) {
         double scaleFactor = 1.0 * width / src.getWidth();

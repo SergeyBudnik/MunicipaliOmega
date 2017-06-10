@@ -12,11 +12,12 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static acropollis.municipali.omega.common.utils.common.ImageUtils.*;
 
-@Service
 @Qualifier(Qualifiers.REQUEST_PROCESSING)
+@Service
 public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticleRestService {
     @Autowired
     @Qualifier(Qualifiers.MODEL)
@@ -62,7 +63,10 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
     }
 
     private void processIcons(ArticleWithIcon articleWithIcon) {
-        articleWithIcon.setIcon(processIcons(articleWithIcon.getIcon().get(-1)));
+        articleWithIcon.setIcon(resizeImages(
+                articleWithIcon.getIcon().get(-1),
+                100, 200, 300, 400, 500
+        ));
 
         articleWithIcon
                 .getQuestions()
@@ -70,26 +74,13 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
                         question
                                 .getAnswers()
                                 .stream()
-                                .filter(it -> it != null)
+                                .filter(Objects::nonNull)
                                 .forEach(answer ->
-                                        answer.setIcon(processIcons(answer.getIcon().get(-1)))
+                                        answer.setIcon(resizeImages(
+                                                answer.getIcon().get(-1),
+                                                100, 200, 300, 400, 500
+                                        ))
                                 )
         );
-    }
-
-    private Map<Integer, byte []> processIcons(byte [] iconBytes) {
-        Map<Integer, byte []> icon = new HashMap<>();
-
-        if (iconBytes != null) {
-            try {
-                for (int size : new Integer [] {100, 200, 300, 400, 500}) {
-                    icon.put(size, toBytes(scaleImageByWidth(fromBytes(iconBytes), size)));
-                }
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-        }
-
-        return icon;
     }
 }
