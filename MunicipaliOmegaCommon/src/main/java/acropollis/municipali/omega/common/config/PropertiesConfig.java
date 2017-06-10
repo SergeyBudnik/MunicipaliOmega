@@ -8,8 +8,6 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 public class PropertiesConfig {
     public static SmartConfig config;
@@ -28,10 +26,26 @@ public class PropertiesConfig {
         config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
         config.getDatabasePassword().override(instanceConfig.getString("database.password"));
+
+        config.getClientAdminInterfaceDefaultLanguage().override(
+                instanceConfig.getString("client.admin.interface.defaultLanguage")
+        );
+
+        config.getClientAdminInterfaceLanguages().override(
+                instanceConfig.getStringList("client.admin.interface.languages")
+        );
+
+        config.getPlatformDefaultLanguage().override(
+                instanceConfig.getString("platform.defaultLanguage")
+        );
+
+        config.getPlatformLanguages().override(
+                instanceConfig.getStringList("platform.languages")
+        );
     }
 
     public static Language getLanguage() {
-        return Language.fromName(config.getLanguage().getValue());
+        return Language.fromName(config.getPlatformDefaultLanguage().getValue());
     }
 
     private static Config getInstanceConfig() {

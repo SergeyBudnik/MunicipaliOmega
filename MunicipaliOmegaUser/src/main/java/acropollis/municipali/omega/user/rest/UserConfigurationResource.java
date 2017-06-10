@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.rest;
 
-import acropollis.municipali.omega.common.dto.language.Language;
+import acropollis.municipali.omega.common.dto.configuration.LanguageConfiguration;
 import acropollis.municipali.omega.user.rest_service.configuration.UserConfigurationRestService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public class UserConfigurationResource {
     @Autowired
     private UserConfigurationRestService userConfigurationRestService;
 
-    @GetMapping("/language")
-    public Language getLanguage() {
-        return userConfigurationRestService.getLanguage();
+    @GetMapping("/language/platform")
+    public LanguageConfiguration getPlatformLanguage() {
+        return userConfigurationRestService.getPlatformLanguage();
     }
 }
