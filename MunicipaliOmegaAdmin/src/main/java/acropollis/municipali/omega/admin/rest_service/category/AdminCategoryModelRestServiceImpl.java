@@ -5,6 +5,8 @@ import acropollis.municipali.omega.common.dto.category.Category;
 import acropollis.municipali.omega.common.dto.category.CategoryWithIcon;
 import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
+import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
+import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.converters.category.CategoryDtoConverter;
 import acropollis.municipali.omega.database.db.converters.category.CategoryModelConverter;
 import acropollis.municipali.omega.database.db.dao.CategoryDao;
@@ -17,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
 @Qualifier(Qualifiers.MODEL)
 @Service
@@ -46,7 +50,12 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
     @Transactional(readOnly = true)
     @Override
     public byte [] getCategoryIcon(CustomerInfo user, long id, int size) {
-        return new byte[0];
+        return EntityImageStorageUtils.getImage(
+                config.getImagesCategoriesIconsLocation().getValue(),
+                id,
+                size,
+                size
+        ).orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Transactional
@@ -54,17 +63,22 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
     public long createCategory(CustomerInfo customerInfo, CategoryWithIcon categoryWithIcon) {
         CategoryModel categoryModel = categoryDao.save(CategoryDtoConverter.convert(categoryWithIcon.withoutIcon()));
 
+        saveIcons(categoryModel, categoryWithIcon);
+
         return categoryModel.getId();
     }
 
     @Transactional
     @Override
     public void updateCategory(CustomerInfo customerInfo, CategoryWithIcon category) {
-        Optional
+        CategoryModel oldCategoryModel = Optional
                 .ofNullable(categoryDao.findOneByIdAndIsDeleted(category.getId(), false))
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
 
-        categoryDao.save(CategoryDtoConverter.convert(category.withoutIcon()));
+        CategoryModel newCategoryModel = categoryDao.save(CategoryDtoConverter.convert(category.withoutIcon()));
+
+        clearIcons(oldCategoryModel.getId());
+        saveIcons(newCategoryModel, category);
     }
 
     @Transactional
@@ -76,9 +90,26 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
             throw new HttpEntityNotFoundException("");
         }
 
-        //clearIcons(articleModel);
+        clearIcons(categoryModel.getId());
 
         categoryModel.setDeleted(true);
         categoryModel.getTranslatedCategories().clear();
+    }
+
+    private void saveIcons(CategoryModel categoryModel, CategoryWithIcon categoryWithIcon) {
+        if (!categoryWithIcon.getIcon().isEmpty()) {
+            EntityImageStorageUtils.saveImages(
+                    config.getImagesArticlesIconsLocation().getValue(),
+                    categoryModel.getId(),
+                    SquareImageAdapter.pack(categoryWithIcon.getIcon())
+            );
+        }
+    }
+
+    private void clearIcons(long id) {
+        EntityImageStorageUtils.removeImages(
+                config.getImagesArticlesIconsLocation().getValue(),
+                id
+        );
     }
 }
