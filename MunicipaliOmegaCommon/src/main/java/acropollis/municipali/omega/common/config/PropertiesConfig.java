@@ -42,6 +42,10 @@ public class PropertiesConfig {
         config.getPlatformLanguages().override(
                 instanceConfig.getStringList("platform.languages")
         );
+
+        config.getGmsKey().override(
+                instanceConfig.getString("gms.key")
+        );
     }
 
     public static Language getLanguage() {

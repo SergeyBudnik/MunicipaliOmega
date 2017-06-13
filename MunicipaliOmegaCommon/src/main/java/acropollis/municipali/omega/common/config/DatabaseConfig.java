@@ -22,6 +22,8 @@ public class DatabaseConfig {
             dataSourceConfig.setJdbcUrl(config.getDatabaseUrl().getValue());
             dataSourceConfig.setUsername(config.getDatabaseUsername().getValue());
             dataSourceConfig.setPassword(config.getDatabasePassword().getValue());
+            dataSourceConfig.setMaximumPoolSize((int) ((long) config.getDatabaseMaxPoolSize().getValue()));
+            dataSourceConfig.setMaxLifetime((int) ((long) config.getDatabaseMaxActive().getValue()));
         }
 
         return new HikariDataSource(dataSourceConfig);
