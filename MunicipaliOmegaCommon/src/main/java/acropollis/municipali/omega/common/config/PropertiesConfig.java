@@ -17,6 +17,7 @@ public class PropertiesConfig {
 
         config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
 
+        // ToDo: switch to isRemote
         if (!Environment.isTest()) {
             config.getConnectionHost().override(instanceConfig.getString("connection.host"));
             config.getConnectionUsername().override(instanceConfig.getString("connection.username"));
@@ -26,6 +27,10 @@ public class PropertiesConfig {
         config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
         config.getDatabasePassword().override(instanceConfig.getString("database.password"));
+
+        config.getDatabaseMaxPoolSizeAdmin().override(instanceConfig.getLong("database.maxPoolSize.admin"));
+        config.getDatabaseMaxPoolSizeUser().override(instanceConfig.getLong("database.maxPoolSize.user"));
+        config.getDatabaseMaxPoolSizeUserNotification().override(instanceConfig.getLong("database.maxPoolSize.userNotification"));
 
         config.getClientAdminInterfaceDefaultLanguage().override(
                 instanceConfig.getString("client.admin.interface.defaultLanguage")

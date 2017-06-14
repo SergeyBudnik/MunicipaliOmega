@@ -11,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import static acropollis.municipali.omega.common.config.DatabaseConfig.*;
+import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
 @Configuration
 @EnableTransactionManagement
@@ -18,7 +19,9 @@ import static acropollis.municipali.omega.common.config.DatabaseConfig.*;
 public class AdminDatabaseConfig {
     @Bean
     DataSource dataSource() {
-        return getDataSource();
+        return getDataSource(
+                (int) ((long) config.getDatabaseMaxPoolSizeAdmin().getValue())
+        );
     }
 
     @Bean

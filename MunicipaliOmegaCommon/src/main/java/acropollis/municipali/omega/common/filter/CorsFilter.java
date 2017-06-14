@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.user.filter;
+package acropollis.municipali.omega.common.filter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;

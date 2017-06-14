@@ -18,7 +18,7 @@
 
     <filter>
         <filter-name>CorsFilter</filter-name>
-        <filter-class>acropollis.municipali.omega.admin.filter.CorsFilter</filter-class>
+        <filter-class>acropollis.municipali.omega.common.filter.CorsFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>CorsFilter</filter-name>
