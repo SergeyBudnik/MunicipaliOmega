@@ -28,10 +28,6 @@ public class PropertiesConfig {
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
         config.getDatabasePassword().override(instanceConfig.getString("database.password"));
 
-        config.getDatabaseMaxPoolSizeAdmin().override(instanceConfig.getLong("database.maxPoolSize.admin"));
-        config.getDatabaseMaxPoolSizeUser().override(instanceConfig.getLong("database.maxPoolSize.user"));
-        config.getDatabaseMaxPoolSizeUserNotification().override(instanceConfig.getLong("database.maxPoolSize.userNotification"));
-
         config.getClientAdminInterfaceDefaultLanguage().override(
                 instanceConfig.getString("client.admin.interface.defaultLanguage")
         );

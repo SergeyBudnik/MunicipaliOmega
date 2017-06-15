@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ArticleToReleasePushRecordDao extends JpaRepository<ArticleToReleasePushRecordModel, Long> {
     List<ArticleToReleasePushRecordModel> findByReleaseDateLessThan(long to);
+    void deleteByArticleId(long articleId);
 }
