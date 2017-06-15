@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> getAll() {
         return articleDao
-                .findAll()
+                .findByIsDeletedIsFalse()
                 .stream()
                 .map(ArticleModelConverter::convert)
                 .collect(Collectors.toList());
@@ -43,7 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Optional<Article> get(long articleId) {
         return Optional
-                .ofNullable(articleDao.findOneByIdAndIsDeleted(articleId, false))
+                .ofNullable(articleDao.findOneByIdAndIsDeletedIsFalse(articleId))
                 .map(ArticleModelConverter::convert);
     }
 
@@ -77,7 +78,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void update(ArticleWithIcon article) throws EntityDoesNotExist {
         ArticleModel oldArticleOptional = Optional
-                .ofNullable(articleDao.findOneByIdAndIsDeleted(article.getId(), false))
+                .ofNullable(articleDao.findOneByIdAndIsDeletedIsFalse(article.getId()))
                 .orElseThrow(EntityDoesNotExist::new);
 
         ArticleModel newArticle = articleDao.save(ArticleDtoConverter.convert(article.withoutIcon(), false));
@@ -88,7 +89,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void delete(long articleId) throws EntityDoesNotExist {
-        ArticleModel articleModel = articleDao.findOneByIdAndIsDeleted(articleId, false);
+        ArticleModel articleModel = articleDao.findOneByIdAndIsDeletedIsFalse(articleId);
 
         if (articleModel == null) {
             throw new EntityDoesNotExist();
@@ -151,7 +152,7 @@ public class ArticleServiceImpl implements ArticleService {
                     AnswerModel answerModel = questionModel
                             .getAnswers()
                             .stream()
-                            .filter(it -> it != null)
+                            .filter(Objects::nonNull)
                             .filter(it -> it.getOrder() == currentAnswerOrder)
                             .findAny()
                             .get();

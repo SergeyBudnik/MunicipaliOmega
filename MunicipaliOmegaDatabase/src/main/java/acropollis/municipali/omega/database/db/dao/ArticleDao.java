@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ArticleDao extends JpaRepository<ArticleModel, Long> {
-    List<ArticleModel> findByLastUpdateDateGreaterThan(long lastUpdateDate);
-    ArticleModel findOneByIdAndIsDeleted(long id, boolean isDeleted);
+    ArticleModel findOneByIdAndIsDeletedIsFalse(long id);
+    List<ArticleModel> findByIsDeletedIsFalse();
+    List<ArticleModel> findByIsDeletedIsFalseAndReleaseDateLessThanAndExpirationDateGreaterThan(
+            long releaseDate,
+            long expirationDate
+    );
 }
