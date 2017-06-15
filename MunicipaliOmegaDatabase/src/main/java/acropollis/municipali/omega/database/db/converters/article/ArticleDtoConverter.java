@@ -3,6 +3,7 @@ package acropollis.municipali.omega.database.db.converters.article;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
+import acropollis.municipali.omega.common.utils.common.EncodingUtils;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleCategoriesModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleModel;
@@ -14,6 +15,8 @@ import acropollis.municipali.omega.database.db.model.article.question.answer.Tra
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static acropollis.municipali.omega.common.utils.common.EncodingUtils.*;
 
 public class ArticleDtoConverter {
     public static ArticleModel convert(Article article, boolean isDeleted) {
@@ -48,8 +51,8 @@ public class ArticleDtoConverter {
             translatedArticleModel.setId(null);
             translatedArticleModel.setArticle(articleModel);
             translatedArticleModel.setLanguage(language);
-            translatedArticleModel.setTitle(translatedArticle.getTitle());
-            translatedArticleModel.setText(translatedArticle.getText());
+            translatedArticleModel.setTitle(toBase64(translatedArticle.getTitle()));
+            translatedArticleModel.setText(toBase64(translatedArticle.getText()));
             translatedArticleModel.setCategories(
                     translatedArticle
                             .getCategories()
@@ -104,7 +107,7 @@ public class ArticleDtoConverter {
             translatedQuestionModel.setId(null);
             translatedQuestionModel.setQuestion(questionModel);
             translatedQuestionModel.setLanguage(language);
-            translatedQuestionModel.setText(translatedQuestion.getText());
+            translatedQuestionModel.setText(toBase64(translatedQuestion.getText()));
 
             translatedQuestionsModels.add(translatedQuestionModel);
         });
@@ -132,7 +135,7 @@ public class ArticleDtoConverter {
             translatedAnswerModel.setId(null);
             translatedAnswerModel.setAnswer(answerModel);
             translatedAnswerModel.setLanguage(language);
-            translatedAnswerModel.setText(translatedAnswer.getText());
+            translatedAnswerModel.setText(toBase64(translatedAnswer.getText()));
 
             translatedAnswerModels.add(translatedAnswerModel);
         });

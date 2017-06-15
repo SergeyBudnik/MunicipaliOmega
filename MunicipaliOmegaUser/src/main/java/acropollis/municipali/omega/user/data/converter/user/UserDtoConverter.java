@@ -5,6 +5,8 @@ import acropollis.municipali.omega.database.db.model.user.UserModel;
 import acropollis.municipali.omega.user.data.dto.user.User;
 import acropollis.municipali.omega.user.data.dto.user.UserId;
 
+import static acropollis.municipali.omega.common.utils.common.EncodingUtils.toBase64;
+
 public class UserDtoConverter {
     public static UserModel convert(User user, String authToken) {
         UserModel userModel = new UserModel();
@@ -14,7 +16,7 @@ public class UserDtoConverter {
 
         userModel.setGmsToken(user.getUserServiceInfo().getGmsToken());
 
-        userModel.setName(user.getUserDetailsInfo().getName());
+        userModel.setName(toBase64(user.getUserDetailsInfo().getName()));
         userModel.setEmail(user.getUserDetailsInfo().getEmail());
         userModel.setGender(user.getUserDetailsInfo().getGender());
         userModel.setDateOfBirth(user.getUserDetailsInfo().getDateOfBirth());

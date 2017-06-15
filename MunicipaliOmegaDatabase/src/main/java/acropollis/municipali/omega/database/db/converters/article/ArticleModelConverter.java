@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static acropollis.municipali.omega.common.utils.common.EncodingUtils.fromBase64;
+
 public class ArticleModelConverter {
     public static Article convert(ArticleModel articleModel) {
         Article article = new Article();
@@ -52,8 +54,8 @@ public class ArticleModelConverter {
         for (TranslatedArticleModel translatedArticleModel : articleModel.getTranslatedArticles()) {
             TranslatedArticle translatedArticle = new TranslatedArticle();
 
-            translatedArticle.setTitle(translatedArticleModel.getTitle());
-            translatedArticle.setText(translatedArticleModel.getText());
+            translatedArticle.setTitle(fromBase64(translatedArticleModel.getTitle()));
+            translatedArticle.setText(fromBase64(translatedArticleModel.getText()));
             translatedArticle.setCategories(
                     translatedArticleModel
                             .getCategories()
@@ -109,7 +111,7 @@ public class ArticleModelConverter {
         for (TranslatedQuestionModel translatedQuestionModel : questionModel.getTranslatedQuestions()) {
             TranslatedQuestion translatedQuestion = new TranslatedQuestion();
 
-            translatedQuestion.setText(translatedQuestionModel.getText());
+            translatedQuestion.setText(fromBase64(translatedQuestionModel.getText()));
 
             translatedQuestions.put(translatedQuestionModel.getLanguage(), translatedQuestion);
         }
@@ -132,7 +134,7 @@ public class ArticleModelConverter {
         for (TranslatedAnswerModel translatedAnswerModel : answerModel.getTranslatedAnswers()) {
             TranslatedAnswer translatedAnswer = new TranslatedAnswer();
 
-            translatedAnswer.setText(translatedAnswerModel.getText());
+            translatedAnswer.setText(fromBase64(translatedAnswerModel.getText()));
 
             translatedAnswers.put(translatedAnswerModel.getLanguage(), translatedAnswer);
         }

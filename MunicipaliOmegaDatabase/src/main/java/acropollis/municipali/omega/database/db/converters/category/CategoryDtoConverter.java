@@ -7,6 +7,8 @@ import acropollis.municipali.omega.database.db.model.category.TranslatedCategory
 import java.util.ArrayList;
 import java.util.List;
 
+import static acropollis.municipali.omega.common.utils.common.EncodingUtils.toBase64;
+
 public class CategoryDtoConverter {
     public static CategoryModel convert(Category category) {
         CategoryModel categoryModel = new CategoryModel();
@@ -28,8 +30,8 @@ public class CategoryDtoConverter {
 
             translatedCategoryModel.setCategory(categoryModel);
             translatedCategoryModel.setLanguage(language);
-            translatedCategoryModel.setTitle(translatedCategory.getTitle());
-            translatedCategoryModel.setText(translatedCategory.getText());
+            translatedCategoryModel.setTitle(toBase64(translatedCategory.getTitle()));
+            translatedCategoryModel.setText(toBase64(translatedCategory.getText()));
 
             res.add(translatedCategoryModel);
         });

@@ -6,13 +6,15 @@ import acropollis.municipali.omega.common.dto.user.UserId;
 import acropollis.municipali.omega.database.db.model.user.UserIdModel;
 import acropollis.municipali.omega.database.db.model.user.UserModel;
 
+import static acropollis.municipali.omega.common.utils.common.EncodingUtils.fromBase64;
+
 public class UserModelConverter {
     public static User convert(UserModel userModel) {
         User user = new User();
 
         user.setUserId(convert(userModel.getId()));
         user.setUserDetailsInfo(new UserDetailsInfo()); {
-            user.getUserDetailsInfo().setName(userModel.getName());
+            user.getUserDetailsInfo().setName(fromBase64(userModel.getName()));
             user.getUserDetailsInfo().setEmail(userModel.getEmail());
             user.getUserDetailsInfo().setUserGender(userModel.getGender());
             user.getUserDetailsInfo().setDateOfBirth(userModel.getDateOfBirth());
