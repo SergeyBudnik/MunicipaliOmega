@@ -10,6 +10,7 @@ import acropollis.municipali.omega.database.db.dao.ReportDao;
 import acropollis.municipali.omega.database.db.exceptions.EntityDoesNotExist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,16 +50,19 @@ public class ReportServiceImpl implements ReportService {
                 );
     }
 
+    @Transactional
     @Override
     public void create(Report report, byte [] reportImage, User user) {
         long id = reportDao.save(ReportDtoConverter.convert(report)).getId();
 
-        EntityImageStorageUtils
-                .saveImages(
-                        config.getImagesReportsLocation().getValue(),
-                        id,
-                        SquareImageAdapter.pack(Collections.singletonMap(-1, reportImage))
-                );
+        if (reportImage != null) {
+            EntityImageStorageUtils
+                    .saveImages(
+                            config.getImagesReportsLocation().getValue(),
+                            id,
+                            SquareImageAdapter.pack(Collections.singletonMap(-1, reportImage))
+                    );
+        }
     }
 
     @Override
