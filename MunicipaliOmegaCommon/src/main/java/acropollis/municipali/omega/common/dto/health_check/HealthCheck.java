@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.admin.data.dto.health_check;
+package acropollis.municipali.omega.common.dto.health_check;
 
 import lombok.Builder;
 import lombok.Data;

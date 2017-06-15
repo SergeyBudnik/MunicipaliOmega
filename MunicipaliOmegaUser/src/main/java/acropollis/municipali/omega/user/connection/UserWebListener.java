@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.admin.connection;
+package acropollis.municipali.omega.user.connection;
 
 import acropollis.municipali.omega.common.connection.SshConnection;
 import acropollis.municipali.omega.common.env.Environment;
@@ -8,7 +8,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 @WebListener
-public class AdminWebListener implements ServletContextListener {
+public class UserWebListener implements ServletContextListener {
     private SshConnection connection;
 
     @Override

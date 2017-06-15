@@ -17,6 +17,7 @@ public class PropertiesConfig {
 
         config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
 
+        // ToDo: switch to isRemote
         if (!Environment.isTest()) {
             config.getConnectionHost().override(instanceConfig.getString("connection.host"));
             config.getConnectionUsername().override(instanceConfig.getString("connection.username"));
@@ -41,6 +42,10 @@ public class PropertiesConfig {
 
         config.getPlatformLanguages().override(
                 instanceConfig.getStringList("platform.languages")
+        );
+
+        config.getGmsKey().override(
+                instanceConfig.getString("gms.key")
         );
     }
 

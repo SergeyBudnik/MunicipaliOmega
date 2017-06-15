@@ -2,7 +2,6 @@ package acropollis.municipali.omega.user_notification.async;
 
 import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
-import acropollis.municipali.omega.common.dto.language.Language;
 import acropollis.municipali.omega.database.db.dao.UserDao;
 import acropollis.municipali.omega.database.db.model.user.UserModel;
 import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
@@ -25,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static acropollis.municipali.omega.common.config.PropertiesConfig.*;
+import static acropollis.municipali.omega.common.config.PropertiesConfig.getLanguage;
 
 @Service
 public class ReleasedArticlesNotificationJob {
@@ -36,16 +35,16 @@ public class ReleasedArticlesNotificationJob {
         @NoArgsConstructor
         @AllArgsConstructor
         @lombok.Data
-        public static class Data {
+        private static class Data {
             private String title;
-            private String text;
+            private String body;
         }
 
         private String to;
-        private Data data;
+        private Data notification;
     }
 
-    private static final String SERVER_KEY = "AAAAKOSHdJU:APA91bFw9odWdNDl1sUJZygtClYqrgbQTjVDVDALGV2AHITEYPSRpBX5kMxgflutZUzoSr3NO6jl8VyAFq6lYoswzdpX6jeE523vOfB1X_7v1e2xNQ0KoQ2gyg1vUMFmHYofpseEskp9";
+    private static final String SERVER_KEY = PropertiesConfig.config.getGmsKey().getValue();
 
     @Autowired
     private ArticleReleasePushService articleReleasePushService;
@@ -77,7 +76,7 @@ public class ReleasedArticlesNotificationJob {
 
     private void sendPush(Article article, String gmsToken) {
         try {
-            WebResource resource = Client.create().resource("https://gcm-http.googleapis.com/gcm/send");
+            WebResource resource = Client.create().resource("https://fcm.googleapis.com/fcm/send");
 
             ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
                     gmsToken,

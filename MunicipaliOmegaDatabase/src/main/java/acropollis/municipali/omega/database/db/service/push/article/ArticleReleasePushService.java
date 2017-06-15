@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ArticleReleasePushService {
     List<Article> getArticlesToRelease(long to);
-    void delete(long id);
+    void delete(long articleId);
 }
