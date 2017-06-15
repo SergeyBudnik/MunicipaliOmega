@@ -17,13 +17,11 @@ public class ReportRestServiceImpl implements ReportRestService {
     @Autowired
     private ReportService reportService;
 
-    @Transactional(readOnly = false)
+    @Transactional
     @Override
     public void postReport(Report report, byte[] reportImage) {
-        Optional<User> user = userService.getByAuthToken(report.getUserId());
-
-        if (user.isPresent()) {
-            reportService.create(report, reportImage, user.get());
-        }
+        userService
+                .getByAuthToken(report.getUserId())
+                .ifPresent(user -> reportService.create(report, reportImage, user));
     }
 }
