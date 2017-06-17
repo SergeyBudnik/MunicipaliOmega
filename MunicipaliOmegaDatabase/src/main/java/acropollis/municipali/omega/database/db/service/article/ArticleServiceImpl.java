@@ -51,7 +51,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Optional<byte[]> getIcon(long articleId, int size) {
         return EntityImageStorageUtils.getImage(
-                config.getImagesAnswersIconsLocation().getValue(),
+                config.getImagesArticlesIconsLocation().getValue(),
                 articleId,
                 size,
                 size

@@ -17,8 +17,7 @@ public class PropertiesConfig {
 
         config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
 
-        // ToDo: switch to isRemote
-        if (!Environment.isTest()) {
+        if (config.getDatabaseRemoteConnection().getValue()) {
             config.getConnectionHost().override(instanceConfig.getString("connection.host"));
             config.getConnectionUsername().override(instanceConfig.getString("connection.username"));
             config.getConnectionPassword().override(instanceConfig.getString("connection.password"));
