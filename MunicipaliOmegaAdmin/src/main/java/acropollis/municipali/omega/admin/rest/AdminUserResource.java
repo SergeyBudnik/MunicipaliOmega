@@ -17,7 +17,7 @@ public class AdminUserResource {
     @Autowired
     private AdminUserRestService adminUserRestService;
 
-    @RequestMapping(value = "/{userAuthToken}", method = RequestMethod.GET)
+    @GetMapping("/{userAuthToken}")
     public User getUser(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,
             @PathVariable String userAuthToken

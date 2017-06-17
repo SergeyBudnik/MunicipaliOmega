@@ -33,7 +33,7 @@ public class AdminStatisticsResource {
     @Autowired
     private AdminCsvAnswerService adminCsvAnswerService;
 
-    @RequestMapping(value = "/json/article/collapsed", method = RequestMethod.POST)
+    @PostMapping("/json/article/collapsed")
     public Map<Long, Long> getCollapsedStatisticsJson(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody GetCollapsedStatisticsRequest request) {
@@ -44,7 +44,7 @@ public class AdminStatisticsResource {
         );
     }
 
-    @RequestMapping(value = "/csv/full", method = RequestMethod.POST, produces = "text/csv")
+    @PostMapping(value = "/csv/full", produces = "text/csv")
     public void getFullStatisticsAsCsv(
             HttpServletResponse response,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
@@ -52,14 +52,14 @@ public class AdminStatisticsResource {
     ) throws IOException {
         List<UserAnswerStatisticsCsvRow> userAnswers = adminStatisticsRestService
                 .getFullStatisticsAsCsv(
-                        null,//adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                        adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                         request
                 );
 
         response.getWriter().print(adminCsvAnswerService.produce(userAnswers));
     }
 
-    @RequestMapping(value = "/csv/question", method = RequestMethod.POST, produces = "text/csv")
+    @PostMapping(value = "/csv/question", produces = "text/csv")
     public void getQuestionStatisticsAsCsv(
             HttpServletResponse response,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
@@ -67,7 +67,7 @@ public class AdminStatisticsResource {
     ) throws IOException {
         List<UserAnswerStatisticsCsvRow> rows = adminStatisticsRestService
                 .getQuestionStatisticsAsCsv(
-                        null,//adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                        adminAuthenticationService.getCustomerInfoOrThrow(authToken),
                         request
                 );
 

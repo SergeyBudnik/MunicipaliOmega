@@ -24,7 +24,7 @@ public class AdminCustomerResource {
     @Autowired
     private AdminAuthenticationService adminAuthenticationService;
 
-    @RequestMapping(value = "/{login}", method = RequestMethod.GET)
+    @GetMapping("/{login}")
     public CustomerInfo getCustomer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable String login
@@ -35,14 +35,14 @@ public class AdminCustomerResource {
         );
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping("")
     public Collection<CustomerInfo> getAllCustomers(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
         return adminCustomerRestService.getAllCustomers(adminAuthenticationService.getCustomerInfoOrThrow(authToken));
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping("")
     public void createCustomer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody Customer customer
@@ -53,7 +53,7 @@ public class AdminCustomerResource {
         );
     }
 
-    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @PutMapping("")
     public void updateCustomer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @RequestBody Customer customer
@@ -64,7 +64,7 @@ public class AdminCustomerResource {
         );
     }
 
-    @RequestMapping(value = "/{login}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{login}")
     public void deleteCustomer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable String login

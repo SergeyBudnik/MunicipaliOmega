@@ -24,7 +24,7 @@ public class AdminReportResource {
     @Autowired
     private AdminReportRestService adminReportRestService;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping("")
     public Collection<Report> getAllReports(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
@@ -33,7 +33,7 @@ public class AdminReportResource {
         );
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public Report getReport(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
@@ -44,7 +44,7 @@ public class AdminReportResource {
         );
     }
 
-    @RequestMapping(value = "/{id}/photo", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/{id}/photo", produces = MediaType.IMAGE_PNG_VALUE)
     public byte [] getReportPhoto(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
@@ -55,7 +55,7 @@ public class AdminReportResource {
         );
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
     public void deleteReport(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable long id
