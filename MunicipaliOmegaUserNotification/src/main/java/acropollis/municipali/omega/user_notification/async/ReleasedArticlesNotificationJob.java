@@ -3,8 +3,6 @@ package acropollis.municipali.omega.user_notification.async;
 import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
-import acropollis.municipali.omega.database.db.dao.UserDao;
-import acropollis.municipali.omega.database.db.model.user.UserModel;
 import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -20,11 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 import static acropollis.municipali.omega.common.config.PropertiesConfig.getLanguage;
 
 @Service
@@ -46,11 +43,10 @@ public class ReleasedArticlesNotificationJob {
     }
 
     private static final String SERVER_KEY = PropertiesConfig.config.getGmsKey().getValue();
+    private static final String ARTICLE_RELEASE_TOPIC = "ArticleRelease";
 
     @Autowired
     private ArticleReleasePushService articleReleasePushService;
-    @Autowired
-    private UserDao userDao; /* Read from cache */
 
     private long lastReloadDate = -1;
 
@@ -60,13 +56,10 @@ public class ReleasedArticlesNotificationJob {
         long currentDate = new Date().getTime();
 
         if (lastReloadDate != -1) {
-            Collection<String> gmsTokens =
-                    userDao.findAll().stream().map(UserModel::getGmsToken).collect(Collectors.toList());
-
             List<Article> articles = articleReleasePushService.getArticlesToRelease(currentDate);
 
             articles.forEach(it -> {
-                gmsTokens.forEach(gmsToken -> sendPush(it, gmsToken));
+                sendPush(it);
 
                 articleReleasePushService.delete(it.getId());
             });
@@ -75,7 +68,7 @@ public class ReleasedArticlesNotificationJob {
         lastReloadDate = currentDate;
     }
 
-    private void sendPush(Article article, String gmsToken) {
+    private void sendPush(Article article) {
         try {
             WebResource resource = Client.create().resource("https://fcm.googleapis.com/fcm/send");
 
@@ -83,7 +76,7 @@ public class ReleasedArticlesNotificationJob {
 
             if (translatedArticle != null) {
                 ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
-                        gmsToken,
+                        "/topics/" + config.getId().getValue() + "_" + ARTICLE_RELEASE_TOPIC,
                         new ReleaseArticlePushNotificationPayload.Data(
                                 translatedArticle.getTitle(),
                                 translatedArticle.getText()
