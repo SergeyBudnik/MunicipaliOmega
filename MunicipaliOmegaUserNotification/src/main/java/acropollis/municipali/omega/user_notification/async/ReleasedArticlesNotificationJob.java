@@ -2,6 +2,7 @@ package acropollis.municipali.omega.user_notification.async;
 
 import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
+import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
 import acropollis.municipali.omega.database.db.dao.UserDao;
 import acropollis.municipali.omega.database.db.model.user.UserModel;
 import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
@@ -78,19 +79,23 @@ public class ReleasedArticlesNotificationJob {
         try {
             WebResource resource = Client.create().resource("https://fcm.googleapis.com/fcm/send");
 
-            ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
-                    gmsToken,
-                    new ReleaseArticlePushNotificationPayload.Data(
-                            article.getTranslatedArticle().get(getLanguage()).getTitle(),
-                            article.getTranslatedArticle().get(getLanguage()).getText()
-                    )
-            );
+            TranslatedArticle translatedArticle = article.getTranslatedArticle().get(getLanguage());
 
-            resource
-                    .header("Authorization", "key=" + SERVER_KEY)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
+            if (translatedArticle != null) {
+                ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
+                        gmsToken,
+                        new ReleaseArticlePushNotificationPayload.Data(
+                                translatedArticle.getTitle(),
+                                translatedArticle.getText()
+                        )
+                );
+
+                resource
+                        .header("Authorization", "key=" + SERVER_KEY)
+                        .type(MediaType.APPLICATION_JSON_TYPE)
+                        .accept(MediaType.APPLICATION_JSON_TYPE)
+                        .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
+            }
         } catch (IOException e) {
             /* Do nothing */
         }

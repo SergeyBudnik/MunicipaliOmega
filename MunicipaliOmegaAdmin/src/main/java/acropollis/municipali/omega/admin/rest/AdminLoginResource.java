@@ -6,10 +6,7 @@ import acropollis.municipali.omega.common.exceptions.HttpCredentialsViolationExc
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
@@ -18,14 +15,14 @@ public class AdminLoginResource {
     @Autowired
     private AdminAuthenticationService adminAuthenticationService;
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping("")
     public CustomerToken login(@RequestBody CustomerCredentials customerCredentials) {
         return adminAuthenticationService
                 .login(customerCredentials)
                 .orElseThrow(() -> new HttpCredentialsViolationException(""));
     }
 
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @DeleteMapping("")
     public void logoff(@RequestBody String authToken) {
         adminAuthenticationService.logoff(authToken);
     }
