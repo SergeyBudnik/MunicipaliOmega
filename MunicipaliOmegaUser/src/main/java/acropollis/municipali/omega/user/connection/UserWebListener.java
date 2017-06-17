@@ -1,31 +1,9 @@
 package acropollis.municipali.omega.user.connection;
 
-import acropollis.municipali.omega.common.connection.SshConnection;
-import acropollis.municipali.omega.common.env.Environment;
+import acropollis.municipali.omega.common.connection.CommonWebListener;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 @WebListener
-public class UserWebListener implements ServletContextListener {
-    private SshConnection connection;
-
-    @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
-        if (!Environment.isTest()) {
-            try {
-                connection = new SshConnection();
-            } catch (Exception e) {
-                /* ToDo: log */
-            }
-        }
-    }
-
-    @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        if (!Environment.isTest()) {
-            connection.close();
-        }
-    }
+public class UserWebListener extends CommonWebListener {
 }
