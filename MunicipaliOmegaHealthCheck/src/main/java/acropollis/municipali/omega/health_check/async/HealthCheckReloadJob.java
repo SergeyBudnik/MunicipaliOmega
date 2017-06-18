@@ -26,7 +26,7 @@ public class HealthCheckReloadJob {
 
         HealthCheck healthCheck = HealthCheck.builder()
                 .version(PropertiesConfig.config.getVersion().getValue())
-                .globalHealth(databaseHealth)
+                .globalHealth(true)
                 .databaseHealth(databaseHealth)
                 .lastUpdateDate(new Date().getTime())
                 .build();
