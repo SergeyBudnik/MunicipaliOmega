@@ -76,7 +76,7 @@ public class ReleasedArticlesNotificationJob {
 
             if (translatedArticle != null) {
                 ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
-                        "/topics/" + config.getId().getValue() + "_" + ARTICLE_RELEASE_TOPIC,
+                        "/topics/" + config.getId().getValue() + "-User_" + ARTICLE_RELEASE_TOPIC,
                         new ReleaseArticlePushNotificationPayload.Data(
                                 translatedArticle.getTitle(),
                                 translatedArticle.getText()
