@@ -11,27 +11,27 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>user.notification</artifactId>
-    <packaging>war</packaging>
+    <artifactId>health.check</artifactId>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>MunicipaliOmegaUserNotification</name>
+    <name>MunicipaliOmegaHealthCheck</name>
 
     <dependencies>
+        <dependency>
+            <groupId>acropollis.municipali.omega</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>acropollis.municipali.omega</groupId>
             <artifactId>database</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>acropollis.municipali.omega</groupId>
-            <artifactId>health.check</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>
-        <finalName>MunicipaliOmegaUserNotification</finalName>
+        <finalName>MunicipaliOmegaHealthCheck</finalName>
 
         <plugins>
             <plugin>
@@ -44,4 +44,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

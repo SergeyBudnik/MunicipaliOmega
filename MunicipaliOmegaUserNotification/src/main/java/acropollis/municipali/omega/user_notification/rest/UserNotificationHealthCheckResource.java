@@ -1,4 +1,4 @@
-package acropollis.municipali.omega.user.rest;
+package acropollis.municipali.omega.user_notification.rest;
 
 import acropollis.municipali.omega.common.dto.health_check.HealthCheck;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/health-check")
 @Api(tags = "Health Check", description = " ")
-public class UserHealthCheckResource {
+public class UserNotificationHealthCheckResource {
     @Autowired
     private HealthCheckService healthCheckService;
 
