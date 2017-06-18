@@ -6,6 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class HealthCheck {
+    private String version;
     private boolean globalHealth;
     private boolean databaseHealth;
     private long lastUpdateDate;

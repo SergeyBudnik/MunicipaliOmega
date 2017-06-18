@@ -15,6 +15,7 @@
         <module>MunicipaliOmegaDatabase</module>
         <module>MunicipaliOmegaUserNotification</module>
         <module>MunicipaliOmegaTests</module>
+        <module>MunicipaliOmegaHealthCheck</module>
     </modules>
 
     <properties>
