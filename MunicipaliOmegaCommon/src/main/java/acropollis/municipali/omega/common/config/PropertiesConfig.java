@@ -17,6 +17,8 @@ public class PropertiesConfig {
 
         config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
 
+        config.getId().override(instanceConfig.getString("id"));
+
         if (config.getDatabaseRemoteConnection().getValue()) {
             config.getConnectionHost().override(instanceConfig.getString("connection.host"));
             config.getConnectionUsername().override(instanceConfig.getString("connection.username"));
@@ -27,25 +29,13 @@ public class PropertiesConfig {
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
         config.getDatabasePassword().override(instanceConfig.getString("database.password"));
 
-        config.getClientAdminInterfaceDefaultLanguage().override(
-                instanceConfig.getString("client.admin.interface.defaultLanguage")
-        );
+        config.getClientAdminInterfaceDefaultLanguage().override(instanceConfig.getString("client.admin.interface.defaultLanguage"));
+        config.getClientAdminInterfaceLanguages().override(instanceConfig.getStringList("client.admin.interface.languages"));
 
-        config.getClientAdminInterfaceLanguages().override(
-                instanceConfig.getStringList("client.admin.interface.languages")
-        );
+        config.getPlatformDefaultLanguage().override(instanceConfig.getString("platform.defaultLanguage"));
+        config.getPlatformLanguages().override(instanceConfig.getStringList("platform.languages"));
 
-        config.getPlatformDefaultLanguage().override(
-                instanceConfig.getString("platform.defaultLanguage")
-        );
-
-        config.getPlatformLanguages().override(
-                instanceConfig.getStringList("platform.languages")
-        );
-
-        config.getGmsKey().override(
-                instanceConfig.getString("gms.key")
-        );
+        config.getGmsKey().override(instanceConfig.getString("gms.key"));
     }
 
     public static Language getLanguage() {
