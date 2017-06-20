@@ -21,7 +21,7 @@ public class UserRestServiceImpl implements UserRestService {
 
     private Random random = new Random();
 
-    @Transactional(readOnly = false)
+    @Transactional
     @Override
     public String authenticate(User user) {
         if (user.getUserId().getLoginType() == UserLoginType.NONE) {
