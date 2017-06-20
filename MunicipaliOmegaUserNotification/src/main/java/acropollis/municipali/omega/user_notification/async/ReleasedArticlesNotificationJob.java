@@ -78,11 +78,11 @@ public class ReleasedArticlesNotificationJob {
             TranslatedArticle translatedArticle = article.getTranslatedArticle().get(getLanguage());
 
             if (translatedArticle != null) {
-                String formattedTitle = translatedArticle.getTitle().substring(0, max(
+                String formattedTitle = translatedArticle.getTitle().substring(0, min(
                         translatedArticle.getTitle().length(), MAX_TEXT_LENGTH
                 ));
 
-                String formattedText = translatedArticle.getText().substring(0, max(
+                String formattedText = translatedArticle.getText().substring(0, min(
                         translatedArticle.getText().length(), MAX_TEXT_LENGTH
                 ));
 
