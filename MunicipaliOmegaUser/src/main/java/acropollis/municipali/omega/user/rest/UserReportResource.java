@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "Report", description = " ")
 public class UserReportResource {
     @Data
-    public static class PostReportRequest {
+    private static class PostReportRequest {
         @NonNull private Report report;
         private byte [] reportImage;
     }

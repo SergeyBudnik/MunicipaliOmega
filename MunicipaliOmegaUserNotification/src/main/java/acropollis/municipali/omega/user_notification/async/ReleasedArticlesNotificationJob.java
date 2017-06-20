@@ -23,6 +23,7 @@ import java.util.List;
 
 import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 import static acropollis.municipali.omega.common.config.PropertiesConfig.getLanguage;
+import static java.lang.Math.*;
 
 @Service
 public class ReleasedArticlesNotificationJob {
@@ -44,6 +45,8 @@ public class ReleasedArticlesNotificationJob {
 
     private static final String SERVER_KEY = PropertiesConfig.config.getGmsKey().getValue();
     private static final String ARTICLE_RELEASE_TOPIC = "ArticleRelease";
+
+    private static final int MAX_TEXT_LENGTH = 32;
 
     @Autowired
     private ArticleReleasePushService articleReleasePushService;
@@ -75,11 +78,19 @@ public class ReleasedArticlesNotificationJob {
             TranslatedArticle translatedArticle = article.getTranslatedArticle().get(getLanguage());
 
             if (translatedArticle != null) {
+                String formattedTitle = translatedArticle.getTitle().substring(0, max(
+                        translatedArticle.getTitle().length(), MAX_TEXT_LENGTH
+                ));
+
+                String formattedText = translatedArticle.getText().substring(0, max(
+                        translatedArticle.getText().length(), MAX_TEXT_LENGTH
+                ));
+
                 ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
                         "/topics/" + config.getId().getValue() + "-User_" + ARTICLE_RELEASE_TOPIC,
                         new ReleaseArticlePushNotificationPayload.Data(
-                                translatedArticle.getTitle(),
-                                translatedArticle.getText()
+                                formattedTitle,
+                                formattedText
                         )
                 );
 
