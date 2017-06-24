@@ -22,15 +22,21 @@ public class HealthCheckReloadJob {
     @Scheduled(fixedDelay = 5 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
-        boolean databaseHealth = customerDao.count() > 0;
-
         HealthCheck healthCheck = HealthCheck.builder()
                 .version(PropertiesConfig.config.getVersion().getValue())
                 .globalHealth(true)
-                .databaseHealth(databaseHealth)
+                .databaseHealth(getDatabaseHealth())
                 .lastUpdateDate(new Date().getTime())
                 .build();
 
         healthCheckCache.saveHealth(healthCheck);
+    }
+
+    private boolean getDatabaseHealth() {
+        try {
+            return customerDao.count() > 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
