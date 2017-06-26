@@ -7,41 +7,72 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Service
 public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
-    private Map<Long, Article> articlesCache = new ConcurrentHashMap<>();
-    private Map<Long, Map<Integer, byte []>> articlesIconsCache = new ConcurrentHashMap<>();
-    private Map<Long, Map<Long, Map<Long, Map<Integer, byte []>>>> answersIconsCache = new HashMap<>();
+    private AtomicReference<Map<Long, Article>> articlesCache = new AtomicReference<>(new ConcurrentHashMap<>());
+    private AtomicReference<Map<Long, Map<Integer, byte []>>> articlesIconsCache = new AtomicReference<>(new ConcurrentHashMap<>());
+    private AtomicReference<Map<Long, Map<Long, Map<Long, Map<Integer, byte []>>>>> answersIconsCache = new AtomicReference<>(new HashMap<>());
+
+    private ReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Override
     public Optional<Article> getArticle(long articleId) {
-        return Optional.ofNullable(articlesCache.get(articleId));
+        try {
+            lock.readLock().lock();
+
+            return Optional.ofNullable(articlesCache.get().get(articleId));
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     @Override
     public Collection<Article> getArticles() {
-        return articlesCache.values();
+        try {
+            lock.readLock().lock();
+
+            return articlesCache.get().values();
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     @Override
     public Optional<byte []> getArticleIcon(long articleId, int size) {
-        return Optional.ofNullable(
-                articlesIconsCache
-                        .getOrDefault(articleId, new HashMap<>())
-                        .get(size)
-        );
+        try {
+            lock.readLock().lock();
+
+            return Optional.ofNullable(
+                    articlesIconsCache
+                            .get()
+                            .getOrDefault(articleId, new HashMap<>())
+                            .get(size)
+            );
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     @Override
     public Optional<byte []> getAnswerIcon(long articleId, long questionId, long answerId, int size) {
-        return Optional.ofNullable(
-                answersIconsCache
-                        .getOrDefault(articleId, new HashMap<>())
-                        .getOrDefault(questionId, new HashMap<>())
-                        .getOrDefault(answerId, new HashMap<>())
-                        .get(size)
-        );
+        try {
+            lock.readLock().lock();
+
+            return Optional.ofNullable(
+                    answersIconsCache
+                            .get()
+                            .getOrDefault(articleId, new HashMap<>())
+                            .getOrDefault(questionId, new HashMap<>())
+                            .getOrDefault(answerId, new HashMap<>())
+                            .get(size)
+            );
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     @Override
@@ -73,8 +104,12 @@ public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
             }
         }
 
-        articlesCache = newArticleCache;
-        articlesIconsCache = newArticlesIconsCache;
-        answersIconsCache = newAnswersIconsCache;
+        lock.writeLock().lock();
+
+        articlesCache.set(newArticleCache);
+        articlesIconsCache.set(newArticlesIconsCache);
+        answersIconsCache.set(newAnswersIconsCache);
+
+        lock.writeLock().unlock();
     }
 }
