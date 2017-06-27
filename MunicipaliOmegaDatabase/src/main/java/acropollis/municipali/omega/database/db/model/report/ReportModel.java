@@ -18,6 +18,6 @@ public class ReportModel {
     private double latitude;
     @Column(name = "LONGITUDE")
     private double longitude;
-    @Column(name = "COMMENT", length = 1024)
+    @Column(name = "COMMENT", length = 2048)
     private String comment;
 }

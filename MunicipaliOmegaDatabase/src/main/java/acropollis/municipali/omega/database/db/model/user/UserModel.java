@@ -20,15 +20,15 @@ public class UserModel {
     private UserIdModel id = new UserIdModel();
     @Column(name = "AUTH_TOKEN")
     private String authToken;
-    @Column(name = "NAME")
+    @Column(name = "NAME", length = 256)
     private String name;
     @Column(name = "GENDER")
     private UserGender gender;
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", length = 256)
     private String email;
     @Column(name = "DATE_OF_BIRTH")
     private Long dateOfBirth;
-    @Column(name = "GMS_TOKEN")
+    @Column(name = "GMS_TOKEN", length = 256)
     private String gmsToken;
     @Column(name = "LAST_UPDATE_DATE")
     private long lastUpdateDate;
