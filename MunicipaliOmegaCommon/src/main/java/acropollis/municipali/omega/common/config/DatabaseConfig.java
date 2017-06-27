@@ -44,6 +44,7 @@ public class DatabaseConfig {
         jpaProperties.put("hibernate.show_sql", config.getDatabaseShowSql().getValue());
         jpaProperties.put("hibernate.format_sql", config.getDatabaseFormatSql().getValue());
         jpaProperties.put("hibernate.id.new_generator_mappings", config.getDatabaseIdNewGeneratorMappings().getValue());
+        jpaProperties.put("hibernate.connection.release_mode", config.getDatabaseConnectionReleaseMode().getValue());
 
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
