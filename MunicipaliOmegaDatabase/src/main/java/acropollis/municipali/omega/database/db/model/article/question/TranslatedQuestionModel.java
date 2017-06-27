@@ -21,6 +21,6 @@ public class TranslatedQuestionModel {
     @Column(name = "LANGUAGE")
     private Language language;
 
-    @Column(name = "QUESTION_TEXT", length = 4096)
+    @Column(name = "QUESTION_TEXT", length = 8192)
     private String text;
 }

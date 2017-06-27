@@ -21,9 +21,9 @@ public class TranslatedCategoryModel {
     @Column(name = "LANGUAGE")
     private Language language;
 
-    @Column(name = "TITLE", length = 64)
+    @Column(name = "TITLE", length = 128)
     private String title;
 
-    @Column(name = "TEXT", length = 4096)
+    @Column(name = "TEXT", length = 8192)
     private String text;
 }

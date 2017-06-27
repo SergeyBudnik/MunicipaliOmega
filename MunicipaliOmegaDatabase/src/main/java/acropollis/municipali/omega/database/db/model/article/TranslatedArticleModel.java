@@ -22,10 +22,10 @@ public class TranslatedArticleModel {
     @Column(name = "LANGUAGE")
     private Language language;
 
-    @Column(name = "ARTICLE_TITLE", length = 128)
+    @Column(name = "ARTICLE_TITLE", length = 256)
     private String title;
 
-    @Column(name = "ARTICLE_TEXT", length = 4096)
+    @Column(name = "ARTICLE_TEXT", length = 8192)
     private String text;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "translatedArticle", cascade = CascadeType.ALL)
