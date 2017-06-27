@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.common.utils.storage;
 
-import acropollis.municipali.omega.common.dto.common.Tuple;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -24,12 +24,12 @@ public class EntityImageStorageUtils {
         }
     }
 
-    public static Optional<Map<Tuple<Integer, Integer>, byte []>> getImages(String location, long entityId) {
+    public static Optional<Map<Pair<Integer, Integer>, byte []>> getImages(String location, long entityId) {
         try {
             File parent = getParent(location, entityId);
 
             if (parent.exists()) {
-                Map<Tuple<Integer, Integer>, byte []> icons = new HashMap<>();
+                Map<Pair<Integer, Integer>, byte []> icons = new HashMap<>();
 
                 File [] children = parent.listFiles();
 
@@ -41,7 +41,7 @@ public class EntityImageStorageUtils {
                             String fileName = child.getName().substring(0, child.getName().length() - ".png".length());
                             String [] sizeParts = fileName.split("x");
 
-                            icons.put(new Tuple<>(
+                            icons.put(new Pair<>(
                                     Integer.parseInt(sizeParts[0]),
                                     Integer.parseInt(sizeParts[1])
                             ), icon);
@@ -58,7 +58,7 @@ public class EntityImageStorageUtils {
         }
     }
 
-    public static void saveImages(String location, long entityId, Map<Tuple<Integer, Integer>, byte[]> image) {
+    public static void saveImages(String location, long entityId, Map<Pair<Integer, Integer>, byte[]> image) {
         try {
             File parent = getParent(location, entityId);
 
@@ -68,7 +68,7 @@ public class EntityImageStorageUtils {
                 }
             }
 
-            for (Tuple<Integer, Integer> imageSize : image.keySet()) {
+            for (Pair<Integer, Integer> imageSize : image.keySet()) {
                 FileUtils.writeByteArrayToFile(
                         getFile(location, entityId, imageSize.getX(), imageSize.getY()),
                         image.get(imageSize)

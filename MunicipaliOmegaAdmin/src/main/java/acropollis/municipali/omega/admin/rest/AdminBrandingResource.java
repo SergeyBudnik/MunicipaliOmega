@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.admin.rest;
 
-import acropollis.municipali.omega.common.dto.common.Tuple;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.branding.AdminBrandingRestService;
 import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
@@ -42,7 +42,7 @@ public class AdminBrandingResource {
     ) {
         adminBrandingRestService.setBackground(
                 adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                Collections.singletonMap(new Tuple<>(-1, -1), background)
+                Collections.singletonMap(new Pair<>(-1, -1), background)
         );
     }
 
@@ -72,7 +72,7 @@ public class AdminBrandingResource {
     ) {
         adminBrandingRestService.setIcon(
                 adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                Collections.singletonMap(new Tuple<>(-1, -1), icon)
+                Collections.singletonMap(new Pair<>(-1, -1), icon)
         );
     }
 
