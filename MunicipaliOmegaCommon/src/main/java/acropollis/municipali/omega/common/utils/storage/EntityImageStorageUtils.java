@@ -28,31 +28,7 @@ public class EntityImageStorageUtils {
         try {
             File parent = getParent(location, entityId);
 
-            if (parent.exists()) {
-                Map<Pair<Integer, Integer>, byte []> icons = new HashMap<>();
-
-                File [] children = parent.listFiles();
-
-                if (children != null) {
-                    for (File child : children) {
-                        byte [] icon = FileUtils.readFileToByteArray(child);
-
-                        if (icon != null) {
-                            String fileName = child.getName().substring(0, child.getName().length() - ".png".length());
-                            String [] sizeParts = fileName.split("x");
-
-                            icons.put(new Pair<>(
-                                    Integer.parseInt(sizeParts[0]),
-                                    Integer.parseInt(sizeParts[1])
-                            ), icon);
-                        }
-                    }
-                }
-
-                return Optional.of(icons);
-            } else {
-                return Optional.empty();
-            }
+            return BaseImageStorageUtils.getImages(parent);
         } catch (IOException e) {
             throw new RuntimeException(); /* ToDo */
         }
