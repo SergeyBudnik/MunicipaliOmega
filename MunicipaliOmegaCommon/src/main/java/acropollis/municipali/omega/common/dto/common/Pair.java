@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Tuple<X, Y> {
+public class Pair<X, Y> {
     private X x;
     private Y y;
 }

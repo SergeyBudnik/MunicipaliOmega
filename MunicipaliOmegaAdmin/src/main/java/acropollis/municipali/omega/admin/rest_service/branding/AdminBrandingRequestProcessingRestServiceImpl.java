@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.admin.rest_service.branding;
 
-import acropollis.municipali.omega.common.dto.common.Tuple;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +28,18 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
     }
 
     @Override
-    public void setBackground(CustomerInfo user, Map<Tuple<Integer, Integer>, byte[]> background) {
+    public void setBackground(CustomerInfo user, Map<Pair<Integer, Integer>, byte[]> background) {
         try {
-            BufferedImage src = fromBytes(Base64.getDecoder().decode(background.get(new Tuple<>(-1, -1))));
+            BufferedImage src = fromBytes(Base64.getDecoder().decode(background.get(new Pair<>(-1, -1))));
 
-            Map<Tuple<Integer, Integer>, byte []> processedBackground = new HashMap<>();
+            Map<Pair<Integer, Integer>, byte []> processedBackground = new HashMap<>();
 
-            processedBackground.put(new Tuple<>( 240,  320), toBytes(scaleAndCropImage(src,  120,  160)));
-            processedBackground.put(new Tuple<>( 320,  480), toBytes(scaleAndCropImage(src,  160,  240)));
-            processedBackground.put(new Tuple<>( 480,  800), toBytes(scaleAndCropImage(src,  240,  400)));
-            processedBackground.put(new Tuple<>( 768, 1280), toBytes(scaleAndCropImage(src,  384, 640)));
-            processedBackground.put(new Tuple<>(1080, 1920), toBytes(scaleAndCropImage(src, 540, 960)));
-            processedBackground.put(new Tuple<>(1440, 2560), toBytes(scaleAndCropImage(src, 720, 1280)));
+            processedBackground.put(new Pair<>( 240,  320), toBytes(scaleAndCropImage(src,  120,  160)));
+            processedBackground.put(new Pair<>( 320,  480), toBytes(scaleAndCropImage(src,  160,  240)));
+            processedBackground.put(new Pair<>( 480,  800), toBytes(scaleAndCropImage(src,  240,  400)));
+            processedBackground.put(new Pair<>( 768, 1280), toBytes(scaleAndCropImage(src,  384, 640)));
+            processedBackground.put(new Pair<>(1080, 1920), toBytes(scaleAndCropImage(src, 540, 960)));
+            processedBackground.put(new Pair<>(1440, 2560), toBytes(scaleAndCropImage(src, 720, 1280)));
 
             adminBrandingRestService.setBackground(user, processedBackground);
         } catch (IOException e) {
@@ -58,18 +58,18 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
     }
 
     @Override
-    public void setIcon(CustomerInfo user, Map<Tuple<Integer, Integer>, byte[]> icon) {
+    public void setIcon(CustomerInfo user, Map<Pair<Integer, Integer>, byte[]> icon) {
         try {
-            BufferedImage src = fromBytes(Base64.getDecoder().decode(icon.get(new Tuple<>(-1, -1))));
+            BufferedImage src = fromBytes(Base64.getDecoder().decode(icon.get(new Pair<>(-1, -1))));
 
-            Map<Tuple<Integer, Integer>, byte []> processedIcon = new HashMap<>();
+            Map<Pair<Integer, Integer>, byte []> processedIcon = new HashMap<>();
 
-            processedIcon.put(new Tuple<>( 75,  75), toBytes(scaleImageByWidth(src, 75)));
-            processedIcon.put(new Tuple<>(100, 100), toBytes(scaleImageByWidth(src, 100)));
-            processedIcon.put(new Tuple<>(150, 150), toBytes(scaleImageByWidth(src, 150)));
-            processedIcon.put(new Tuple<>(200, 200), toBytes(scaleImageByWidth(src, 200)));
-            processedIcon.put(new Tuple<>(300, 300), toBytes(scaleImageByWidth(src, 300)));
-            processedIcon.put(new Tuple<>(400, 400), toBytes(scaleImageByWidth(src, 400)));
+            processedIcon.put(new Pair<>( 75,  75), toBytes(scaleImageByWidth(src, 75)));
+            processedIcon.put(new Pair<>(100, 100), toBytes(scaleImageByWidth(src, 100)));
+            processedIcon.put(new Pair<>(150, 150), toBytes(scaleImageByWidth(src, 150)));
+            processedIcon.put(new Pair<>(200, 200), toBytes(scaleImageByWidth(src, 200)));
+            processedIcon.put(new Pair<>(300, 300), toBytes(scaleImageByWidth(src, 300)));
+            processedIcon.put(new Pair<>(400, 400), toBytes(scaleImageByWidth(src, 400)));
 
             adminBrandingRestService.setIcon(user, processedIcon);
         } catch (IOException e) {

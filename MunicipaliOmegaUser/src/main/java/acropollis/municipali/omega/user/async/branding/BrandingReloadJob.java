@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.async.branding;
 
-import acropollis.municipali.omega.common.dto.common.Tuple;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.omega.common.utils.storage.StandaloneImageStorageUtils;
 import acropollis.municipali.omega.user.cache.branding.UserBrandingCache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ public class BrandingReloadJob {
 
     @Scheduled(fixedDelay = 5 * 1000)
     public void reload() {
-        Optional<Map<Tuple<Integer, Integer>, byte []>> background = StandaloneImageStorageUtils
+        Optional<Map<Pair<Integer, Integer>, byte []>> background = StandaloneImageStorageUtils
                 .getImages(config.getImagesBrandingBackgroundLocation().getValue());
 
         userBrandingCache.setBackground(background.orElse(new HashMap<>()));
 
-        Optional<Map<Tuple<Integer, Integer>, byte []>> icon = StandaloneImageStorageUtils
+        Optional<Map<Pair<Integer, Integer>, byte []>> icon = StandaloneImageStorageUtils
                 .getImages(config.getImagesBrandingIconLocation().getValue());
 
         userBrandingCache.setIcon(icon.orElse(new HashMap<>()));

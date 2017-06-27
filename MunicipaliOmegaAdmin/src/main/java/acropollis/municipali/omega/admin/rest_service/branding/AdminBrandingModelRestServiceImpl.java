@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.admin.rest_service.branding;
 
-import acropollis.municipali.omega.common.dto.common.Tuple;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
@@ -23,7 +23,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     }
 
     @Override
-    public void setBackground(CustomerInfo user, Map<Tuple<Integer, Integer>, byte[]> background) {
+    public void setBackground(CustomerInfo user, Map<Pair<Integer, Integer>, byte[]> background) {
         saveImages(getBackgroundLocation(), background);
     }
 
@@ -40,7 +40,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     }
 
     @Override
-    public void setIcon(CustomerInfo user, Map<Tuple<Integer, Integer>, byte []> icon) {
+    public void setIcon(CustomerInfo user, Map<Pair<Integer, Integer>, byte []> icon) {
         saveImages(getIconLocation(), icon);
     }
 

@@ -104,12 +104,14 @@ public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
             }
         }
 
-        lock.writeLock().lock();
+        try {
+            lock.writeLock().lock();
 
-        articlesCache.set(newArticleCache);
-        articlesIconsCache.set(newArticlesIconsCache);
-        answersIconsCache.set(newAnswersIconsCache);
-
-        lock.writeLock().unlock();
+            articlesCache.set(newArticleCache);
+            articlesIconsCache.set(newArticlesIconsCache);
+            answersIconsCache.set(newAnswersIconsCache);
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 }
