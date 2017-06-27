@@ -7,6 +7,8 @@ import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
+import acropollis.municipali.omega.user.utils.log.LogUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import static acropollis.municipali.omega.database.db.converters.article.Article
 
 @Service
 public class VisibleArticlesReloadJob {
+    private static final Logger log = LogUtils.getArticlesReloadLogger();
+
     @Autowired
     private VisibleArticlesCache visibleArticlesCache;
 
@@ -31,26 +35,35 @@ public class VisibleArticlesReloadJob {
     public void reload() {
         long currentTime = new Date().getTime();
 
-        List<ArticleWithIcon> visibleArticles = new ArrayList<>();
+        try {
+            List<ArticleWithIcon> visibleArticles = new ArrayList<>();
 
-        List<ArticleModel> articlesModels = articleDao
-                .findByIsDeletedIsFalseAndReleaseDateLessThanAndExpirationDateGreaterThan(
-                        currentTime,
-                        currentTime
+            List<ArticleModel> articlesModels = articleDao
+                    .findByIsDeletedIsFalseAndReleaseDateLessThanAndExpirationDateGreaterThan(
+                            currentTime,
+                            currentTime
+                    );
+
+            for (ArticleModel articleModel : articlesModels) {
+                Article article = convert(articleModel);
+
+                ArticleWithIcon articleWithIcon = article.withIcon(
+                        getArticleIcons(article),
+                        getAnswersIcons(article)
                 );
 
-        for (ArticleModel articleModel : articlesModels) {
-            Article article = convert(articleModel);
+                visibleArticles.add(articleWithIcon);
+            }
 
-            ArticleWithIcon articleWithIcon = article.withIcon(
-                    getArticleIcons(article),
-                    getAnswersIcons(article)
-            );
+            visibleArticlesCache.setArticles(visibleArticles);
 
-            visibleArticles.add(articleWithIcon);
+            log.info(String.format("%d articles reloaded in %d ms",
+                    visibleArticles.size(),
+                    new Date().getTime() - currentTime
+            ));
+        } catch (Exception e) {
+            log.error(String.format("Articles failed to reload in %d ms", new Date().getTime() - currentTime));
         }
-
-        visibleArticlesCache.setArticles(visibleArticles);
     }
 
     private Map<Integer, byte []> getArticleIcons(Article article) {
@@ -58,8 +71,7 @@ public class VisibleArticlesReloadJob {
                 getImages(
                         config.getImagesArticlesIconsLocation().getValue(),
                         article.getId()
-                )
-                        .orElseGet(HashMap::new)
+                ).orElseGet(HashMap::new)
         );
     }
 
