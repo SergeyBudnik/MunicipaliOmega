@@ -27,7 +27,7 @@ public class PendingAnswersPersistJob {
     @Autowired
     private UserPendingAnswersCache userPendingAnswersCache;
 
-    @Scheduled(fixedDelay = 5 * 1000)
+    @Scheduled(fixedRate = 60 * 1000)
     @Transactional
     public void persistAnswers() {
         long currentTime = new Date().getTime();

@@ -19,7 +19,7 @@ public class HealthCheckReloadJob {
     @Autowired
     private HealthCheckCache healthCheckCache;
 
-    @Scheduled(fixedDelay = 5 * 1000)
+    @Scheduled(fixedRate = 60 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
         HealthCheck healthCheck = HealthCheck.builder()

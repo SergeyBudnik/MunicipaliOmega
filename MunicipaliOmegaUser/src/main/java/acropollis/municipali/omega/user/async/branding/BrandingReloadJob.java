@@ -23,7 +23,7 @@ public class BrandingReloadJob {
     @Autowired
     private UserBrandingCache userBrandingCache;
 
-    @Scheduled(fixedDelay = 5 * 1000)
+    @Scheduled(fixedRate = 60 * 1000)
     public void reload() {
         long currentTime = new Date().getTime();
 

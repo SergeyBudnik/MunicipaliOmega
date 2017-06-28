@@ -30,7 +30,7 @@ public class VisibleArticlesReloadJob {
     @Autowired
     private ArticleDao articleDao;
 
-    @Scheduled(fixedDelay = 5 * 1000)
+    @Scheduled(fixedRate = 60 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
         long currentTime = new Date().getTime();
