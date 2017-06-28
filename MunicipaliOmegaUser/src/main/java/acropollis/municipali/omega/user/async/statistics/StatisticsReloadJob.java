@@ -28,7 +28,7 @@ public class StatisticsReloadJob {
     @Autowired
     private UserStatisticsCache userStatisticsCache;
 
-    @Scheduled(fixedRate = 5 * 1000)
+    @Scheduled(fixedRate = 60 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
         long currentTime = new Date().getTime();
