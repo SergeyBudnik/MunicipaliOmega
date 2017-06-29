@@ -1,11 +1,15 @@
-package acropollis.municipali.omega.user.async.statistics;
+package acropollis.municipali.omega.user.async;
 
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
+import acropollis.municipali.omega.database.db.dao.UserAnswerDao;
+import acropollis.municipali.omega.health_check.async.CommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
+import acropollis.municipali.omega.health_check.data.CommonReloadJobHealth;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.cache.statistics.UserStatisticsCache;
-import acropollis.municipali.omega.database.db.dao.UserAnswerDao;
+import acropollis.municipali.omega.user.data.health_check.UserHealth;
 import acropollis.municipali.omega.user.utils.log.LogUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class StatisticsReloadJob {
+public class UserAnswersReloadJob extends CommonHealthcheckedJob<UserHealth, CommonReloadJobHealth> {
     private static final Logger log = LogUtils.getUserAnswersReloadLogger();
 
     @Autowired
@@ -28,10 +32,15 @@ public class StatisticsReloadJob {
     @Autowired
     private UserStatisticsCache userStatisticsCache;
 
+    @Autowired
+    private HealthCheckCache healthCheckCache;
+
     @Scheduled(fixedRate = 60 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
-        long currentTime = new Date().getTime();
+        onReloadStarted();
+
+        long reloadStartDate = new Date().getTime();
 
         try {
             Map<Long, Map<Long, Map<Long, Long>>> statistics = new HashMap<>();
@@ -56,9 +65,44 @@ public class StatisticsReloadJob {
 
             userStatisticsCache.set(statistics);
 
-            log.info(String.format("User answers reloaded in %d ms", new Date().getTime() - currentTime));
+            updateHealthWithSuccess(
+                    reloadStartDate,
+                    new Date().getTime()
+            );
         } catch (Exception e) {
-            log.error(String.format("User answers failed to reload in %d ms", new Date().getTime() - currentTime));
+            updateHealthWithFailure(reloadStartDate, new Date().getTime(), e);
         }
+    }
+
+    @Override
+    protected HealthCheckCache getHealthCheckCache() {
+        return healthCheckCache;
+    }
+
+    @Override
+    protected CommonReloadJobHealth getReloadJobHealthEntity() {
+        return new CommonReloadJobHealth();
+    }
+
+    @Override
+    protected UserHealth getHealthEntity() {
+        return new UserHealth();
+    }
+
+    @Override
+    protected void updateReloadJobHealth(UserHealth userHealth, CommonReloadJobHealth reloadJobHealth) {
+        userHealth.setStatisticsReloadJobHealth(reloadJobHealth);
+    }
+
+    private void updateHealthWithSuccess(long startDate, long endDate) {
+        onReloadSuccess(startDate, endDate);
+
+        log.info(String.format("User answers reloaded in %d ms", endDate - startDate));
+    }
+
+    private void updateHealthWithFailure(long startDate, long endDate, Exception failureReason) {
+        onReloadFailure(startDate, endDate, failureReason);
+
+        log.error(String.format("User answers failed to reload in %d ms", endDate - startDate), failureReason);
     }
 }

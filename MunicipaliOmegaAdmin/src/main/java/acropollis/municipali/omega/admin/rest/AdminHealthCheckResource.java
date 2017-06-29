@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.admin.rest;
 
-import acropollis.municipali.omega.common.dto.health_check.HealthCheck;
+import acropollis.municipali.omega.health_check.data.CommonHealth;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.health_check.service.HealthCheckService;
 import io.swagger.annotations.Api;
@@ -17,7 +17,7 @@ public class AdminHealthCheckResource {
     private HealthCheckService healthCheckService;
 
     @GetMapping("")
-    public HealthCheck getHealth() {
+    public CommonHealth getHealth() {
         return healthCheckService
                 .getHealth()
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));

@@ -4,12 +4,18 @@ import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
 import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
+import acropollis.municipali.omega.health_check.async.CommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
+import acropollis.municipali.omega.health_check.data.CommonReloadJobHealth;
+import acropollis.municipali.omega.user_notification.data.health_check.UserNotificationHealth;
+import acropollis.municipali.omega.user_notification.utils.log.LogUtils;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,7 +32,9 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.getLang
 import static java.lang.Math.*;
 
 @Service
-public class ReleasedArticlesNotificationJob {
+public class UserNotificationReleasedArticlesNotificationJob extends CommonHealthcheckedJob<UserNotificationHealth, CommonReloadJobHealth> {
+    private static final Logger log = LogUtils.getReleasedArticlesNotificationJobLogger();
+
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
@@ -51,27 +59,52 @@ public class ReleasedArticlesNotificationJob {
     @Autowired
     private ArticleReleasePushService articleReleasePushService;
 
+    @Autowired
+    private HealthCheckCache healthCheckCache;
+
     private long lastReloadDate = -1;
 
     @Scheduled(fixedRate = 60 * 1000)
     @Transactional
     public void reload() {
-        long currentDate = new Date().getTime();
+        onReloadStarted();
 
-        if (lastReloadDate != -1) {
-            List<Article> articles = articleReleasePushService.getArticlesToRelease(currentDate);
+        long reloadStartDate = new Date().getTime();
 
-            articles.forEach(it -> {
-                sendPush(it);
+        try {
+            if (lastReloadDate != -1) {
+                int totalAttempts = 0;
+                int successfullAttempts = 0;
 
-                articleReleasePushService.delete(it.getId());
-            });
+                for (Article article : articleReleasePushService.getArticlesToRelease(reloadStartDate)) {
+                    totalAttempts++;
+
+                    if (sendPush(article)) {
+                        successfullAttempts++;
+                    }
+
+                    articleReleasePushService.delete(article.getId());
+                }
+
+                updateHealthWithSuccess(
+                        totalAttempts,
+                        successfullAttempts,
+                        reloadStartDate,
+                        new Date().getTime()
+                );
+            }
+
+            lastReloadDate = reloadStartDate;
+        } catch (Exception e) {
+            updateHealthWithFailure(
+                    reloadStartDate,
+                    new Date().getTime(),
+                    e
+            );
         }
-
-        lastReloadDate = currentDate;
     }
 
-    private void sendPush(Article article) {
+    private boolean sendPush(Article article) {
         try {
             WebResource resource = Client.create().resource("https://fcm.googleapis.com/fcm/send");
 
@@ -100,8 +133,56 @@ public class ReleasedArticlesNotificationJob {
                         .accept(MediaType.APPLICATION_JSON_TYPE)
                         .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
             }
+
+            return true;
         } catch (IOException e) {
-            /* Do nothing */
+            log.error("Released articles push notification sending failed", e);
+
+            return false;
         }
+    }
+
+    @Override
+    protected HealthCheckCache getHealthCheckCache() {
+        return healthCheckCache;
+    }
+
+    @Override
+    protected UserNotificationHealth getHealthEntity() {
+        return new UserNotificationHealth();
+    }
+
+    @Override
+    protected CommonReloadJobHealth getReloadJobHealthEntity() {
+        return new CommonReloadJobHealth();
+    }
+
+    @Override
+    protected void updateReloadJobHealth(UserNotificationHealth userHealth, CommonReloadJobHealth reloadJobHealth) {
+        userHealth.setReleasedArticlesNotificationReloadJobHealth(reloadJobHealth);
+    }
+
+    private void updateHealthWithSuccess(
+            int totalAttempts,
+            int successfulAttempts,
+            long startDate,
+            long endDate
+    ) {
+        onReloadSuccess(startDate, endDate);
+
+        log.info(String.format("%d of %d push notifications were sent in %d ms",
+                successfulAttempts,
+                totalAttempts,
+                endDate - startDate
+        ));
+    }
+
+    private void updateHealthWithFailure(long startDate, long endDate, Exception failureReason) {
+        onReloadFailure(startDate, endDate, failureReason);
+
+        log.error(
+                String.format("Articles failed to reload in %d ms", endDate - startDate),
+                failureReason
+        );
     }
 }
