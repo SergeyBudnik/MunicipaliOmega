@@ -1,35 +1,29 @@
-package acropollis.municipali.omega.health_check.async;
+package acropollis.municipali.omega.user.async;
 
-import acropollis.municipali.omega.common.config.PropertiesConfig;
-import acropollis.municipali.omega.common.dto.health_check.HealthCheck;
 import acropollis.municipali.omega.database.db.dao.CustomerDao;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
+import acropollis.municipali.omega.user.data.health_check.UserHealth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-
 @Service
-public class HealthCheckReloadJob {
-    @Autowired
-    private CustomerDao customerDao;
-
+public class UserDatabaseHealthCheckReloadJob {
     @Autowired
     private HealthCheckCache healthCheckCache;
+
+    @Autowired
+    private CustomerDao customerDao;
 
     @Scheduled(fixedRate = 60 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
-        HealthCheck healthCheck = HealthCheck.builder()
-                .version(PropertiesConfig.config.getVersion().getValue())
-                .globalHealth(true)
-                .databaseHealth(getDatabaseHealth())
-                .lastUpdateDate(new Date().getTime())
-                .build();
+        UserHealth userHealth = (UserHealth) healthCheckCache.getHealth().orElse(new UserHealth());
 
-        healthCheckCache.saveHealth(healthCheck);
+        userHealth.setDatabaseHealth(getDatabaseHealth());
+
+        healthCheckCache.saveHealth(userHealth);
     }
 
     private boolean getDatabaseHealth() {

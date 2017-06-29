@@ -16,6 +16,6 @@ public class LogUtils {
     }
 
     public static Logger getPendingAnswersPersistLogger() {
-        return Logger.getLogger("pendingAnswersPersist");
+        return Logger.getLogger("pendingAnswersPersistJob");
     }
 }
