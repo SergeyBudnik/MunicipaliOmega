@@ -4,21 +4,26 @@ import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
 import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
+import acropollis.municipali.omega.common.exceptions.HttpEntityIllegalStateException;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
+import acropollis.municipali.omega.database.db.service.article.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Date;
 
-import static acropollis.municipali.omega.common.utils.common.ImageUtils.resizeImages;
-
-@Qualifier(Qualifiers.REQUEST_PROCESSING)
 @Service
-public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticleRestService {
+@Qualifier(Qualifiers.MODEL_VALIDATION)
+public class AdminArticleModelValidationRestServiceImpl implements AdminArticleRestService {
     @Autowired
-    @Qualifier(Qualifiers.MODEL_VALIDATION)
+    @Qualifier(Qualifiers.MODEL)
     private AdminArticleRestService adminArticleRestService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @Override
     public Collection<Article> getAllArticles(CustomerInfo user) {
@@ -36,48 +41,34 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
     }
 
     @Override
-    public byte[] getAnswerIcon(CustomerInfo user, long articleId, long questionId, long answerId, int size) {
+    public byte [] getAnswerIcon(CustomerInfo user, long articleId, long questionId, long answerId, int size) {
         return adminArticleRestService.getAnswerIcon(user, articleId, questionId, answerId, size);
     }
 
     @Override
     public long createArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
-        processIcons(articleWithIcon);
-
         return adminArticleRestService.createArticle(user, articleWithIcon);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
-        processIcons(articleWithIcon);
+        Article article = articleService
+                .get(articleWithIcon.getId())
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
+
+        boolean isReleased = article.getReleaseDate() <= new Date().getTime();
+
+        if (isReleased) {
+            throw new HttpEntityIllegalStateException("");
+        }
 
         adminArticleRestService.updateArticle(user, articleWithIcon);
     }
 
     @Override
+    @Transactional
     public void deleteArticle(CustomerInfo user, long id) {
         adminArticleRestService.deleteArticle(user, id);
-    }
-
-    private void processIcons(ArticleWithIcon articleWithIcon) {
-        articleWithIcon.setIcon(resizeImages(
-                articleWithIcon.getIcon().get(-1),
-                100, 200, 300, 400, 500
-        ));
-
-        articleWithIcon
-                .getQuestions()
-                .forEach(question ->
-                        question
-                                .getAnswers()
-                                .stream()
-                                .filter(Objects::nonNull)
-                                .forEach(answer ->
-                                        answer.setIcon(resizeImages(
-                                                answer.getIcon().get(-1),
-                                                100, 200, 300, 400, 500
-                                        ))
-                                )
-        );
     }
 }
