@@ -1,26 +1,23 @@
 package acropollis.municipali.omega.admin.rest_service.article;
 
+import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
 import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
-import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-import static acropollis.municipali.omega.common.utils.common.ImageUtils.*;
+import static acropollis.municipali.omega.common.utils.common.ImageUtils.resizeImages;
 
 @Qualifier(Qualifiers.REQUEST_PROCESSING)
 @Service
 public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticleRestService {
     @Autowired
-    @Qualifier(Qualifiers.MODEL)
+    @Qualifier(Qualifiers.MODEL_VALIDATION)
     private AdminArticleRestService adminArticleRestService;
 
     @Override
