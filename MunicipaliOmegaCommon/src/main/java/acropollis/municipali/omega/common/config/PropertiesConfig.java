@@ -8,6 +8,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 import java.io.File;
+import java.util.List;
 
 public class PropertiesConfig {
     public static SmartConfig config;
@@ -35,7 +36,7 @@ public class PropertiesConfig {
         config.getPlatformDefaultLanguage().override(instanceConfig.getString("platform.defaultLanguage"));
         config.getPlatformLanguages().override(instanceConfig.getStringList("platform.languages"));
 
-        config.getGmsKey().override(instanceConfig.getString("gms.key"));
+        config.getGmsKeys().override((List<String>) instanceConfig.getAnyRefList("gms.keys"));
     }
 
     public static Language getLanguage() {
