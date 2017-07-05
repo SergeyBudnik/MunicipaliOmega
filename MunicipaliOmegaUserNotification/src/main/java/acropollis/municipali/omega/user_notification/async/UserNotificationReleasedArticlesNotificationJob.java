@@ -51,7 +51,7 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
         private Data notification;
     }
 
-    private static final String SERVER_KEY = PropertiesConfig.config.getGmsKey().getValue();
+    private static final List<String> SERVER_KEYS = PropertiesConfig.config.getGmsKeys().getValue();
     private static final String ARTICLE_RELEASE_TOPIC = "ArticleRelease";
 
     private static final int MAX_TEXT_LENGTH = 32;
@@ -127,11 +127,13 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
                         )
                 );
 
-                resource
-                        .header("Authorization", "key=" + SERVER_KEY)
-                        .type(MediaType.APPLICATION_JSON_TYPE)
-                        .accept(MediaType.APPLICATION_JSON_TYPE)
-                        .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
+                for (String serverKey : SERVER_KEYS) {
+                    resource
+                            .header("Authorization", "key=" + serverKey)
+                            .type(MediaType.APPLICATION_JSON_TYPE)
+                            .accept(MediaType.APPLICATION_JSON_TYPE)
+                            .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
+                }
             }
 
             return true;
