@@ -61,7 +61,7 @@ public class ArticleDtoConverter {
                                 TranslatedArticleCategoriesModel translatedArticleCategoriesModel = new TranslatedArticleCategoriesModel();
 
                                 translatedArticleCategoriesModel.setTranslatedArticle(translatedArticleModel);
-                                translatedArticleCategoriesModel.setText(it);
+                                translatedArticleCategoriesModel.setText(toBase64(it));
 
                                 return translatedArticleCategoriesModel;
                             })
