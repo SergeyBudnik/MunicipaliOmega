@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "TRANSLATED_ARTICLE")
+@Table(name = "TRANSLATED_ARTICLE_CATEGORY")
 public class TranslatedArticleCategoriesModel {
     @Id
     @Column(name = "ID")
