@@ -7,6 +7,7 @@ import acropollis.municipali.omega.common.dto.article.question.TranslatedQuestio
 import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
 import acropollis.municipali.omega.common.dto.article.question.answer.TranslatedAnswer;
 import acropollis.municipali.omega.common.dto.language.Language;
+import acropollis.municipali.omega.common.utils.common.EncodingUtils;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleCategoriesModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleModel;
@@ -61,6 +62,7 @@ public class ArticleModelConverter {
                             .getCategories()
                             .stream()
                             .map(TranslatedArticleCategoriesModel::getText)
+                            .map(EncodingUtils::fromBase64)
                             .collect(Collectors.toList())
             );
 
