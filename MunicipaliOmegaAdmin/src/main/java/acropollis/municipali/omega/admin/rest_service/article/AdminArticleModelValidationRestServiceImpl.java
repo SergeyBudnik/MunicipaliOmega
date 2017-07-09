@@ -53,15 +53,15 @@ public class AdminArticleModelValidationRestServiceImpl implements AdminArticleR
     @Override
     @Transactional(readOnly = true)
     public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
-        Article article = articleService
-                .get(articleWithIcon.getId())
-                .orElseThrow(() -> new HttpEntityNotFoundException(""));
-
-        boolean isReleased = article.getReleaseDate() <= new Date().getTime();
-
-        if (isReleased) {
-            throw new HttpEntityIllegalStateException("");
-        }
+//        Article article = articleService
+//                .get(articleWithIcon.getId())
+//                .orElseThrow(() -> new HttpEntityNotFoundException(""));
+//
+//        boolean isReleased = article.getReleaseDate() <= new Date().getTime();
+//
+//        if (isReleased) {
+//            throw new HttpEntityIllegalStateException("");
+//        }
 
         adminArticleRestService.updateArticle(user, articleWithIcon);
     }
