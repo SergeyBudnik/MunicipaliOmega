@@ -51,7 +51,7 @@ public class AdminArticleModelValidationRestServiceImpl implements AdminArticleR
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
 //        Article article = articleService
 //                .get(articleWithIcon.getId())
