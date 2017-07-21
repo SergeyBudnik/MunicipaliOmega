@@ -20,6 +20,8 @@ public class PropertiesConfig {
 
         config.getId().override(instanceConfig.getString("id"));
 
+        config.getDatabaseRemoteConnection().override(instanceConfig.getBoolean("database.remoteConnection"));
+
         if (config.getDatabaseRemoteConnection().getValue()) {
             config.getConnectionHost().override(instanceConfig.getString("connection.host"));
             config.getConnectionUsername().override(instanceConfig.getString("connection.username"));
