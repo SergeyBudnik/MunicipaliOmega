@@ -1,27 +1,27 @@
 package acropollis.municipali.omega.admin.rest_service.statistics;
 
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.data.dto.statistics.csv.UserAnswerStatisticsCsvRow;
 import acropollis.municipali.omega.admin.data.request.statistics.GetCollapsedStatisticsRequest;
 import acropollis.municipali.omega.admin.data.request.statistics.GetFullStatisticsRequest;
 import acropollis.municipali.omega.admin.data.request.statistics.GetQuestionStatisticsRequest;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 
 import java.util.List;
 import java.util.Map;
 
 public interface AdminStatisticsRestService {
     Map<Long, Long> getStatistics(
-            CustomerInfo customerInfo,
+            MunicipaliUserInfo userInfo,
             GetCollapsedStatisticsRequest request
     );
 
     List<UserAnswerStatisticsCsvRow> getFullStatisticsAsCsv(
-            CustomerInfo customerInfo,
+            MunicipaliUserInfo userInfo,
             GetFullStatisticsRequest request
     );
 
     List<UserAnswerStatisticsCsvRow> getQuestionStatisticsAsCsv(
-            CustomerInfo customerInfo,
+            MunicipaliUserInfo userInfo,
             GetQuestionStatisticsRequest request
     );
 }

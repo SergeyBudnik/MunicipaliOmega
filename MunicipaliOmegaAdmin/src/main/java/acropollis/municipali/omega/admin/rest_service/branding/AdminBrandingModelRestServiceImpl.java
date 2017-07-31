@@ -1,9 +1,9 @@
 package acropollis.municipali.omega.admin.rest_service.branding;
 
-import acropollis.municipali.omega.common.dto.common.Pair;
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
-import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
+import acropollis.municipali.omega.common.dto.common.Pair;
+import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -16,36 +16,36 @@ import static acropollis.municipali.omega.common.utils.storage.StandaloneImageSt
 @Qualifier(Qualifiers.MODEL)
 public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestService {
     @Override
-    public byte [] getBackground(CustomerInfo user, int w, int h) {
+    public byte [] getBackground(MunicipaliUserInfo userInfo, int w, int h) {
         return
                 getImage(getBackgroundLocation(), w, h)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Override
-    public void setBackground(CustomerInfo user, Map<Pair<Integer, Integer>, byte[]> background) {
+    public void setBackground(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte[]> background) {
         saveImages(getBackgroundLocation(), background);
     }
 
     @Override
-    public void removeBackground(CustomerInfo user) {
+    public void removeBackground(MunicipaliUserInfo userInfo) {
         removeImages(getBackgroundLocation());
     }
 
     @Override
-    public byte [] getIcon(CustomerInfo user, int size) {
+    public byte [] getIcon(MunicipaliUserInfo userInfo, int size) {
         return
                 getImage(getIconLocation(), size, size)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Override
-    public void setIcon(CustomerInfo user, Map<Pair<Integer, Integer>, byte []> icon) {
+    public void setIcon(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte []> icon) {
         saveImages(getIconLocation(), icon);
     }
 
     @Override
-    public void removeIcon(CustomerInfo user) {
+    public void removeIcon(MunicipaliUserInfo userInfo) {
         removeImages(getIconLocation());
     }
 

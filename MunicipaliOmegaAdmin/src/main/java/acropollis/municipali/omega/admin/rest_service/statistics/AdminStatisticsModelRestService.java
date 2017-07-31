@@ -1,6 +1,5 @@
 package acropollis.municipali.omega.admin.rest_service.statistics;
 
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.data.dto.statistics.csv.UserAnswerStatisticsCsvRow;
 import acropollis.municipali.omega.admin.data.request.statistics.GetCollapsedStatisticsRequest;
 import acropollis.municipali.omega.admin.data.request.statistics.GetFullStatisticsRequest;
@@ -18,6 +17,7 @@ import acropollis.municipali.omega.database.db.model.answer.UserAnswerModel;
 import acropollis.municipali.omega.database.db.service.answer.AnswerService;
 import acropollis.municipali.omega.database.db.service.article.ArticleService;
 import acropollis.municipali.omega.database.db.service.question.QuestionService;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
 
     @Transactional(readOnly = true)
     @Override
-    public Map<Long, Long> getStatistics(CustomerInfo customerInfo, GetCollapsedStatisticsRequest request) {
+    public Map<Long, Long> getStatistics(MunicipaliUserInfo userInfo, GetCollapsedStatisticsRequest request) {
         Map<Long, Long> res = new HashMap<>();
 
         for (long answerId : request.getQuestionCriteria().getAnswersIds()) {
@@ -60,7 +60,7 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
     @Transactional(readOnly = true)
     @Override
     public List<UserAnswerStatisticsCsvRow> getFullStatisticsAsCsv(
-            CustomerInfo customerInfo,
+            MunicipaliUserInfo userInfo,
             GetFullStatisticsRequest request
     ) {
         List<UserAnswerModel> userAnswerModels = userAnswerDao.findAll();
@@ -104,7 +104,7 @@ public class AdminStatisticsModelRestService implements AdminStatisticsRestServi
     @Transactional(readOnly = true)
     @Override
     public List<UserAnswerStatisticsCsvRow> getQuestionStatisticsAsCsv(
-            CustomerInfo customerInfo,
+            MunicipaliUserInfo userInfo,
             GetQuestionStatisticsRequest request
     ) {
         Article article = articleService

@@ -1,8 +1,8 @@
 package acropollis.municipali.omega.admin.rest_service.branding;
 
-import acropollis.municipali.omega.common.dto.common.Pair;
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
+import acropollis.municipali.omega.common.dto.common.Pair;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -23,12 +23,12 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
     private AdminBrandingRestService adminBrandingRestService;
 
     @Override
-    public byte [] getBackground(CustomerInfo user, int w, int h) {
-        return adminBrandingRestService.getBackground(user, w, h);
+    public byte [] getBackground(MunicipaliUserInfo userInfo, int w, int h) {
+        return adminBrandingRestService.getBackground(userInfo, w, h);
     }
 
     @Override
-    public void setBackground(CustomerInfo user, Map<Pair<Integer, Integer>, byte[]> background) {
+    public void setBackground(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte[]> background) {
         try {
             BufferedImage src = fromBytes(Base64.getDecoder().decode(background.get(new Pair<>(-1, -1))));
 
@@ -41,24 +41,24 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
             processedBackground.put(new Pair<>(1080, 1920), toBytes(scaleAndCropImage(src, 540, 960)));
             processedBackground.put(new Pair<>(1440, 2560), toBytes(scaleAndCropImage(src, 720, 1280)));
 
-            adminBrandingRestService.setBackground(user, processedBackground);
+            adminBrandingRestService.setBackground(userInfo, processedBackground);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void removeBackground(CustomerInfo user) {
-        adminBrandingRestService.removeBackground(user);
+    public void removeBackground(MunicipaliUserInfo userInfo) {
+        adminBrandingRestService.removeBackground(userInfo);
     }
 
     @Override
-    public byte [] getIcon(CustomerInfo user, int size) {
-        return adminBrandingRestService.getIcon(user, size);
+    public byte [] getIcon(MunicipaliUserInfo userInfo, int size) {
+        return adminBrandingRestService.getIcon(userInfo, size);
     }
 
     @Override
-    public void setIcon(CustomerInfo user, Map<Pair<Integer, Integer>, byte[]> icon) {
+    public void setIcon(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte[]> icon) {
         try {
             BufferedImage src = fromBytes(Base64.getDecoder().decode(icon.get(new Pair<>(-1, -1))));
 
@@ -71,15 +71,15 @@ public class AdminBrandingRequestProcessingRestServiceImpl implements AdminBrand
             processedIcon.put(new Pair<>(300, 300), toBytes(scaleImageByWidth(src, 300)));
             processedIcon.put(new Pair<>(400, 400), toBytes(scaleImageByWidth(src, 400)));
 
-            adminBrandingRestService.setIcon(user, processedIcon);
+            adminBrandingRestService.setIcon(userInfo, processedIcon);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void removeIcon(CustomerInfo user) {
-        adminBrandingRestService.removeIcon(user);
+    public void removeIcon(MunicipaliUserInfo userInfo) {
+        adminBrandingRestService.removeIcon(userInfo);
     }
 }
 

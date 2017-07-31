@@ -1,10 +1,9 @@
 package acropollis.municipali.omega.admin.rest;
 
 import acropollis.municipali.omega.admin.data.request.article.AddOrUpdateArticleRequest;
+import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.article.AdminArticleRestService;
 import acropollis.municipali.omega.common.dto.article.Article;
-import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,19 +16,18 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/article")
 @Api(tags = "Article", description = "PROTECTED")
-public class AdminArticleResource {
+public class AdminArticleResource extends AdminResource {
     @Autowired
     @Qualifier(Qualifiers.REQUEST_VALIDATION)
     private AdminArticleRestService adminArticleRestService;
-
-    @Autowired
-    private AdminAuthenticationService adminAuthenticationService;
 
     @GetMapping("")
     public Collection<Article> getAllArticles(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
-        return adminArticleRestService.getAllArticles(adminAuthenticationService.getCustomerInfoOrThrow(authToken));
+        return adminArticleRestService.getAllArticles(
+                getUserInfo(authToken)
+        );
     }
 
     @GetMapping("/{id}")
@@ -38,7 +36,7 @@ public class AdminArticleResource {
             @PathVariable long id
     ) {
         return adminArticleRestService.getArticle(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 id
         );
     }
@@ -53,7 +51,7 @@ public class AdminArticleResource {
             @PathVariable int size
     ) {
         return adminArticleRestService.getArticleIcon(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 id,
                 size
         );
@@ -71,7 +69,7 @@ public class AdminArticleResource {
             @PathVariable int size
     ) {
         return adminArticleRestService.getAnswerIcon(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 articleId,
                 questionId,
                 answerId,
@@ -85,7 +83,7 @@ public class AdminArticleResource {
             @RequestBody AddOrUpdateArticleRequest request
     ) {
         return adminArticleRestService.createArticle(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 request.getArticle().toDto()
         );
     }
@@ -97,7 +95,7 @@ public class AdminArticleResource {
             @RequestBody AddOrUpdateArticleRequest request
     ) {
         adminArticleRestService.updateArticle(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 request.getArticle().toDto(id)
         );
     }
@@ -108,7 +106,7 @@ public class AdminArticleResource {
             @PathVariable long id
     ) {
         adminArticleRestService.deleteArticle(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 id
         );
     }

@@ -1,6 +1,5 @@
 package acropollis.municipali.omega.admin.rest_service.article;
 
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
@@ -10,6 +9,7 @@ import acropollis.municipali.omega.database.db.exceptions.EntityDoesNotExist;
 import acropollis.municipali.omega.database.db.service.answer.AnswerService;
 import acropollis.municipali.omega.database.db.service.article.ArticleService;
 import acropollis.municipali.omega.database.db.service.question.QuestionService;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -29,13 +29,13 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     @Transactional(readOnly = true)
     @Override
-    public Collection<Article> getAllArticles(CustomerInfo user) {
+    public Collection<Article> getAllArticles(MunicipaliUserInfo userInfo) {
         return articleService.getAll();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Article getArticle(CustomerInfo user, long id) {
+    public Article getArticle(MunicipaliUserInfo userInfo, long id) {
         return articleService
                 .get(id)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
@@ -43,7 +43,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     @Transactional(readOnly = true)
     @Override
-    public byte [] getArticleIcon(CustomerInfo user, long id, int size) {
+    public byte [] getArticleIcon(MunicipaliUserInfo userInfo, long id, int size) {
         return articleService
                 .getIcon(id, size)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
@@ -51,7 +51,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     @Transactional(readOnly = true)
     @Override
-    public byte [] getAnswerIcon(CustomerInfo user, long articleId, long questionId, long answerId, int size) {
+    public byte [] getAnswerIcon(MunicipaliUserInfo userInfo, long articleId, long questionId, long answerId, int size) {
         Question question = articleService
                 .get(articleId)
                 .flatMap(article -> questionService.get(article, questionId))
@@ -64,13 +64,13 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     @Transactional
     @Override
-    public long createArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
+    public long createArticle(MunicipaliUserInfo userInfo, ArticleWithIcon articleWithIcon) {
         return articleService.create(articleWithIcon);
     }
 
     @Transactional
     @Override
-    public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
+    public void updateArticle(MunicipaliUserInfo userInfo, ArticleWithIcon articleWithIcon) {
         try {
             articleService.update(articleWithIcon);
         } catch (EntityDoesNotExist e) {
@@ -80,7 +80,7 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     @Transactional
     @Override
-    public void deleteArticle(CustomerInfo user, long id) {
+    public void deleteArticle(MunicipaliUserInfo userInfo, long id) {
         try {
             articleService.delete(id);
         } catch (EntityDoesNotExist e) {

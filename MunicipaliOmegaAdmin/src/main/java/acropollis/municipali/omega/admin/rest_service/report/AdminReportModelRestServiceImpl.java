@@ -1,11 +1,11 @@
 package acropollis.municipali.omega.admin.rest_service.report;
 
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.common.dto.report.Report;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.database.db.exceptions.EntityDoesNotExist;
 import acropollis.municipali.omega.database.db.service.report.ReportService;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ public class AdminReportModelRestServiceImpl implements AdminReportRestService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Report> getAllReports(CustomerInfo customerInfo) {
+    public List<Report> getAllReports(MunicipaliUserInfo userInfo) {
         return reportService.getAll();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Report getReport(CustomerInfo customerInfo, long id) {
+    public Report getReport(MunicipaliUserInfo userInfo, long id) {
         return reportService
                 .get(id)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
@@ -35,15 +35,15 @@ public class AdminReportModelRestServiceImpl implements AdminReportRestService {
 
     @Transactional(readOnly = true)
     @Override
-    public byte [] getReportPhoto(CustomerInfo customerInfo, long id) {
+    public byte [] getReportPhoto(MunicipaliUserInfo userInfo, long id) {
         return reportService
                 .getPhoto(id)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     @Override
-    public void deleteReport(CustomerInfo customerInfo, long id) {
+    public void deleteReport(MunicipaliUserInfo userInfo, long id) {
         try {
             reportService.delete(id);
         } catch (EntityDoesNotExist e) {

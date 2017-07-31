@@ -3,7 +3,6 @@ package acropollis.municipali.omega.admin.rest_service.category;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.category.Category;
 import acropollis.municipali.omega.common.dto.category.CategoryWithIcon;
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
 import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
@@ -11,6 +10,7 @@ import acropollis.municipali.omega.database.db.converters.category.CategoryDtoCo
 import acropollis.municipali.omega.database.db.converters.category.CategoryModelConverter;
 import acropollis.municipali.omega.database.db.dao.CategoryDao;
 import acropollis.municipali.omega.database.db.model.category.CategoryModel;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
 
     @Transactional(readOnly = true)
     @Override
-    public List<Category> getAllCategories(CustomerInfo customerInfo) {
+    public List<Category> getAllCategories(MunicipaliUserInfo userInfo) {
         return categoryDao
                 .findAll()
                 .stream()
@@ -40,7 +40,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
 
     @Transactional(readOnly = true)
     @Override
-    public Category getCategory(CustomerInfo customerInfo, long id) {
+    public Category getCategory(MunicipaliUserInfo userInfo, long id) {
         return Optional
                 .ofNullable(categoryDao.findOne(id))
                 .map(CategoryModelConverter::convert)
@@ -49,7 +49,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
 
     @Transactional(readOnly = true)
     @Override
-    public byte [] getCategoryIcon(CustomerInfo user, long id, int size) {
+    public byte [] getCategoryIcon(MunicipaliUserInfo userInfo, long id, int size) {
         return EntityImageStorageUtils.getImage(
                 config.getImagesCategoriesIconsLocation().getValue(),
                 id,
@@ -60,7 +60,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
 
     @Transactional
     @Override
-    public long createCategory(CustomerInfo customerInfo, CategoryWithIcon categoryWithIcon) {
+    public long createCategory(MunicipaliUserInfo userInfo, CategoryWithIcon categoryWithIcon) {
         CategoryModel categoryModel = categoryDao.save(CategoryDtoConverter.convert(categoryWithIcon.withoutIcon()));
 
         saveIcons(categoryModel, categoryWithIcon);
@@ -70,7 +70,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
 
     @Transactional
     @Override
-    public void updateCategory(CustomerInfo customerInfo, CategoryWithIcon category) {
+    public void updateCategory(MunicipaliUserInfo userInfo, CategoryWithIcon category) {
         CategoryModel oldCategoryModel = Optional
                 .ofNullable(categoryDao.findOneByIdAndIsDeleted(category.getId(), false))
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
@@ -83,7 +83,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
 
     @Transactional
     @Override
-    public void deleteCategory(CustomerInfo customerInfo, long id) {
+    public void deleteCategory(MunicipaliUserInfo userInfo, long id) {
         CategoryModel categoryModel = categoryDao.findOneByIdAndIsDeleted(id, false);
 
         if (categoryModel == null) {

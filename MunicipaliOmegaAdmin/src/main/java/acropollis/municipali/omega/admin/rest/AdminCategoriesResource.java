@@ -3,7 +3,6 @@ package acropollis.municipali.omega.admin.rest;
 import acropollis.municipali.omega.admin.data.request.category.AddOrUpdateCategoryRequest;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.category.AdminCategoryRestService;
-import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import acropollis.municipali.omega.common.dto.category.Category;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/category")
 @Api(tags = "Category", description = "PROTECTED")
-public class AdminCategoriesResource {
-    @Autowired
-    private AdminAuthenticationService adminAuthenticationService;
-
+public class AdminCategoriesResource extends AdminResource {
     @Qualifier(Qualifiers.REQUEST_VALIDATION)
     @Autowired
     private AdminCategoryRestService adminCategoryRestService;
@@ -30,7 +26,7 @@ public class AdminCategoriesResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
         return adminCategoryRestService.getAllCategories(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken)
+                getUserInfo(authToken)
         );
     }
 
@@ -40,7 +36,7 @@ public class AdminCategoriesResource {
             @PathVariable long id
     ) {
         return adminCategoryRestService.getCategory(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 id
         );
     }
@@ -55,7 +51,7 @@ public class AdminCategoriesResource {
             @PathVariable int size
     ) {
         return adminCategoryRestService.getCategoryIcon(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 id,
                 size
         );
@@ -67,7 +63,7 @@ public class AdminCategoriesResource {
             @RequestBody AddOrUpdateCategoryRequest request
     ) {
         return adminCategoryRestService.createCategory(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 request.toCategory()
         );
     }
@@ -79,7 +75,7 @@ public class AdminCategoriesResource {
             @RequestBody AddOrUpdateCategoryRequest request
     ) {
         adminCategoryRestService.updateCategory(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 request.toCategory(id)
         );
     }
@@ -90,7 +86,7 @@ public class AdminCategoriesResource {
             @PathVariable long id
     ) {
         adminCategoryRestService.deleteCategory(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 id
         );
     }

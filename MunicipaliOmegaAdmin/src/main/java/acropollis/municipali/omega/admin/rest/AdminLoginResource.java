@@ -1,29 +1,21 @@
 package acropollis.municipali.omega.admin.rest;
 
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerCredentials;
-import acropollis.municipali.omega.admin.data.dto.customer.CustomerToken;
-import acropollis.municipali.omega.common.exceptions.HttpCredentialsViolationException;
-import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
+import acropollis.municipali.security.common.dto.MunicipaliUserCredentials;
+import acropollis.municipali.security.common.dto.MunicipaliUserToken;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
 @Api(tags = "Login", description = "PROTECTED")
-public class AdminLoginResource {
-    @Autowired
-    private AdminAuthenticationService adminAuthenticationService;
-
+public class AdminLoginResource extends AdminResource {
     @PostMapping("")
-    public CustomerToken login(@RequestBody CustomerCredentials customerCredentials) {
-        return adminAuthenticationService
-                .login(customerCredentials)
-                .orElseThrow(() -> new HttpCredentialsViolationException(""));
+    public MunicipaliUserToken login(@RequestBody MunicipaliUserCredentials credentials) {
+        return super.login(credentials);
     }
 
     @DeleteMapping("")
     public void logoff(@RequestBody String authToken) {
-        adminAuthenticationService.logoff(authToken);
+        super.logoff(authToken);
     }
 }
