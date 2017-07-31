@@ -6,9 +6,7 @@ import acropollis.municipali.omega.admin.data.request.statistics.GetFullStatisti
 import acropollis.municipali.omega.admin.data.request.statistics.GetQuestionStatisticsRequest;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.admin.rest_service.statistics.AdminStatisticsRestService;
-import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import acropollis.municipali.omega.admin.service.csv.answer.AdminCsvAnswerService;
-import acropollis.municipali.omega.common.dto.answer.UserAnswer;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,13 +21,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/statistics")
 @Api(tags = "Statistics", description = "PROTECTED")
-public class AdminStatisticsResource {
+public class AdminStatisticsResource extends AdminResource {
     @Autowired
     @Qualifier(Qualifiers.MODEL)
     private AdminStatisticsRestService adminStatisticsRestService;
 
-    @Autowired
-    private AdminAuthenticationService adminAuthenticationService;
     @Autowired
     private AdminCsvAnswerService adminCsvAnswerService;
 
@@ -39,7 +35,7 @@ public class AdminStatisticsResource {
             @RequestBody GetCollapsedStatisticsRequest request) {
 
         return adminStatisticsRestService.getStatistics(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 request
         );
     }
@@ -52,7 +48,7 @@ public class AdminStatisticsResource {
     ) throws IOException {
         List<UserAnswerStatisticsCsvRow> userAnswers = adminStatisticsRestService
                 .getFullStatisticsAsCsv(
-                        adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                        getUserInfo(authToken),
                         request
                 );
 
@@ -67,7 +63,7 @@ public class AdminStatisticsResource {
     ) throws IOException {
         List<UserAnswerStatisticsCsvRow> rows = adminStatisticsRestService
                 .getQuestionStatisticsAsCsv(
-                        adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                        getUserInfo(authToken),
                         request
                 );
 

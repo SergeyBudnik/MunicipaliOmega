@@ -1,7 +1,6 @@
 package acropollis.municipali.omega.admin.rest;
 
 import acropollis.municipali.omega.admin.rest_service.user.AdminUserRestService;
-import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
 import acropollis.municipali.omega.common.dto.user.User;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "User", description = "PROTECTED")
-public class AdminUserResource {
-    @Autowired
-    private AdminAuthenticationService adminAuthenticationService;
+public class AdminUserResource extends AdminResource {
     @Autowired
     private AdminUserRestService adminUserRestService;
 
@@ -23,7 +20,7 @@ public class AdminUserResource {
             @PathVariable String userAuthToken
     ) {
         return adminUserRestService.getUserDetails(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
+                getUserInfo(authToken),
                 userAuthToken
         );
     }

@@ -3,7 +3,7 @@ package acropollis.municipali.omega.admin.rest_service.article;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,42 +21,42 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
     private AdminArticleRestService adminArticleRestService;
 
     @Override
-    public Collection<Article> getAllArticles(CustomerInfo user) {
-        return adminArticleRestService.getAllArticles(user);
+    public Collection<Article> getAllArticles(MunicipaliUserInfo userInfo) {
+        return adminArticleRestService.getAllArticles(userInfo);
     }
 
     @Override
-    public Article getArticle(CustomerInfo user, long id) {
-        return adminArticleRestService.getArticle(user, id);
+    public Article getArticle(MunicipaliUserInfo userInfo, long id) {
+        return adminArticleRestService.getArticle(userInfo, id);
     }
 
     @Override
-    public byte [] getArticleIcon(CustomerInfo user, long id, int size) {
-        return adminArticleRestService.getArticleIcon(user, id, size);
+    public byte [] getArticleIcon(MunicipaliUserInfo userInfo, long id, int size) {
+        return adminArticleRestService.getArticleIcon(userInfo, id, size);
     }
 
     @Override
-    public byte[] getAnswerIcon(CustomerInfo user, long articleId, long questionId, long answerId, int size) {
-        return adminArticleRestService.getAnswerIcon(user, articleId, questionId, answerId, size);
+    public byte[] getAnswerIcon(MunicipaliUserInfo userInfo, long articleId, long questionId, long answerId, int size) {
+        return adminArticleRestService.getAnswerIcon(userInfo, articleId, questionId, answerId, size);
     }
 
     @Override
-    public long createArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
+    public long createArticle(MunicipaliUserInfo userInfo, ArticleWithIcon articleWithIcon) {
         processIcons(articleWithIcon);
 
-        return adminArticleRestService.createArticle(user, articleWithIcon);
+        return adminArticleRestService.createArticle(userInfo, articleWithIcon);
     }
 
     @Override
-    public void updateArticle(CustomerInfo user, ArticleWithIcon articleWithIcon) {
+    public void updateArticle(MunicipaliUserInfo userInfo, ArticleWithIcon articleWithIcon) {
         processIcons(articleWithIcon);
 
-        adminArticleRestService.updateArticle(user, articleWithIcon);
+        adminArticleRestService.updateArticle(userInfo, articleWithIcon);
     }
 
     @Override
-    public void deleteArticle(CustomerInfo user, long id) {
-        adminArticleRestService.deleteArticle(user, id);
+    public void deleteArticle(MunicipaliUserInfo userInfo, long id) {
+        adminArticleRestService.deleteArticle(userInfo, id);
     }
 
     private void processIcons(ArticleWithIcon articleWithIcon) {

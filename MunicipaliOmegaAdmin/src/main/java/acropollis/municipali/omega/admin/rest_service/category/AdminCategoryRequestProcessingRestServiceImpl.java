@@ -3,7 +3,7 @@ package acropollis.municipali.omega.admin.rest_service.category;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.category.Category;
 import acropollis.municipali.omega.common.dto.category.CategoryWithIcon;
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,37 +20,37 @@ public class AdminCategoryRequestProcessingRestServiceImpl implements AdminCateg
     private AdminCategoryRestService adminCategoryRestService;
 
     @Override
-    public List<Category> getAllCategories(CustomerInfo customerInfo) {
-        return adminCategoryRestService.getAllCategories(customerInfo);
+    public List<Category> getAllCategories(MunicipaliUserInfo userInfo) {
+        return adminCategoryRestService.getAllCategories(userInfo);
     }
 
     @Override
-    public Category getCategory(CustomerInfo customerInfo, long id) {
-        return adminCategoryRestService.getCategory(customerInfo, id);
+    public Category getCategory(MunicipaliUserInfo userInfo, long id) {
+        return adminCategoryRestService.getCategory(userInfo, id);
     }
 
     @Override
-    public byte [] getCategoryIcon(CustomerInfo user, long id, int size) {
-        return adminCategoryRestService.getCategoryIcon(user, id, size);
+    public byte [] getCategoryIcon(MunicipaliUserInfo userInfo, long id, int size) {
+        return adminCategoryRestService.getCategoryIcon(userInfo, id, size);
     }
 
     @Override
-    public long createCategory(CustomerInfo customerInfo, CategoryWithIcon categoryWithIcon) {
+    public long createCategory(MunicipaliUserInfo userInfo, CategoryWithIcon categoryWithIcon) {
         processIcons(categoryWithIcon);
 
-        return adminCategoryRestService.createCategory(customerInfo, categoryWithIcon);
+        return adminCategoryRestService.createCategory(userInfo, categoryWithIcon);
     }
 
     @Override
-    public void updateCategory(CustomerInfo customerInfo, CategoryWithIcon categoryWithIcon) {
+    public void updateCategory(MunicipaliUserInfo userInfo, CategoryWithIcon categoryWithIcon) {
         processIcons(categoryWithIcon);
 
-        adminCategoryRestService.updateCategory(customerInfo, categoryWithIcon);
+        adminCategoryRestService.updateCategory(userInfo, categoryWithIcon);
     }
 
     @Override
-    public void deleteCategory(CustomerInfo customerInfo, long id) {
-        adminCategoryRestService.deleteCategory(customerInfo, id);
+    public void deleteCategory(MunicipaliUserInfo userInfo, long id) {
+        adminCategoryRestService.deleteCategory(userInfo, id);
     }
 
     private void processIcons(CategoryWithIcon categoryWithIcon) {

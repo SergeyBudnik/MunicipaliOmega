@@ -32,6 +32,8 @@ public class PropertiesConfig {
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
         config.getDatabasePassword().override(instanceConfig.getString("database.password"));
 
+        config.getSecurityServiceRootUrl().override(instanceConfig.getString("securityService.rootUrl"));
+
         config.getClientAdminInterfaceDefaultLanguage().override(instanceConfig.getString("client.admin.interface.defaultLanguage"));
         config.getClientAdminInterfaceLanguages().override(instanceConfig.getStringList("client.admin.interface.languages"));
 

@@ -1,67 +1,46 @@
 package acropollis.municipali.omega.admin.rest;
 
-import acropollis.municipali.omega.common.dto.customer.Customer;
-import acropollis.municipali.omega.common.dto.customer.CustomerInfo;
-import acropollis.municipali.omega.admin.rest_service.Qualifiers;
-import acropollis.municipali.omega.admin.rest_service.customer.AdminCustomerRestService;
-import acropollis.municipali.omega.admin.service.authentication.AdminAuthenticationService;
+import acropollis.municipali.security.common.dto.MunicipaliUser;
+import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
 @Api(tags = "Customer", description = "PROTECTED")
-public class AdminCustomerResource {
-    @Autowired
-    @Qualifier(Qualifiers.MODEL)
-    private AdminCustomerRestService adminCustomerRestService;
-
-    @Autowired
-    private AdminAuthenticationService adminAuthenticationService;
-
+public class AdminCustomerResource extends AdminResource {
     @GetMapping("/{login}")
-    public CustomerInfo getCustomer(
+    public MunicipaliUserInfo getCustomer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable String login
     ) {
-        return adminCustomerRestService.getCustomer(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                login
-        );
+        return super.getCustomer(authToken, login);
     }
 
     @GetMapping("")
-    public Collection<CustomerInfo> getAllCustomers(
+    public List<MunicipaliUserInfo> getAllCustomers(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken
     ) {
-        return adminCustomerRestService.getAllCustomers(adminAuthenticationService.getCustomerInfoOrThrow(authToken));
+        return super.getAllCustomers(authToken);
     }
 
     @PostMapping("")
     public void createCustomer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @RequestBody Customer customer
+            @RequestBody MunicipaliUser customer
     ) {
-        adminCustomerRestService.createCustomer(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                customer
-        );
+        super.createCustomer(authToken, customer);
     }
 
     @PutMapping("")
     public void updateCustomer(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @RequestBody Customer customer
+            @RequestBody MunicipaliUser customer
     ) {
-        adminCustomerRestService.updateCustomer(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                customer
-        );
+        super.editCustomer(authToken, customer);
     }
 
     @DeleteMapping("/{login}")
@@ -69,9 +48,6 @@ public class AdminCustomerResource {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             @PathVariable String login
     ) {
-        adminCustomerRestService.deleteCustomer(
-                adminAuthenticationService.getCustomerInfoOrThrow(authToken),
-                login
-        );
+        super.deleteCustomer(authToken, login);
     }
 }
