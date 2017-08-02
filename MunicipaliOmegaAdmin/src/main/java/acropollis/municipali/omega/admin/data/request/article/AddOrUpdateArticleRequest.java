@@ -26,6 +26,8 @@ public class AddOrUpdateArticleRequest {
         private Map<Language, TranslatedArticle> translatedArticle;
         private List<QuestionInfo> questions;
         private byte [] icon;
+        private byte [] image;
+        private String video;
         private boolean sendPushOnRelease;
         private long releaseDate;
         private long expirationDate;
@@ -44,6 +46,8 @@ public class AddOrUpdateArticleRequest {
             articleWithIcon.setTranslatedArticle(translatedArticle);
             articleWithIcon.setQuestions(questions.stream().map(QuestionInfo::toDto).collect(Collectors.toList()));
             articleWithIcon.setIcon(Collections.singletonMap(-1, icon));
+            articleWithIcon.setImage(Collections.singletonMap(-1, image));
+            articleWithIcon.setVideo(video);
             articleWithIcon.setSendPushOnRelease(sendPushOnRelease);
             articleWithIcon.setReleaseDate(releaseDate);
             articleWithIcon.setExpirationDate(expirationDate);

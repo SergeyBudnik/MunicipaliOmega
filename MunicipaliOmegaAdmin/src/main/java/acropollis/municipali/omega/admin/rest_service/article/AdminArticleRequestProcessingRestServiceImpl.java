@@ -36,6 +36,11 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
     }
 
     @Override
+    public byte[] getArticleImage(MunicipaliUserInfo userInfo, long id, int size) {
+        return adminArticleRestService.getArticleImage(userInfo, id, size);
+    }
+
+    @Override
     public byte[] getAnswerIcon(MunicipaliUserInfo userInfo, long articleId, long questionId, long answerId, int size) {
         return adminArticleRestService.getAnswerIcon(userInfo, articleId, questionId, answerId, size);
     }
@@ -63,6 +68,11 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
         articleWithIcon.setIcon(resizeImages(
                 articleWithIcon.getIcon().get(-1),
                 100, 200, 300, 400, 500
+        ));
+
+        articleWithIcon.setImage(resizeImages(
+                articleWithIcon.getImage().get(-1),
+                300, 450, 600, 900, 1200
         ));
 
         articleWithIcon

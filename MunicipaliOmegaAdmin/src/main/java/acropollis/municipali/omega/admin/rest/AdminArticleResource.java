@@ -58,6 +58,22 @@ public class AdminArticleResource extends AdminResource {
     }
 
     @GetMapping(
+            value = "/{id}/image/{size}",
+            produces = MediaType.IMAGE_PNG_VALUE
+    )
+    public byte [] getArticleImage(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
+            @PathVariable long id,
+            @PathVariable int size
+    ) {
+        return adminArticleRestService.getArticleImage(
+                getUserInfo(authToken),
+                id,
+                size
+        );
+    }
+
+    @GetMapping(
             value = "/{articleId}/question/{questionId}/answer/{answerId}/icon/{size}",
             produces = MediaType.IMAGE_PNG_VALUE
     )

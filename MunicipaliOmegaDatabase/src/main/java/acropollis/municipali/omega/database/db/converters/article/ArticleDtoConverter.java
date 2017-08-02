@@ -32,6 +32,7 @@ public class ArticleDtoConverter {
                 articleModel.getQuestions().add(convert(question, articleModel, questionOrder++));
             }
         }
+        articleModel.setVideo(article.getVideo());
         articleModel.setSendPushOnRelease(article.isSendPushOnRelease());
         articleModel.setCreationDate(article.getCreationDate());
         articleModel.setReleaseDate(article.getReleaseDate());

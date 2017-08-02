@@ -26,6 +26,9 @@ public class ArticleModel {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<QuestionModel> questions;
 
+    @Column(name = "VIDEO")
+    private String video;
+
     @Column(name = "SEND_PUSH_ON_RELEASE")
     private boolean sendPushOnRelease;
 

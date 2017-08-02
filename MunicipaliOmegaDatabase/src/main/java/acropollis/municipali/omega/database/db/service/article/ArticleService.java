@@ -11,6 +11,7 @@ public interface ArticleService {
     List<Article> getAll();
     Optional<Article> get(long articleId);
     Optional<byte []> getIcon(long articleId, int size);
+    Optional<byte []> getImage(long articleId, int size);
     long create(ArticleWithIcon articleWithIcon);
     void update(ArticleWithIcon article) throws EntityDoesNotExist;
     void delete(long articleId) throws EntityDoesNotExist;
