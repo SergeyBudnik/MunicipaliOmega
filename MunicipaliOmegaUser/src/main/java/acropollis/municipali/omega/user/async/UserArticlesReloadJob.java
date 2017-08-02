@@ -57,6 +57,7 @@ public class UserArticlesReloadJob extends CommonHealthcheckedJob<UserHealth, Us
 
                 ArticleWithIcon articleWithIcon = article.withIcon(
                         getArticleIcons(article),
+                        Collections.emptyMap(),
                         getAnswersIcons(article)
                 );
 

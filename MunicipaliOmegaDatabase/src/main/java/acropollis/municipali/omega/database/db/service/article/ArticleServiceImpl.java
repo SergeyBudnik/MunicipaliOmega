@@ -59,6 +59,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Optional<byte[]> getImage(long articleId, int size) {
+        return EntityImageStorageUtils.getImage(
+                config.getImagesArticlesImagesLocation().getValue(),
+                articleId,
+                size,
+                size
+        );
+    }
+
+    @Override
     public long create(ArticleWithIcon articleWithIcon) {
         ArticleModel articleModel = articleDao.save(ArticleDtoConverter.convert(articleWithIcon.withoutIcon(), false));
 
@@ -112,6 +122,11 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getId()
         );
 
+        EntityImageStorageUtils.removeImages(
+                config.getImagesArticlesImagesLocation().getValue(),
+                article.getId()
+        );
+
         article.getQuestions().forEach(question ->
                         question.getAnswers().forEach(answer ->
                                 EntityImageStorageUtils.removeImages(
@@ -128,6 +143,14 @@ public class ArticleServiceImpl implements ArticleService {
                     config.getImagesArticlesIconsLocation().getValue(),
                     articleModel.getId(),
                     SquareImageAdapter.pack(articleWithIcon.getIcon())
+            );
+        }
+
+        if (!articleWithIcon.getImage().isEmpty()) {
+            EntityImageStorageUtils.saveImages(
+                    config.getImagesArticlesImagesLocation().getValue(),
+                    articleModel.getId(),
+                    SquareImageAdapter.pack(articleWithIcon.getImage())
             );
         }
 

@@ -40,6 +40,7 @@ public class ArticleModelConverter {
                         .map(ArticleModelConverter::convert)
                         .collect(Collectors.toList())
         );
+        article.setVideo(articleModel.getVideo());
         article.setSendPushOnRelease(articleModel.isSendPushOnRelease());
         article.setCreationDate(articleModel.getCreationDate());
         article.setReleaseDate(articleModel.getReleaseDate());

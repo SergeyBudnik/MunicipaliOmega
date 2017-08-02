@@ -16,6 +16,8 @@ public class ArticleWithIcon {
     private Map<Language, TranslatedArticle> translatedArticle;
     private List<QuestionWithIcon> questions;
     private Map<Integer, byte []> icon;
+    private Map<Integer, byte []> image;
+    private String video;
     private boolean sendPushOnRelease;
     private long creationDate;
     private long releaseDate;
@@ -30,6 +32,7 @@ public class ArticleWithIcon {
         article.setType(type);
         article.setTranslatedArticle(translatedArticle);
         article.setQuestions(questions.stream().map(QuestionWithIcon::withoutIcon).collect(Collectors.toList()));
+        article.setVideo(video);
         article.setSendPushOnRelease(sendPushOnRelease);
         article.setCreationDate(creationDate);
         article.setReleaseDate(releaseDate);

@@ -34,6 +34,11 @@ public class AdminArticleModelValidationRestServiceImpl implements AdminArticleR
     }
 
     @Override
+    public byte[] getArticleImage(MunicipaliUserInfo userInfo, long id, int size) {
+        return adminArticleRestService.getArticleImage(userInfo, id, size);
+    }
+
+    @Override
     public byte [] getAnswerIcon(MunicipaliUserInfo userInfo, long articleId, long questionId, long answerId, int size) {
         return adminArticleRestService.getAnswerIcon(userInfo, articleId, questionId, answerId, size);
     }

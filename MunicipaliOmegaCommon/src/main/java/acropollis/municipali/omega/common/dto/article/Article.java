@@ -16,6 +16,7 @@ public class Article {
     private ArticleType type;
     private Map<Language, TranslatedArticle> translatedArticle;
     private List<Question> questions;
+    private String video;
     private boolean sendPushOnRelease;
     private long creationDate;
     private long releaseDate;
@@ -25,6 +26,7 @@ public class Article {
     @Transient
     public ArticleWithIcon withIcon(
             Map<Integer, byte []> articleIcon,
+            Map<Integer, byte []> articleImage,
             Map<Long, Map<Long, Map<Integer, byte []>>> answersIcons) {
 
         ArticleWithIcon articleWithIcon = new ArticleWithIcon();
@@ -32,6 +34,8 @@ public class Article {
         articleWithIcon.setId(id);
         articleWithIcon.setType(type);
         articleWithIcon.setIcon(articleIcon);
+        articleWithIcon.setImage(articleImage);
+        articleWithIcon.setVideo(video);
         articleWithIcon.setTranslatedArticle(translatedArticle);
         articleWithIcon.setSendPushOnRelease(sendPushOnRelease);
         articleWithIcon.setQuestions(

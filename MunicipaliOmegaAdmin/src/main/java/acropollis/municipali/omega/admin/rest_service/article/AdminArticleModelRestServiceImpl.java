@@ -51,6 +51,14 @@ public class AdminArticleModelRestServiceImpl implements AdminArticleRestService
 
     @Transactional(readOnly = true)
     @Override
+    public byte [] getArticleImage(MunicipaliUserInfo userInfo, long id, int size) {
+        return articleService
+                .getImage(id, size)
+                .orElseThrow(() -> new HttpEntityNotFoundException(""));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public byte [] getAnswerIcon(MunicipaliUserInfo userInfo, long articleId, long questionId, long answerId, int size) {
         Question question = articleService
                 .get(articleId)
