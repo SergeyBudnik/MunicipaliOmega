@@ -34,6 +34,15 @@ public class UserArticleResource {
     }
 
     @RequestMapping(
+            value = "/{id}/image/{size}",
+            method = RequestMethod.GET,
+            produces = MediaType.IMAGE_PNG_VALUE
+    )
+    public byte [] getArticleImage(@PathVariable long id, @PathVariable int size) {
+        return articleRestService.getArticleImage(id, size);
+    }
+
+    @RequestMapping(
             value = "/{articleId}/question/{questionId}/answer/{answerId}/icon/{size}",
             method = RequestMethod.GET,
             produces = MediaType.IMAGE_PNG_VALUE
