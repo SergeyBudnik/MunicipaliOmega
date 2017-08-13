@@ -25,6 +25,21 @@ public class AnswerRestServiceImpl implements AnswerRestService {
 
     @Override
     public Map<Long, Long> getAnswerStatistics(long articleId, long questionId) {
+        return getAnswers(articleId, questionId);
+    }
+
+    @Override
+    public Map<Long, Long> answer(UserAnswer answer) {
+        userPendingAnswersCache.addAnswer(answer);
+
+        Map<Long, Long> answers = getAnswers(answer.getArticleId(), answer.getQuestionId()); {
+            answers.put(answer.getAnswerId(), answers.getOrDefault(answer.getAnswerId(), 0L) + 1);
+        }
+
+        return answers;
+    }
+
+    private Map<Long, Long> getAnswers(long articleId, long questionId) {
         Article article = visibleArticlesCache
                 .getArticle(articleId)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
@@ -41,10 +56,5 @@ public class AnswerRestServiceImpl implements AnswerRestService {
         }
 
         return userStatisticsCache.get(articleId, questionId);
-    }
-
-    @Override
-    public void answer(UserAnswer answer) {
-        userPendingAnswersCache.addAnswer(answer);
     }
 }

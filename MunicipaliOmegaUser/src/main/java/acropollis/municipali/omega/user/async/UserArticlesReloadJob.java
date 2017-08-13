@@ -57,7 +57,7 @@ public class UserArticlesReloadJob extends CommonHealthcheckedJob<UserHealth, Us
 
                 ArticleWithIcon articleWithIcon = article.withIcon(
                         getArticleIcons(article),
-                        Collections.emptyMap(),
+                        getArticleImages(article),
                         getAnswersIcons(article)
                 );
 
@@ -80,6 +80,15 @@ public class UserArticlesReloadJob extends CommonHealthcheckedJob<UserHealth, Us
         return SquareImageAdapter.unpack(
                 getImages(
                         config.getImagesArticlesIconsLocation().getValue(),
+                        article.getId()
+                ).orElseGet(HashMap::new)
+        );
+    }
+
+    private Map<Integer, byte []> getArticleImages(Article article) {
+        return SquareImageAdapter.unpack(
+                getImages(
+                        config.getImagesArticlesImagesLocation().getValue(),
                         article.getId()
                 ).orElseGet(HashMap::new)
         );

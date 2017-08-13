@@ -15,6 +15,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
     private AtomicReference<Map<Long, Article>> articlesCache = new AtomicReference<>(new ConcurrentHashMap<>());
     private AtomicReference<Map<Long, Map<Integer, byte []>>> articlesIconsCache = new AtomicReference<>(new ConcurrentHashMap<>());
+    private AtomicReference<Map<Long, Map<Integer, byte []>>> articlesImagesCache = new AtomicReference<>(new ConcurrentHashMap<>());
     private AtomicReference<Map<Long, Map<Long, Map<Long, Map<Integer, byte []>>>>> answersIconsCache = new AtomicReference<>(new HashMap<>());
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -58,6 +59,22 @@ public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
     }
 
     @Override
+    public Optional<byte[]> getArticleImage(long articleId, int size) {
+        try {
+            lock.readLock().lock();
+
+            return Optional.ofNullable(
+                    articlesImagesCache
+                            .get()
+                            .getOrDefault(articleId, new HashMap<>())
+                            .get(size)
+            );
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
     public Optional<byte []> getAnswerIcon(long articleId, long questionId, long answerId, int size) {
         try {
             lock.readLock().lock();
@@ -79,11 +96,13 @@ public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
     public void setArticles(Collection<ArticleWithIcon> articles) {
         Map<Long, Article> newArticleCache = new HashMap<>();
         Map<Long, Map<Integer, byte []>> newArticlesIconsCache = new HashMap<>();
+        Map<Long, Map<Integer, byte []>> newArticlesImagesCache = new HashMap<>();
         Map<Long, Map<Long, Map<Long, Map<Integer, byte []>>>> newAnswersIconsCache = new HashMap<>();
 
         for (ArticleWithIcon article : articles) {
             newArticleCache.put(article.getId(), article.withoutIcon());
             newArticlesIconsCache.put(article.getId(), article.getIcon());
+            newArticlesImagesCache.put(article.getId(), article.getImage());
 
             newAnswersIconsCache.put(article.getId(), new HashMap<>());
 
@@ -109,6 +128,7 @@ public class VisibleArticlesCacheImpl implements VisibleArticlesCache {
 
             articlesCache.set(newArticleCache);
             articlesIconsCache.set(newArticlesIconsCache);
+            articlesImagesCache.set(newArticlesImagesCache);
             answersIconsCache.set(newAnswersIconsCache);
         } finally {
             lock.writeLock().unlock();

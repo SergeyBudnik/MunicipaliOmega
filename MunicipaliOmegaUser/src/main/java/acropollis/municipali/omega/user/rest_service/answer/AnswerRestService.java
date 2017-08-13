@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface AnswerRestService {
     Map<Long, Long> getAnswerStatistics(long articleId, long questionId);
-    void answer(UserAnswer answer);
+    Map<Long, Long> answer(UserAnswer answer);
 }
