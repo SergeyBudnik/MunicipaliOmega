@@ -30,11 +30,6 @@ public class AdminCategoryRequestProcessingRestServiceImpl implements AdminCateg
     }
 
     @Override
-    public byte [] getCategoryIcon(MunicipaliUserInfo userInfo, long id, int size) {
-        return adminCategoryRestService.getCategoryIcon(userInfo, id, size);
-    }
-
-    @Override
     public long createCategory(MunicipaliUserInfo userInfo, CategoryWithIcon categoryWithIcon) {
         processIcons(categoryWithIcon);
 

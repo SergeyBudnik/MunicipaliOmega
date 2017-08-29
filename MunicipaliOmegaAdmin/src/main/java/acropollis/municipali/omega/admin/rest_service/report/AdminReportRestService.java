@@ -8,6 +8,5 @@ import java.util.List;
 public interface AdminReportRestService {
     List<Report> getAllReports(MunicipaliUserInfo customerInfo);
     Report getReport(MunicipaliUserInfo customerInfo, long id);
-    byte [] getReportPhoto(MunicipaliUserInfo customerInfo, long id);
     void deleteReport(MunicipaliUserInfo customerInfo, long id);
 }

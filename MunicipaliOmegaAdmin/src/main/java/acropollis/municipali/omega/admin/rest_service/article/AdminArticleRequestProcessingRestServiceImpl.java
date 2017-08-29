@@ -31,21 +31,6 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
     }
 
     @Override
-    public byte [] getArticleIcon(MunicipaliUserInfo userInfo, long id, int size) {
-        return adminArticleRestService.getArticleIcon(userInfo, id, size);
-    }
-
-    @Override
-    public byte[] getArticleImage(MunicipaliUserInfo userInfo, long id, int size) {
-        return adminArticleRestService.getArticleImage(userInfo, id, size);
-    }
-
-    @Override
-    public byte[] getAnswerIcon(MunicipaliUserInfo userInfo, long articleId, long questionId, long answerId, int size) {
-        return adminArticleRestService.getAnswerIcon(userInfo, articleId, questionId, answerId, size);
-    }
-
-    @Override
     public long createArticle(MunicipaliUserInfo userInfo, ArticleWithIcon articleWithIcon) {
         processIcons(articleWithIcon);
 
@@ -67,12 +52,12 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
     private void processIcons(ArticleWithIcon articleWithIcon) {
         articleWithIcon.setIcon(resizeImages(
                 articleWithIcon.getIcon().get(-1),
-                100, 200, 300, 400, 500
+                50, 75, 100, 150, 200
         ));
 
         articleWithIcon.setImage(resizeImages(
                 articleWithIcon.getImage().get(-1),
-                300, 450, 600, 900, 1200
+                150, 225, 300, 450, 600
         ));
 
         articleWithIcon
@@ -85,7 +70,7 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
                                 .forEach(answer ->
                                         answer.setIcon(resizeImages(
                                                 answer.getIcon().get(-1),
-                                                100, 200, 300, 400, 500
+                                                50, 75, 100, 150, 200
                                         ))
                                 )
         );

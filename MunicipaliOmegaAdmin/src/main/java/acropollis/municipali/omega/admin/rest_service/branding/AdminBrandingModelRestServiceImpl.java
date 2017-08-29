@@ -2,58 +2,56 @@ package acropollis.municipali.omega.admin.rest_service.branding;
 
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.common.Pair;
-import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
+import acropollis.municipali.omega.database.db.service.image.ImageService;
 import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
-import static acropollis.municipali.omega.common.utils.storage.StandaloneImageStorageUtils.*;
 
 @Service
 @Qualifier(Qualifiers.MODEL)
 public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestService {
-    @Override
-    public byte [] getBackground(MunicipaliUserInfo userInfo, int w, int h) {
-        return
-                getImage(getBackgroundLocation(), w, h)
-                .orElseThrow(() -> new HttpEntityNotFoundException(""));
-    }
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public void setBackground(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte[]> background) {
-        saveImages(getBackgroundLocation(), background);
+        background.forEach((size, image) ->
+                imageService.addImage(
+                        config.getImagesBrandingBackgroundLocation().getValue(),
+                        String.format("%dx%d", size.getX(), size.getY()),
+                        image
+                )
+        );
     }
 
     @Override
     public void removeBackground(MunicipaliUserInfo userInfo) {
-        removeImages(getBackgroundLocation());
-    }
-
-    @Override
-    public byte [] getIcon(MunicipaliUserInfo userInfo, int size) {
-        return
-                getImage(getIconLocation(), size, size)
-                .orElseThrow(() -> new HttpEntityNotFoundException(""));
+        imageService.removeAllImagesKeepDirectory(
+                config.getImagesBrandingBackgroundLocation().getValue()
+        );
     }
 
     @Override
     public void setIcon(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte []> icon) {
-        saveImages(getIconLocation(), icon);
+        icon.forEach((size, image) ->
+                imageService.addImage(
+                        config.getImagesBrandingIconLocation().getValue(),
+                        String.format("%dx%d", size.getX(), size.getY()),
+                        image
+                )
+        );
     }
 
     @Override
     public void removeIcon(MunicipaliUserInfo userInfo) {
-        removeImages(getIconLocation());
-    }
+        imageService.removeAllImagesKeepDirectory(
+                config.getImagesBrandingIconLocation().getValue()
+        );
 
-    private String getIconLocation() {
-        return config.getImagesBrandingIconLocation().getValue();
-    }
-
-    private String getBackgroundLocation() {
-        return config.getImagesBrandingBackgroundLocation().getValue();
     }
 }

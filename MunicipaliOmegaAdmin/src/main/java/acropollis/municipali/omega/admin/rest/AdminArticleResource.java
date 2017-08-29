@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -38,58 +37,6 @@ public class AdminArticleResource extends AdminResource {
         return adminArticleRestService.getArticle(
                 getUserInfo(authToken),
                 id
-        );
-    }
-
-    @GetMapping(
-            value = "/{id}/icon/{size}",
-            produces = MediaType.IMAGE_PNG_VALUE
-    )
-    public byte [] getArticleIcon(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @PathVariable long id,
-            @PathVariable int size
-    ) {
-        return adminArticleRestService.getArticleIcon(
-                getUserInfo(authToken),
-                id,
-                size
-        );
-    }
-
-    @GetMapping(
-            value = "/{id}/image/{size}",
-            produces = MediaType.IMAGE_PNG_VALUE
-    )
-    public byte [] getArticleImage(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @PathVariable long id,
-            @PathVariable int size
-    ) {
-        return adminArticleRestService.getArticleImage(
-                getUserInfo(authToken),
-                id,
-                size
-        );
-    }
-
-    @GetMapping(
-            value = "/{articleId}/question/{questionId}/answer/{answerId}/icon/{size}",
-            produces = MediaType.IMAGE_PNG_VALUE
-    )
-    public byte [] getAnswerIcon(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @PathVariable long articleId,
-            @PathVariable long questionId,
-            @PathVariable long answerId,
-            @PathVariable int size
-    ) {
-        return adminArticleRestService.getAnswerIcon(
-                getUserInfo(authToken),
-                articleId,
-                questionId,
-                answerId,
-                size
         );
     }
 

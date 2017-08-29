@@ -6,7 +6,4 @@ import java.util.Collection;
 
 public interface ArticleRestService {
     Collection<Article> getAllArticles();
-    byte [] getArticleIcon(long articleId, int size);
-    byte [] getArticleImage(long articleId, int size);
-    byte [] getAnswerIcon(long articleId, long questionId, long answerId, int size);
 }

@@ -20,19 +20,6 @@ public class AdminBrandingResource extends AdminResource {
     @Qualifier(Qualifiers.REQUEST_PROCESSING)
     private AdminBrandingRestService adminBrandingRestService;
     
-    @GetMapping(value = "/background/{w}/{h}", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte [] getBackground(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @PathVariable int w,
-            @PathVariable int h
-    ) {
-        return adminBrandingRestService.getBackground(
-                getUserInfo(authToken),
-                w,
-                h
-        );
-    }
-
     @PostMapping(value = "/background", consumes = MediaType.TEXT_PLAIN_VALUE)
     public void setBackground(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
@@ -50,17 +37,6 @@ public class AdminBrandingResource extends AdminResource {
     ) {
         adminBrandingRestService.removeBackground(
                 getUserInfo(authToken)
-        );
-    }
-
-    @GetMapping(value = "/icon/{size}", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte [] getIcon(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @PathVariable int size
-    ) {
-        return adminBrandingRestService.getIcon(
-                getUserInfo(authToken),
-                size
         );
     }
 

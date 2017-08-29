@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface AnswerService {
     Optional<Answer> get(Question question, long answerId);
-    Optional<byte []> getIcon(Question question, long answerId, int size);
 }

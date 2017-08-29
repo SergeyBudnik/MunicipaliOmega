@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,22 +37,6 @@ public class AdminCategoriesResource extends AdminResource {
         return adminCategoryRestService.getCategory(
                 getUserInfo(authToken),
                 id
-        );
-    }
-
-    @GetMapping(
-            value = "/{id}/icon/{size}",
-            produces = MediaType.IMAGE_PNG_VALUE
-    )
-    public byte [] getCategoryIcon(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @PathVariable long id,
-            @PathVariable int size
-    ) {
-        return adminCategoryRestService.getCategoryIcon(
-                getUserInfo(authToken),
-                id,
-                size
         );
     }
 

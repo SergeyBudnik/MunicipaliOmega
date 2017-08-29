@@ -1,9 +1,6 @@
 package acropollis.municipali.omega.user.async;
 
 import acropollis.municipali.omega.common.dto.article.Article;
-import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
-import acropollis.municipali.omega.common.dto.article.question.Question;
-import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.health_check.async.CommonHealthcheckedJob;
@@ -17,10 +14,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
-import static acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils.getImages;
 import static acropollis.municipali.omega.database.db.converters.article.ArticleModelConverter.convert;
 
 @Service
@@ -44,7 +41,7 @@ public class UserArticlesReloadJob extends CommonHealthcheckedJob<UserHealth, Us
         long reloadStartDate = new Date().getTime();
 
         try {
-            List<ArticleWithIcon> visibleArticles = new ArrayList<>();
+            List<Article> visibleArticles = new ArrayList<>();
 
             List<ArticleModel> articlesModels = articleDao
                     .findByIsDeletedIsFalseAndReleaseDateLessThanAndExpirationDateGreaterThan(
@@ -53,15 +50,7 @@ public class UserArticlesReloadJob extends CommonHealthcheckedJob<UserHealth, Us
                     );
 
             for (ArticleModel articleModel : articlesModels) {
-                Article article = convert(articleModel);
-
-                ArticleWithIcon articleWithIcon = article.withIcon(
-                        getArticleIcons(article),
-                        getArticleImages(article),
-                        getAnswersIcons(article)
-                );
-
-                visibleArticles.add(articleWithIcon);
+                visibleArticles.add(convert(articleModel));
             }
 
             visibleArticlesCache.setArticles(visibleArticles);
@@ -74,48 +63,6 @@ public class UserArticlesReloadJob extends CommonHealthcheckedJob<UserHealth, Us
         } catch (Exception e) {
             updateHealthWithFailure(reloadStartDate, new Date().getTime(), e);
         }
-    }
-
-    private Map<Integer, byte []> getArticleIcons(Article article) {
-        return SquareImageAdapter.unpack(
-                getImages(
-                        config.getImagesArticlesIconsLocation().getValue(),
-                        article.getId()
-                ).orElseGet(HashMap::new)
-        );
-    }
-
-    private Map<Integer, byte []> getArticleImages(Article article) {
-        return SquareImageAdapter.unpack(
-                getImages(
-                        config.getImagesArticlesImagesLocation().getValue(),
-                        article.getId()
-                ).orElseGet(HashMap::new)
-        );
-    }
-
-    private Map<Long, Map<Long, Map<Integer, byte []>>> getAnswersIcons(Article article) {
-        Map<Long, Map<Long, Map<Integer, byte []>>> answersIcons = new HashMap<>();
-
-        for (Question question : article.getQuestions()) {
-            answersIcons.put(question.getId(), new HashMap<>());
-
-            question.getAnswers()
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .forEach(answer -> {
-                        Map<Integer, byte[]> answerIcons = SquareImageAdapter
-                                .unpack(
-                                        getImages(
-                                                config.getImagesAnswersIconsLocation().getValue(), answer.getId())
-                                                .orElseGet(HashMap::new)
-                                );
-
-                        answersIcons.get(question.getId()).put(answer.getId(), answerIcons);
-                    });
-        }
-
-        return answersIcons;
     }
 
     @Override

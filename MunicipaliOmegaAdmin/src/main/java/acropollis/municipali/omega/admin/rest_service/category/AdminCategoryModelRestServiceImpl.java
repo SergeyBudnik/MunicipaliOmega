@@ -4,12 +4,11 @@ import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.category.Category;
 import acropollis.municipali.omega.common.dto.category.CategoryWithIcon;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
-import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
-import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.converters.category.CategoryDtoConverter;
 import acropollis.municipali.omega.database.db.converters.category.CategoryModelConverter;
 import acropollis.municipali.omega.database.db.dao.CategoryDao;
 import acropollis.municipali.omega.database.db.model.category.CategoryModel;
+import acropollis.municipali.omega.database.db.service.image.ImageService;
 import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +26,8 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestService {
     @Autowired
     private CategoryDao categoryDao;
+    @Autowired
+    private ImageService imageService;
 
     @Transactional(readOnly = true)
     @Override
@@ -45,17 +46,6 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
                 .ofNullable(categoryDao.findOne(id))
                 .map(CategoryModelConverter::convert)
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public byte [] getCategoryIcon(MunicipaliUserInfo userInfo, long id, int size) {
-        return EntityImageStorageUtils.getImage(
-                config.getImagesCategoriesIconsLocation().getValue(),
-                id,
-                size,
-                size
-        ).orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
     @Transactional
@@ -97,19 +87,20 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
     }
 
     private void saveIcons(CategoryModel categoryModel, CategoryWithIcon categoryWithIcon) {
-        if (!categoryWithIcon.getIcon().isEmpty()) {
-            EntityImageStorageUtils.saveImages(
-                    config.getImagesArticlesIconsLocation().getValue(),
-                    categoryModel.getId(),
-                    SquareImageAdapter.pack(categoryWithIcon.getIcon())
-            );
-        }
+        categoryWithIcon.getIcon().forEach((size, icon) ->
+                imageService.addImage(
+                        config.getImagesCategoriesIconsLocation().getValue(),
+                        String.format("%d", categoryModel.getId()),
+                        String.format("%dx%d", size, size),
+                        icon
+                )
+        );
     }
 
     private void clearIcons(long id) {
-        EntityImageStorageUtils.removeImages(
-                config.getImagesArticlesIconsLocation().getValue(),
-                id
+        imageService.removeAllImagesRemoveDirectory(
+                config.getImagesCategoriesIconsLocation().getValue(),
+                String.format("%d", id)
         );
     }
 }
