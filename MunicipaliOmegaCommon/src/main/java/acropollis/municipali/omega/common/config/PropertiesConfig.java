@@ -28,6 +28,13 @@ public class PropertiesConfig {
             config.getConnectionPassword().override(instanceConfig.getString("connection.password"));
         }
 
+        config.getImageHostingHttpUrl().override(instanceConfig.getString("imageHosting.http.url"));
+
+        config.getImageHostingFtpUrl().override(instanceConfig.getString("imageHosting.ftp.url"));
+        config.getImageHostingFtpUsername().override(instanceConfig.getString("imageHosting.ftp.username"));
+        config.getImageHostingFtpPassword().override(instanceConfig.getString("imageHosting.ftp.password"));
+        config.getImageHostingFtpPort().override(instanceConfig.getLong("imageHosting.ftp.port"));
+
         config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
         config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
         config.getDatabasePassword().override(instanceConfig.getString("database.password"));

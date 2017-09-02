@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface ReportService {
     List<Report> getAll();
     Optional<Report> get(long id);
-    Optional<byte []> getPhoto(long id);
     void create(Report report, byte [] reportImage, User user);
     void delete(long id) throws EntityDoesNotExist;
 }

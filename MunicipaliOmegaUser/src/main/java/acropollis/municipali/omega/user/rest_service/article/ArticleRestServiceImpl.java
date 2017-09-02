@@ -17,25 +17,4 @@ public class ArticleRestServiceImpl implements ArticleRestService {
     public Collection<Article> getAllArticles() {
         return visibleArticlesCache.getArticles();
     }
-
-    @Override
-    public byte [] getArticleIcon(long articleId, int size) {
-        return visibleArticlesCache
-                .getArticleIcon(articleId, size)
-                .orElseThrow(() -> new HttpEntityNotFoundException(""));
-    }
-
-    @Override
-    public byte[] getArticleImage(long articleId, int size) {
-        return visibleArticlesCache
-                .getArticleImage(articleId, size)
-                .orElseThrow(() -> new HttpEntityNotFoundException(""));
-    }
-
-    @Override
-    public byte [] getAnswerIcon(long articleId, long questionId, long answerId, int size) {
-        return visibleArticlesCache
-                .getAnswerIcon(articleId, questionId, answerId, size)
-                .orElseThrow(() -> new HttpEntityNotFoundException(""));
-    }
 }

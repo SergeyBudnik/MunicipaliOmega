@@ -4,8 +4,6 @@ import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
-import acropollis.municipali.omega.common.utils.storage.EntityImageStorageUtils;
-import acropollis.municipali.omega.common.utils.storage.SquareImageAdapter;
 import acropollis.municipali.omega.database.db.converters.article.ArticleDtoConverter;
 import acropollis.municipali.omega.database.db.converters.article.ArticleModelConverter;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
@@ -15,6 +13,7 @@ import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.question.QuestionModel;
 import acropollis.municipali.omega.database.db.model.article.question.answer.AnswerModel;
 import acropollis.municipali.omega.database.db.model.push.ArticleToReleasePushRecordModel;
+import acropollis.municipali.omega.database.db.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
+import static acropollis.municipali.omega.common.config.PropertiesConfig.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -31,6 +30,9 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao;
     @Autowired
     private ArticleToReleasePushRecordDao articleToReleasePushRecordDao;
+
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public List<Article> getAll() {
@@ -46,26 +48,6 @@ public class ArticleServiceImpl implements ArticleService {
         return Optional
                 .ofNullable(articleDao.findOneByIdAndIsDeletedIsFalse(articleId))
                 .map(ArticleModelConverter::convert);
-    }
-
-    @Override
-    public Optional<byte[]> getIcon(long articleId, int size) {
-        return EntityImageStorageUtils.getImage(
-                config.getImagesArticlesIconsLocation().getValue(),
-                articleId,
-                size,
-                size
-        );
-    }
-
-    @Override
-    public Optional<byte[]> getImage(long articleId, int size) {
-        return EntityImageStorageUtils.getImage(
-                config.getImagesArticlesImagesLocation().getValue(),
-                articleId,
-                size,
-                size
-        );
     }
 
     @Override
@@ -117,42 +99,44 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private void clearIcons(ArticleModel article) {
-        EntityImageStorageUtils.removeImages(
+        imageService.removeAllImagesRemoveDirectory(
                 config.getImagesArticlesIconsLocation().getValue(),
-                article.getId()
+                String.format("%d", article.getId())
         );
 
-        EntityImageStorageUtils.removeImages(
+        imageService.removeAllImagesRemoveDirectory(
                 config.getImagesArticlesImagesLocation().getValue(),
-                article.getId()
+                String.format("%d", article.getId())
         );
 
         article.getQuestions().forEach(question ->
-                        question.getAnswers().forEach(answer ->
-                                EntityImageStorageUtils.removeImages(
-                                        config.getImagesAnswersIconsLocation().getValue(),
-                                        answer.getId()
-                                )
+                question.getAnswers().forEach(answer ->
+                        imageService.removeAllImagesRemoveDirectory(
+                                config.getImagesAnswersIconsLocation().getValue(),
+                                String.format("%d", answer.getId())
                         )
+                )
         );
     }
 
     private void saveIcons(ArticleModel articleModel, ArticleWithIcon articleWithIcon) {
-        if (!articleWithIcon.getIcon().isEmpty()) {
-            EntityImageStorageUtils.saveImages(
-                    config.getImagesArticlesIconsLocation().getValue(),
-                    articleModel.getId(),
-                    SquareImageAdapter.pack(articleWithIcon.getIcon())
-            );
-        }
+        articleWithIcon.getIcon().forEach((size, icon) ->
+                imageService.addImage(
+                        config.getImagesArticlesIconsLocation().getValue(),
+                        String.format("%d", articleModel.getId()),
+                        String.format("%dx%d", size, size),
+                        icon
+                )
+        );
 
-        if (!articleWithIcon.getImage().isEmpty()) {
-            EntityImageStorageUtils.saveImages(
-                    config.getImagesArticlesImagesLocation().getValue(),
-                    articleModel.getId(),
-                    SquareImageAdapter.pack(articleWithIcon.getImage())
-            );
-        }
+        articleWithIcon.getImage().forEach((size, icon) ->
+                imageService.addImage(
+                        config.getImagesArticlesImagesLocation().getValue(),
+                        String.format("%d", articleModel.getId()),
+                        String.format("%dx%d", size, size),
+                        icon
+                )
+        );
 
         int questionOrder = 0;
 
@@ -180,13 +164,14 @@ public class ArticleServiceImpl implements ArticleService {
                             .findAny()
                             .get();
 
-                    if (!answerWithIcon.getIcon().isEmpty()) {
-                        EntityImageStorageUtils.saveImages(
-                                config.getImagesAnswersIconsLocation().getValue(),
-                                answerModel.getId(),
-                                SquareImageAdapter.pack(answerWithIcon.getIcon())
-                        );
-                    }
+                    answerWithIcon.getIcon().forEach((size, icon) ->
+                            imageService.addImage(
+                                    config.getImagesAnswersIconsLocation().getValue(),
+                                    String.format("%d", answerModel.getId()),
+                                    String.format("%dx%d", size, size),
+                                    icon
+                            )
+                    );
                 }
 
                 answerOrder++;

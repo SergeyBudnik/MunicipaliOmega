@@ -9,7 +9,6 @@ import java.util.List;
 public interface AdminCategoryRestService {
     List<Category> getAllCategories(MunicipaliUserInfo userInfo);
     Category getCategory(MunicipaliUserInfo userInfo, long id);
-    byte [] getCategoryIcon(MunicipaliUserInfo userInfo, long id, int size);
     long createCategory(MunicipaliUserInfo userInfo, CategoryWithIcon categoryWithIcon);
     void updateCategory(MunicipaliUserInfo userInfo, CategoryWithIcon categoryWithIcon);
     void deleteCategory(MunicipaliUserInfo userInfo, long id);

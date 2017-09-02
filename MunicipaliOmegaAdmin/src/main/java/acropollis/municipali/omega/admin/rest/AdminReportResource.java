@@ -7,7 +7,6 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -35,17 +34,6 @@ public class AdminReportResource extends AdminResource {
             @PathVariable long id
     ) {
         return adminReportRestService.getReport(
-                getUserInfo(authToken),
-                id
-        );
-    }
-
-    @GetMapping(value = "/{id}/photo", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte [] getReportPhoto(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
-            @PathVariable long id
-    ) {
-        return adminReportRestService.getReportPhoto(
                 getUserInfo(authToken),
                 id
         );

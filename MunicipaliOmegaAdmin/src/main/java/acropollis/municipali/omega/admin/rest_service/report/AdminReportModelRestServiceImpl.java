@@ -33,14 +33,6 @@ public class AdminReportModelRestServiceImpl implements AdminReportRestService {
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public byte [] getReportPhoto(MunicipaliUserInfo userInfo, long id) {
-        return reportService
-                .getPhoto(id)
-                .orElseThrow(() -> new HttpEntityNotFoundException(""));
-    }
-
     @Transactional
     @Override
     public void deleteReport(MunicipaliUserInfo userInfo, long id) {
