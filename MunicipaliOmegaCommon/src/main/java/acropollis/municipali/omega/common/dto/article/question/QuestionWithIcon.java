@@ -28,11 +28,7 @@ public class QuestionWithIcon {
         question.setAnswers(new ArrayList<>());
 
         for (AnswerWithIcon answer : answers) {
-            question.getAnswers().add(
-                    answer != null ?
-                            answer.withoutIcon() :
-                            null
-            );
+            question.getAnswers().add(answer != null ? answer.withoutIcon() : null);
         }
 
         return question;

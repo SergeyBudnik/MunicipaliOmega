@@ -22,6 +22,9 @@ public class AnswerModel {
     @Column(name = "SORTING_ORDER")
     private Integer order;
 
+    @Column(name = "HAS_ICON")
+    private boolean hasIcon;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<TranslatedAnswerModel> translatedAnswers;
 }

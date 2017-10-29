@@ -17,6 +17,7 @@ public class ArticleWithIcon {
     private List<QuestionWithIcon> questions;
     private Map<Integer, byte []> icon;
     private Map<Integer, byte []> image;
+    private Map<Integer, byte []> clippedImage;
     private String video;
     private boolean sendPushOnRelease;
     private long creationDate;

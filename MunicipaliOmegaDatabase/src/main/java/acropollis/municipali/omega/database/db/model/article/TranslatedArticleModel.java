@@ -25,6 +25,9 @@ public class TranslatedArticleModel {
     @Column(name = "ARTICLE_TITLE", length = 256)
     private String title;
 
+    @Column(name = "ARTICLE_DESCRIPTION", length = 8192)
+    private String description;
+
     @Column(name = "ARTICLE_TEXT", length = 8192)
     private String text;
 

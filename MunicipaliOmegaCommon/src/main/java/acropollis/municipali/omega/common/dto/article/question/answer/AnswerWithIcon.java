@@ -18,6 +18,7 @@ public class AnswerWithIcon {
 
         answer.setId(id);
         answer.setTranslatedAnswer(translatedAnswer);
+        answer.setHasIcon(!icon.isEmpty());
 
         return answer;
     }

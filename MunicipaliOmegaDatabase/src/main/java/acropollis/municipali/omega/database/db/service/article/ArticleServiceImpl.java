@@ -138,6 +138,15 @@ public class ArticleServiceImpl implements ArticleService {
                 )
         );
 
+        articleWithIcon.getClippedImage().forEach((size, icon) ->
+                imageService.addImage(
+                        config.getImagesArticlesClippedImagesLocation().getValue(),
+                        String.format("%d", articleModel.getId()),
+                        String.format("%dx%d", size, size),
+                        icon
+                )
+        );
+
         int questionOrder = 0;
 
         for (QuestionWithIcon question : articleWithIcon.getQuestions()) {

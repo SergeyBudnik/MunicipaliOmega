@@ -50,6 +50,7 @@ public class AddOrUpdateArticleRequest {
             articleWithIcon.setQuestions(questions.stream().map(QuestionInfo::toDto).collect(Collectors.toList()));
             articleWithIcon.setIcon(Collections.singletonMap(-1, icon));
             articleWithIcon.setImage(Collections.singletonMap(-1, image));
+            articleWithIcon.setClippedImage(Collections.singletonMap(-1, clippedImage));
             articleWithIcon.setVideo(video);
             articleWithIcon.setSendPushOnRelease(sendPushOnRelease);
             articleWithIcon.setReleaseDate(releaseDate);
@@ -77,11 +78,7 @@ public class AddOrUpdateArticleRequest {
             questionWithIcon.setAnswers(new ArrayList<>());
 
             for (AnswerInfo answerInfo : answers) {
-                questionWithIcon.getAnswers().add(
-                        answerInfo != null ?
-                                answerInfo.toDto() :
-                                null
-                );
+                questionWithIcon.getAnswers().add(answerInfo != null ? answerInfo.toDto() : null);
             }
 
             questionWithIcon.setShowResult(showResult);
