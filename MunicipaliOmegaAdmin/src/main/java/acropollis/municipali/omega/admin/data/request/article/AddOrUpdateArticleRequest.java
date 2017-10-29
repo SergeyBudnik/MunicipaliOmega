@@ -27,9 +27,12 @@ public class AddOrUpdateArticleRequest {
         private List<QuestionInfo> questions;
         private byte [] icon;
         private byte [] image;
+        private byte [] clippedImage;
         private String video;
         private boolean sendPushOnRelease;
         private long releaseDate;
+        private long calendarStartDate;
+        private long calendarFinishDate;
         private long expirationDate;
 
         @Transient
@@ -50,6 +53,8 @@ public class AddOrUpdateArticleRequest {
             articleWithIcon.setVideo(video);
             articleWithIcon.setSendPushOnRelease(sendPushOnRelease);
             articleWithIcon.setReleaseDate(releaseDate);
+            articleWithIcon.setCalendarStartDate(calendarStartDate);
+            articleWithIcon.setCalendarFinishDate(calendarFinishDate);
             articleWithIcon.setExpirationDate(expirationDate);
 
             return articleWithIcon;

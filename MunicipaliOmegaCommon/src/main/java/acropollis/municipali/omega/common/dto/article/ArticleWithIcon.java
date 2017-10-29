@@ -21,6 +21,8 @@ public class ArticleWithIcon {
     private boolean sendPushOnRelease;
     private long creationDate;
     private long releaseDate;
+    private long calendarStartDate;
+    private long calendarFinishDate;
     private long expirationDate;
     private long lastUpdateDate;
 
@@ -37,6 +39,8 @@ public class ArticleWithIcon {
         article.setCreationDate(creationDate);
         article.setReleaseDate(releaseDate);
         article.setExpirationDate(expirationDate);
+        article.setCalendarStartDate(calendarStartDate);
+        article.setCalendarFinishDate(calendarFinishDate);
         article.setLastUpdateDate(lastUpdateDate);
 
         return article;
