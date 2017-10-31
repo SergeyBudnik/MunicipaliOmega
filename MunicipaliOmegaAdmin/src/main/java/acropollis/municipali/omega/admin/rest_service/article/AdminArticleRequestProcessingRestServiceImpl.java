@@ -60,7 +60,7 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
                 150, 225, 300, 450, 600
         ));
 
-        articleWithIcon.setImage(resizeImages(
+        articleWithIcon.setClippedImage(resizeImages(
                 articleWithIcon.getImage().get(-1),
                 150, 225, 300, 450, 600
         ));
