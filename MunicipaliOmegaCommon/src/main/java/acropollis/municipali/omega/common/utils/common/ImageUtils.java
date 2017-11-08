@@ -1,5 +1,7 @@
 package acropollis.municipali.omega.common.utils.common;
 
+import acropollis.municipali.omega.common.dto.common.Pair;
+
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -20,6 +22,28 @@ public class ImageUtils {
             try {
                 for (int size : sizes) {
                     dest.put(size, toBytes(scaleImageByWidth(fromBytes(src), size)));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException();
+            }
+        }
+
+        return dest;
+    }
+
+    public static Map<Pair<Integer, Integer>, byte []> resizeImages(
+            byte [] src,
+            Pair<Integer, Integer>... sizes
+    ) {
+        Map<Pair<Integer, Integer>, byte []> dest = new HashMap<>();
+
+        if (src != null) {
+            try {
+                for (Pair<Integer, Integer> size : sizes) {
+                    dest.put(
+                            new Pair<>(size.getX(), size.getY()),
+                            toBytes(scaleImageByWidth(fromBytes(src), size.getX()))
+                    );
                 }
             } catch (IOException e) {
                 throw new RuntimeException();

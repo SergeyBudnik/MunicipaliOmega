@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "USER")
+@Table(name = "CLIENT_USER")
 public class UserModel {
     @EmbeddedId
     @Delegate

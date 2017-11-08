@@ -109,6 +109,11 @@ public class ArticleServiceImpl implements ArticleService {
                 String.format("%d", article.getId())
         );
 
+        imageService.removeAllImagesRemoveDirectory(
+                config.getImagesArticlesClippedImagesLocation().getValue(),
+                String.format("%d", article.getId())
+        );
+
         article.getQuestions().forEach(question ->
                 question.getAnswers().forEach(answer ->
                         imageService.removeAllImagesRemoveDirectory(
@@ -142,7 +147,7 @@ public class ArticleServiceImpl implements ArticleService {
                 imageService.addImage(
                         config.getImagesArticlesClippedImagesLocation().getValue(),
                         String.format("%d", articleModel.getId()),
-                        String.format("%dx%d", size, size),
+                        String.format("%dx%d", size.getX(), size.getY()),
                         icon
                 )
         );

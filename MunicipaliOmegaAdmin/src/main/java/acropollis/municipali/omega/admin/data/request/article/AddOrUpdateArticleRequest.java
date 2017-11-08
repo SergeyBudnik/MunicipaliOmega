@@ -8,6 +8,7 @@ import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.TranslatedQuestion;
 import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.answer.TranslatedAnswer;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.omega.common.dto.language.Language;
 import lombok.Data;
 
@@ -50,7 +51,10 @@ public class AddOrUpdateArticleRequest {
             articleWithIcon.setQuestions(questions.stream().map(QuestionInfo::toDto).collect(Collectors.toList()));
             articleWithIcon.setIcon(Collections.singletonMap(-1, icon));
             articleWithIcon.setImage(Collections.singletonMap(-1, image));
-            articleWithIcon.setClippedImage(Collections.singletonMap(-1, clippedImage));
+            articleWithIcon.setClippedImage(Collections.singletonMap(
+                    new Pair<>(-1, -1),
+                    clippedImage)
+            );
             articleWithIcon.setVideo(video);
             articleWithIcon.setSendPushOnRelease(sendPushOnRelease);
             articleWithIcon.setReleaseDate(releaseDate);
