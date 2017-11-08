@@ -10,15 +10,5 @@ import java.util.Map;
 public class Answer {
     private Long id;
     private Map<Language, TranslatedAnswer> translatedAnswer;
-
-    @Transient
-    public AnswerWithIcon withIcon(Map<Integer, byte []> icon) {
-        AnswerWithIcon answerWithIcon = new AnswerWithIcon();
-
-        answerWithIcon.setId(id);
-        answerWithIcon.setIcon(icon);
-        answerWithIcon.setTranslatedAnswer(translatedAnswer);
-
-        return answerWithIcon;
-    }
+    private boolean hasIcon;
 }

@@ -3,6 +3,7 @@ package acropollis.municipali.omega.admin.rest_service.article;
 import acropollis.municipali.omega.admin.rest_service.Qualifiers;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.ArticleWithIcon;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.security.common.dto.MunicipaliUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,6 +59,15 @@ public class AdminArticleRequestProcessingRestServiceImpl implements AdminArticl
         articleWithIcon.setImage(resizeImages(
                 articleWithIcon.getImage().get(-1),
                 150, 225, 300, 450, 600
+        ));
+
+        articleWithIcon.setClippedImage(resizeImages(
+                articleWithIcon.getClippedImage().get(new Pair<>(-1, -1)),
+                new Pair(150, 50),
+                new Pair(225, 75),
+                new Pair(300, 100),
+                new Pair(450, 150),
+                new Pair(600, 200)
         ));
 
         articleWithIcon

@@ -1,6 +1,7 @@
 package acropollis.municipali.omega.common.dto.article;
 
 import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.omega.common.dto.language.Language;
 import lombok.Data;
 
@@ -17,10 +18,13 @@ public class ArticleWithIcon {
     private List<QuestionWithIcon> questions;
     private Map<Integer, byte []> icon;
     private Map<Integer, byte []> image;
+    private Map<Pair<Integer, Integer>, byte []> clippedImage;
     private String video;
     private boolean sendPushOnRelease;
     private long creationDate;
     private long releaseDate;
+    private long calendarStartDate;
+    private long calendarFinishDate;
     private long expirationDate;
     private long lastUpdateDate;
 
@@ -37,6 +41,8 @@ public class ArticleWithIcon {
         article.setCreationDate(creationDate);
         article.setReleaseDate(releaseDate);
         article.setExpirationDate(expirationDate);
+        article.setCalendarStartDate(calendarStartDate);
+        article.setCalendarFinishDate(calendarFinishDate);
         article.setLastUpdateDate(lastUpdateDate);
 
         return article;

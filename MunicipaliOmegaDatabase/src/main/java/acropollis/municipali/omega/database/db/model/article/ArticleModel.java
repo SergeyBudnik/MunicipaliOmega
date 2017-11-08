@@ -38,6 +38,12 @@ public class ArticleModel {
     @Column(name = "RELEASE_DATE")
     private long releaseDate;
 
+    @Column(name = "CALENDAR_START_DATE")
+    private long calendarStartDate;
+
+    @Column(name = "CALENDAR_FINISH_DATE")
+    private long calendarFinishDate;
+
     @Column(name = "EXPIRATION_DATE")
     private long expirationDate;
 

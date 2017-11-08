@@ -16,7 +16,10 @@ public class PropertiesConfig {
     static {
         Config instanceConfig = getInstanceConfig();
 
-        config = SmartConfigProperties.getConfig(instanceConfig.getString("env"));
+        config = SmartConfigProperties.getConfig(
+                instanceConfig.getString("env"),
+                instanceConfig.getString("db")
+        );
 
         config.getId().override(instanceConfig.getString("id"));
 

@@ -3,7 +3,6 @@ package acropollis.municipali.omega.database.db.converters.article;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
-import acropollis.municipali.omega.common.utils.common.EncodingUtils;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleCategoriesModel;
 import acropollis.municipali.omega.database.db.model.article.TranslatedArticleModel;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static acropollis.municipali.omega.common.utils.common.EncodingUtils.*;
+import static acropollis.municipali.omega.common.utils.common.EncodingUtils.toBase64;
 
 public class ArticleDtoConverter {
     public static ArticleModel convert(Article article, boolean isDeleted) {
@@ -36,6 +35,8 @@ public class ArticleDtoConverter {
         articleModel.setSendPushOnRelease(article.isSendPushOnRelease());
         articleModel.setCreationDate(article.getCreationDate());
         articleModel.setReleaseDate(article.getReleaseDate());
+        articleModel.setCalendarStartDate(article.getCalendarStartDate());
+        articleModel.setCalendarFinishDate(article.getCalendarFinishDate());
         articleModel.setExpirationDate(article.getExpirationDate());
         articleModel.setLastUpdateDate(article.getLastUpdateDate());
         articleModel.setDeleted(isDeleted);
@@ -53,6 +54,7 @@ public class ArticleDtoConverter {
             translatedArticleModel.setArticle(articleModel);
             translatedArticleModel.setLanguage(language);
             translatedArticleModel.setTitle(toBase64(translatedArticle.getTitle()));
+            translatedArticleModel.setDescription(toBase64(translatedArticle.getDescription()));
             translatedArticleModel.setText(toBase64(translatedArticle.getText()));
             translatedArticleModel.setCategories(
                     translatedArticle
@@ -123,6 +125,7 @@ public class ArticleDtoConverter {
         answerModel.setTranslatedAnswers(getTranslatedAnswer(answer, answerModel));
         answerModel.setQuestion(questionModel);
         answerModel.setOrder(order);
+        answerModel.setHasIcon(answer.isHasIcon());
 
         return answerModel;
     }

@@ -8,6 +8,7 @@ import acropollis.municipali.omega.common.dto.article.question.QuestionWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.TranslatedQuestion;
 import acropollis.municipali.omega.common.dto.article.question.answer.AnswerWithIcon;
 import acropollis.municipali.omega.common.dto.article.question.answer.TranslatedAnswer;
+import acropollis.municipali.omega.common.dto.common.Pair;
 import acropollis.municipali.omega.common.dto.language.Language;
 import lombok.Data;
 
@@ -27,9 +28,12 @@ public class AddOrUpdateArticleRequest {
         private List<QuestionInfo> questions;
         private byte [] icon;
         private byte [] image;
+        private byte [] clippedImage;
         private String video;
         private boolean sendPushOnRelease;
         private long releaseDate;
+        private long calendarStartDate;
+        private long calendarFinishDate;
         private long expirationDate;
 
         @Transient
@@ -47,9 +51,15 @@ public class AddOrUpdateArticleRequest {
             articleWithIcon.setQuestions(questions.stream().map(QuestionInfo::toDto).collect(Collectors.toList()));
             articleWithIcon.setIcon(Collections.singletonMap(-1, icon));
             articleWithIcon.setImage(Collections.singletonMap(-1, image));
+            articleWithIcon.setClippedImage(Collections.singletonMap(
+                    new Pair<>(-1, -1),
+                    clippedImage)
+            );
             articleWithIcon.setVideo(video);
             articleWithIcon.setSendPushOnRelease(sendPushOnRelease);
             articleWithIcon.setReleaseDate(releaseDate);
+            articleWithIcon.setCalendarStartDate(calendarStartDate);
+            articleWithIcon.setCalendarFinishDate(calendarFinishDate);
             articleWithIcon.setExpirationDate(expirationDate);
 
             return articleWithIcon;
@@ -72,11 +82,7 @@ public class AddOrUpdateArticleRequest {
             questionWithIcon.setAnswers(new ArrayList<>());
 
             for (AnswerInfo answerInfo : answers) {
-                questionWithIcon.getAnswers().add(
-                        answerInfo != null ?
-                                answerInfo.toDto() :
-                                null
-                );
+                questionWithIcon.getAnswers().add(answerInfo != null ? answerInfo.toDto() : null);
             }
 
             questionWithIcon.setShowResult(showResult);

@@ -44,6 +44,8 @@ public class ArticleModelConverter {
         article.setSendPushOnRelease(articleModel.isSendPushOnRelease());
         article.setCreationDate(articleModel.getCreationDate());
         article.setReleaseDate(articleModel.getReleaseDate());
+        article.setCalendarStartDate(articleModel.getCalendarStartDate());
+        article.setCalendarFinishDate(articleModel.getCalendarFinishDate());
         article.setExpirationDate(articleModel.getExpirationDate());
         article.setLastUpdateDate(articleModel.getLastUpdateDate());
 
@@ -58,6 +60,7 @@ public class ArticleModelConverter {
 
             translatedArticle.setTitle(fromBase64(translatedArticleModel.getTitle()));
             translatedArticle.setText(fromBase64(translatedArticleModel.getText()));
+            translatedArticle.setDescription(fromBase64(translatedArticleModel.getDescription()));
             translatedArticle.setCategories(
                     translatedArticleModel
                             .getCategories()
@@ -127,6 +130,7 @@ public class ArticleModelConverter {
 
         answer.setId(answerModel.getId());
         answer.setTranslatedAnswer(getTranslatedAnswer(answerModel));
+        answer.setHasIcon(answerModel.isHasIcon());
 
         return answer;
     }

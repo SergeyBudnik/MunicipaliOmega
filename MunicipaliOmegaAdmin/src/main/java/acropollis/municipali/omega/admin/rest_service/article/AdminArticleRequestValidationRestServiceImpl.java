@@ -85,6 +85,10 @@ public class AdminArticleRequestValidationRestServiceImpl implements AdminArticl
             throw new HttpEntityNotValidException("'article.translatedArticle[%s].title' can't be null", language);
         }
 
+        if (isNullOrEmpty(translatedArticle.getDescription())) {
+            throw new HttpEntityNotValidException("'article.translatedArticle[%s].description' can't be null", language);
+        }
+
         if (isNullOrEmpty(translatedArticle.getText())) {
             throw new HttpEntityNotValidException("'article.translatedArticle[%s].text' can't be null", language);
         }
