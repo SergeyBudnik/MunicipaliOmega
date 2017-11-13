@@ -3,6 +3,7 @@ package acropollis.municipali.omega.user.cache.view;
 import acropollis.municipali.omega.common.dto.views.ArticleView;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -29,7 +30,7 @@ public class ArticleViewCacheImpl implements ArticleViewCache {
         try {
             lock.writeLock().lock();
 
-            Set<ArticleView> views = cache.keySet();
+            Set<ArticleView> views = new HashSet<>(cache.keySet());
 
             cache.clear();
 

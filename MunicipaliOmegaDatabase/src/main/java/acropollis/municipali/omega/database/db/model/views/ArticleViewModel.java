@@ -1,15 +1,15 @@
 package acropollis.municipali.omega.database.db.model.views;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Delegate;
 
-import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-@NoArgsConstructor
 @Data
-@Embeddable
+@Entity
+@Table(name = "ARTICLE_VIEW")
 public class ArticleViewModel {
     @EmbeddedId
     @Delegate
