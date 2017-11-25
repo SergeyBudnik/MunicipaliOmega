@@ -1,25 +1,23 @@
 package acropollis.municipali.omega.user_notification.async;
 
-import acropollis.municipali.omega.health_check.async.DatabaseCommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.MemoryCommonHealthcheckedJob;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
-import acropollis.municipali.omega.health_check.data.DatabaseHealth;
+import acropollis.municipali.omega.health_check.data.MemoryHealth;
 import acropollis.municipali.omega.user_notification.data.health_check.UserNotificationHealth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static acropollis.municipali.omega.user_notification.config.UserNotificationDatabaseConfig.POOL_NAME;
-
 @Service
-public class UserNotificationDatabaseHealthCheckReloadJob extends DatabaseCommonHealthcheckedJob<UserNotificationHealth> {
+public class UserNotificationMemoryHealthCheckReloadJob extends MemoryCommonHealthcheckedJob<UserNotificationHealth> {
     @Autowired
     private HealthCheckCache healthCheckCache;
 
     @Scheduled(fixedRate = 60 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
-        execute(POOL_NAME);
+        execute();
     }
 
     @Override
@@ -33,12 +31,12 @@ public class UserNotificationDatabaseHealthCheckReloadJob extends DatabaseCommon
     }
 
     @Override
-    protected DatabaseHealth getReloadJobHealthEntity() {
-        return new DatabaseHealth();
+    protected MemoryHealth getReloadJobHealthEntity() {
+        return new MemoryHealth();
     }
 
     @Override
-    protected void updateReloadJobHealth(UserNotificationHealth userNotificationHealth, DatabaseHealth reloadJobHealth) {
-        userNotificationHealth.setDatabaseHealth(reloadJobHealth);
+    protected void updateReloadJobHealth(UserNotificationHealth adminHealth, MemoryHealth reloadJobHealth) {
+        adminHealth.setMemoryHealth(reloadJobHealth);
     }
 }

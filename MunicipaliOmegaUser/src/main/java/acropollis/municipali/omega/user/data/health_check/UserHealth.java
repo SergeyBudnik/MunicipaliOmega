@@ -3,6 +3,7 @@ package acropollis.municipali.omega.user.data.health_check;
 import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.health_check.data.CommonHealth;
 import acropollis.municipali.omega.health_check.data.CommonReloadJobHealth;
+import acropollis.municipali.omega.health_check.data.MemoryHealth;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,11 +22,12 @@ public class UserHealth extends CommonHealth {
         private int amount;
     }
 
-    private boolean databaseHealth;
     private ArticlesReloadJobHealth articlesReloadJobHealth;
     private PendingAnswersPersistJobHealth pendingAnswersPersistJobHealth;
+    private MemoryHealth memoryHealth;
     private CommonReloadJobHealth brandingReloadJobHealth;
     private CommonReloadJobHealth statisticsReloadJobHealth;
+    private CommonReloadJobHealth hostingHealth;
 
     public UserHealth() {
         setVersion(PropertiesConfig.config.getVersion().getValue());

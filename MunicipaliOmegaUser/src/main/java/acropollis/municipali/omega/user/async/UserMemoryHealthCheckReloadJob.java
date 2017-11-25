@@ -1,25 +1,23 @@
 package acropollis.municipali.omega.user.async;
 
-import acropollis.municipali.omega.health_check.async.DatabaseCommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.MemoryCommonHealthcheckedJob;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
-import acropollis.municipali.omega.health_check.data.DatabaseHealth;
+import acropollis.municipali.omega.health_check.data.MemoryHealth;
 import acropollis.municipali.omega.user.data.health_check.UserHealth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static acropollis.municipali.omega.user.config.UserDatabaseConfig.POOL_NAME;
-
 @Service
-public class UserDatabaseHealthCheckReloadJob extends DatabaseCommonHealthcheckedJob<UserHealth> {
+public class UserMemoryHealthCheckReloadJob extends MemoryCommonHealthcheckedJob<UserHealth> {
     @Autowired
     private HealthCheckCache healthCheckCache;
 
     @Scheduled(fixedRate = 60 * 1000)
     @Transactional(readOnly = true)
     public void reload() {
-        execute(POOL_NAME);
+        execute();
     }
 
     @Override
@@ -33,12 +31,12 @@ public class UserDatabaseHealthCheckReloadJob extends DatabaseCommonHealthchecke
     }
 
     @Override
-    protected DatabaseHealth getReloadJobHealthEntity() {
-        return new DatabaseHealth();
+    protected MemoryHealth getReloadJobHealthEntity() {
+        return new MemoryHealth();
     }
 
     @Override
-    protected void updateReloadJobHealth(UserHealth userNotificationHealth, DatabaseHealth reloadJobHealth) {
-        userNotificationHealth.setDatabaseHealth(reloadJobHealth);
+    protected void updateReloadJobHealth(UserHealth userHealth, MemoryHealth reloadJobHealth) {
+        userHealth.setMemoryHealth(reloadJobHealth);
     }
 }

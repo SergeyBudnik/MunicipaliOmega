@@ -16,8 +16,10 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 public class DatabaseConfig {
     public static final String JPA_REPOSITORIES_LOCATION = "acropollis.municipali.omega.database.db.dao";
 
-    public static DataSource getDataSource(int maxPoolSize) {
+    public static DataSource getDataSource(String poolName, int maxPoolSize) {
         HikariConfig dataSourceConfig = new HikariConfig(); {
+            dataSourceConfig.setPoolName(poolName);
+            dataSourceConfig.setRegisterMbeans(true);
             dataSourceConfig.setDriverClassName(config.getDatabaseDriver().getValue());
             dataSourceConfig.setJdbcUrl(config.getDatabaseUrl().getValue());
             dataSourceConfig.setUsername(config.getDatabaseUsername().getValue());

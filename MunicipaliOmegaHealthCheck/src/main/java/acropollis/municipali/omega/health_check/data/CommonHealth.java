@@ -5,4 +5,6 @@ import lombok.Data;
 @Data
 public abstract class CommonHealth {
     private String version;
+    private DatabaseHealth databaseHealth;
+    private MemoryHealth memoryHealth;
 }
