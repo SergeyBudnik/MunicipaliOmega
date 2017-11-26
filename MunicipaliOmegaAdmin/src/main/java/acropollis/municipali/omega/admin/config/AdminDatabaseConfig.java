@@ -17,9 +17,12 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 @EnableTransactionManagement
 @EnableJpaRepositories(JPA_REPOSITORIES_LOCATION)
 public class AdminDatabaseConfig {
+    public static final String POOL_NAME = "Admin";
+
     @Bean
     DataSource dataSource() {
         return getDataSource(
+                "Admin",
                 (int) ((long) config.getDatabaseMaxPoolSizeAdmin().getValue())
         );
     }

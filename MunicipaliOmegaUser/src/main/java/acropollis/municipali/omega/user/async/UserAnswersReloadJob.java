@@ -4,9 +4,9 @@ import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.question.Question;
 import acropollis.municipali.omega.common.dto.article.question.answer.Answer;
 import acropollis.municipali.omega.database.db.dao.UserAnswerDao;
-import acropollis.municipali.omega.health_check.async.CommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
-import acropollis.municipali.omega.health_check.data.CommonReloadJobHealth;
+import acropollis.municipali.omega.health_check.data.CommonHealth;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.cache.statistics.UserStatisticsCache;
 import acropollis.municipali.omega.user.data.health_check.UserHealth;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class UserAnswersReloadJob extends CommonHealthcheckedJob<UserHealth, CommonReloadJobHealth> {
+public class UserAnswersReloadJob extends CommonHealthCheck<UserHealth, CommonHealth> {
     private static final Logger log = LogUtils.getUserAnswersReloadLogger();
 
     @Autowired
@@ -80,8 +80,8 @@ public class UserAnswersReloadJob extends CommonHealthcheckedJob<UserHealth, Com
     }
 
     @Override
-    protected CommonReloadJobHealth getReloadJobHealthEntity() {
-        return new CommonReloadJobHealth();
+    protected CommonHealth getReloadJobHealthEntity() {
+        return new CommonHealth();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class UserAnswersReloadJob extends CommonHealthcheckedJob<UserHealth, Com
     }
 
     @Override
-    protected void updateReloadJobHealth(UserHealth userHealth, CommonReloadJobHealth reloadJobHealth) {
+    protected void updateReloadJobHealth(UserHealth userHealth, CommonHealth reloadJobHealth) {
         userHealth.setStatisticsReloadJobHealth(reloadJobHealth);
     }
 

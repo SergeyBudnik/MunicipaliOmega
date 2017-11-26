@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user_notification.rest;
 
-import acropollis.municipali.omega.health_check.data.CommonHealth;
+import acropollis.municipali.omega.health_check.data.CommonComponentHealth;
 import acropollis.municipali.omega.common.exceptions.HttpEntityNotFoundException;
 import acropollis.municipali.omega.health_check.service.HealthCheckService;
 import io.swagger.annotations.Api;
@@ -17,7 +17,7 @@ public class UserNotificationHealthCheckResource {
     private HealthCheckService healthCheckService;
 
     @GetMapping("")
-    public CommonHealth getHealth() {
+    public CommonComponentHealth getHealth() {
         return healthCheckService
                 .getHealth()
                 .orElseThrow(() -> new HttpEntityNotFoundException(""));

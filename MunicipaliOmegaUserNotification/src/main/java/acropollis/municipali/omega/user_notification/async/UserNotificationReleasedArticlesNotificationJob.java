@@ -4,9 +4,9 @@ import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
 import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
-import acropollis.municipali.omega.health_check.async.CommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
-import acropollis.municipali.omega.health_check.data.CommonReloadJobHealth;
+import acropollis.municipali.omega.health_check.data.CommonHealth;
 import acropollis.municipali.omega.user_notification.data.health_check.UserNotificationHealth;
 import acropollis.municipali.omega.user_notification.utils.log.LogUtils;
 import com.sun.jersey.api.client.Client;
@@ -32,7 +32,7 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.getLang
 import static java.lang.Math.*;
 
 @Service
-public class UserNotificationReleasedArticlesNotificationJob extends CommonHealthcheckedJob<UserNotificationHealth, CommonReloadJobHealth> {
+public class UserNotificationReleasedArticlesNotificationJob extends CommonHealthCheck<UserNotificationHealth, CommonHealth> {
     private static final Logger log = LogUtils.getReleasedArticlesNotificationJobLogger();
 
     @AllArgsConstructor
@@ -155,12 +155,12 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
     }
 
     @Override
-    protected CommonReloadJobHealth getReloadJobHealthEntity() {
-        return new CommonReloadJobHealth();
+    protected CommonHealth getReloadJobHealthEntity() {
+        return new CommonHealth();
     }
 
     @Override
-    protected void updateReloadJobHealth(UserNotificationHealth userHealth, CommonReloadJobHealth reloadJobHealth) {
+    protected void updateReloadJobHealth(UserNotificationHealth userHealth, CommonHealth reloadJobHealth) {
         userHealth.setReleasedArticlesNotificationReloadJobHealth(reloadJobHealth);
     }
 
