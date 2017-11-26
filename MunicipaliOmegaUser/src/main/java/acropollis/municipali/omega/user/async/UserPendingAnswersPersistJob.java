@@ -1,7 +1,7 @@
 package acropollis.municipali.omega.user.async;
 
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
-import acropollis.municipali.omega.health_check.async.CommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
 import acropollis.municipali.omega.user.cache.answer.pending.UserPendingAnswersCache;
 import acropollis.municipali.omega.user.data.converter.answer.UserAnswerDtoConverter;
 import acropollis.municipali.omega.user.data.dto.answer.UserAnswer;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserPendingAnswersPersistJob extends CommonHealthcheckedJob<UserHealth, UserHealth.PendingAnswersPersistJobHealth> {
+public class UserPendingAnswersPersistJob extends CommonHealthCheck<UserHealth, UserHealth.PendingAnswersPersistJobHealth> {
     private static final Logger log = LogUtils.getPendingAnswersPersistLogger();
 
     @Autowired

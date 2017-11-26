@@ -1,16 +1,16 @@
-package acropollis.municipali.omega.user_notification.async;
+package acropollis.municipali.omega.user.async;
 
-import acropollis.municipali.omega.health_check.async.MemoryCommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.MemoryHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
 import acropollis.municipali.omega.health_check.data.MemoryHealth;
-import acropollis.municipali.omega.user_notification.data.health_check.UserNotificationHealth;
+import acropollis.municipali.omega.user.data.health_check.UserHealth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserNotificationMemoryHealthCheckReloadJob extends MemoryCommonHealthcheckedJob<UserNotificationHealth> {
+public class UserMemoryHealthCheck extends MemoryHealthCheck<UserHealth> {
     @Autowired
     private HealthCheckCache healthCheckCache;
 
@@ -26,8 +26,8 @@ public class UserNotificationMemoryHealthCheckReloadJob extends MemoryCommonHeal
     }
 
     @Override
-    protected UserNotificationHealth getHealthEntity() {
-        return new UserNotificationHealth();
+    protected UserHealth getHealthEntity() {
+        return new UserHealth();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class UserNotificationMemoryHealthCheckReloadJob extends MemoryCommonHeal
     }
 
     @Override
-    protected void updateReloadJobHealth(UserNotificationHealth adminHealth, MemoryHealth reloadJobHealth) {
-        adminHealth.setMemoryHealth(reloadJobHealth);
+    protected void updateReloadJobHealth(UserHealth userHealth, MemoryHealth reloadJobHealth) {
+        userHealth.setMemoryHealth(reloadJobHealth);
     }
 }

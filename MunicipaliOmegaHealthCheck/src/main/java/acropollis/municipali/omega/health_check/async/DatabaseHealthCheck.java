@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.health_check.async;
 
-import acropollis.municipali.omega.health_check.data.CommonHealth;
+import acropollis.municipali.omega.health_check.data.CommonComponentHealth;
 import acropollis.municipali.omega.health_check.data.DatabaseHealth;
 import com.zaxxer.hikari.pool.HikariPoolMBean;
 
@@ -10,7 +10,7 @@ import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.util.Date;
 
-public abstract class DatabaseCommonHealthcheckedJob<H extends CommonHealth> extends CommonHealthcheckedJob<H, DatabaseHealth> {
+public abstract class DatabaseHealthCheck<H extends CommonComponentHealth> extends CommonHealthCheck<H, DatabaseHealth> {
     protected final void execute(String poolName) {
         long t1 = new Date().getTime();
 

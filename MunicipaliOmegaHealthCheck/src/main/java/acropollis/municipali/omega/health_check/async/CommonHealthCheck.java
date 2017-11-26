@@ -1,13 +1,13 @@
 package acropollis.municipali.omega.health_check.async;
 
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
+import acropollis.municipali.omega.health_check.data.CommonComponentHealth;
 import acropollis.municipali.omega.health_check.data.CommonHealth;
-import acropollis.municipali.omega.health_check.data.CommonReloadJobHealth;
 
 import java.util.Date;
 import java.util.function.Consumer;
 
-public abstract class CommonHealthcheckedJob<H extends CommonHealth, JH extends CommonReloadJobHealth> {
+public abstract class CommonHealthCheck<H extends CommonComponentHealth, JH extends CommonHealth> {
     private static final int NO_RELOAD = -1;
     private static final String SUCCESS = "Success";
 
@@ -36,7 +36,7 @@ public abstract class CommonHealthcheckedJob<H extends CommonHealth, JH extends 
     }
 
     private H onReloadFinished(boolean health, long startDate, long endDate, Consumer<JH> specificAction) {
-        H userHealth = (H) getHealthCheckCache().getHealth().orElse(getHealthEntity());
+        H componenHealth = (H) getHealthCheckCache().getHealth().orElse(getHealthEntity());
 
         JH reloadJobHealth = getReloadJobHealthEntity(); {
             reloadJobHealth.setHealth(health);
@@ -49,12 +49,12 @@ public abstract class CommonHealthcheckedJob<H extends CommonHealth, JH extends 
 
         specificAction.accept(reloadJobHealth);
 
-        updateReloadJobHealth(userHealth, reloadJobHealth);
+        updateReloadJobHealth(componenHealth, reloadJobHealth);
 
-        getHealthCheckCache().saveHealth(userHealth);
+        getHealthCheckCache().saveHealth(componenHealth);
 
         lastReloadDate = newLastReloadDate;
 
-        return userHealth;
+        return componenHealth;
     }
 }

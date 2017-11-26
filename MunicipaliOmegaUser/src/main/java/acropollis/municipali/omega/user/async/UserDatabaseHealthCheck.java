@@ -1,6 +1,6 @@
 package acropollis.municipali.omega.user.async;
 
-import acropollis.municipali.omega.health_check.async.DatabaseCommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.DatabaseHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
 import acropollis.municipali.omega.health_check.data.DatabaseHealth;
 import acropollis.municipali.omega.user.data.health_check.UserHealth;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static acropollis.municipali.omega.user.config.UserDatabaseConfig.POOL_NAME;
 
 @Service
-public class UserDatabaseHealthCheckReloadJob extends DatabaseCommonHealthcheckedJob<UserHealth> {
+public class UserDatabaseHealthCheck extends DatabaseHealthCheck<UserHealth> {
     @Autowired
     private HealthCheckCache healthCheckCache;
 

@@ -3,7 +3,7 @@ package acropollis.municipali.omega.user.async;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.database.db.dao.ArticleDao;
 import acropollis.municipali.omega.database.db.model.article.ArticleModel;
-import acropollis.municipali.omega.health_check.async.CommonHealthcheckedJob;
+import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
 import acropollis.municipali.omega.user.cache.article.visible.VisibleArticlesCache;
 import acropollis.municipali.omega.user.data.health_check.UserHealth;
@@ -21,7 +21,7 @@ import java.util.List;
 import static acropollis.municipali.omega.database.db.converters.article.ArticleModelConverter.convert;
 
 @Service
-public class UserArticlesReloadJob extends CommonHealthcheckedJob<UserHealth, UserHealth.ArticlesReloadJobHealth> {
+public class UserArticlesReloadJob extends CommonHealthCheck<UserHealth, UserHealth.ArticlesReloadJobHealth> {
     private static final Logger log = LogUtils.getArticlesReloadLogger();
 
     @Autowired

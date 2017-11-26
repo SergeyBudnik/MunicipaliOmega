@@ -1,18 +1,18 @@
-package acropollis.municipali.omega.user_notification.async;
+package acropollis.municipali.omega.admin.async.health_check;
 
-import acropollis.municipali.omega.health_check.async.DatabaseCommonHealthcheckedJob;
+import acropollis.municipali.omega.admin.data.health_check.AdminHealth;
+import acropollis.municipali.omega.health_check.async.DatabaseHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
 import acropollis.municipali.omega.health_check.data.DatabaseHealth;
-import acropollis.municipali.omega.user_notification.data.health_check.UserNotificationHealth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static acropollis.municipali.omega.user_notification.config.UserNotificationDatabaseConfig.POOL_NAME;
+import static acropollis.municipali.omega.admin.config.AdminDatabaseConfig.POOL_NAME;
 
 @Service
-public class UserNotificationDatabaseHealthCheckReloadJob extends DatabaseCommonHealthcheckedJob<UserNotificationHealth> {
+public class AdminDatabaseHealthCheck extends DatabaseHealthCheck<AdminHealth> {
     @Autowired
     private HealthCheckCache healthCheckCache;
 
@@ -28,8 +28,8 @@ public class UserNotificationDatabaseHealthCheckReloadJob extends DatabaseCommon
     }
 
     @Override
-    protected UserNotificationHealth getHealthEntity() {
-        return new UserNotificationHealth();
+    protected AdminHealth getHealthEntity() {
+        return new AdminHealth();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserNotificationDatabaseHealthCheckReloadJob extends DatabaseCommon
     }
 
     @Override
-    protected void updateReloadJobHealth(UserNotificationHealth userNotificationHealth, DatabaseHealth reloadJobHealth) {
+    protected void updateReloadJobHealth(AdminHealth userNotificationHealth, DatabaseHealth reloadJobHealth) {
         userNotificationHealth.setDatabaseHealth(reloadJobHealth);
     }
 }

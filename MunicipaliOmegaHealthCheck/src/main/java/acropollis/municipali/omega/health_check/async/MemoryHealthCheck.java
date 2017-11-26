@@ -1,13 +1,13 @@
 package acropollis.municipali.omega.health_check.async;
 
-import acropollis.municipali.omega.health_check.data.CommonHealth;
+import acropollis.municipali.omega.health_check.data.CommonComponentHealth;
 import acropollis.municipali.omega.health_check.data.MemoryHealth;
 
 import java.util.Date;
 
 import static java.lang.Runtime.getRuntime;
 
-public abstract class MemoryCommonHealthcheckedJob<H extends CommonHealth> extends CommonHealthcheckedJob<H, MemoryHealth> {
+public abstract class MemoryHealthCheck<H extends CommonComponentHealth> extends CommonHealthCheck<H, MemoryHealth> {
     protected final void execute() {
         long time = new Date().getTime();
 
