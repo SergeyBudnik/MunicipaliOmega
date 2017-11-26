@@ -50,6 +50,8 @@ public class PropertiesConfig {
         config.getPlatformDefaultLanguage().override(instanceConfig.getString("platform.defaultLanguage"));
         config.getPlatformLanguages().override(instanceConfig.getStringList("platform.languages"));
 
+        config.getAdminUiVersionPath().override(instanceConfig.getString("admin.ui.version.path"));
+
         config.getGmsKeys().override((List<String>) instanceConfig.getAnyRefList("gms.keys"));
     }
 

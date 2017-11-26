@@ -2,6 +2,7 @@ package acropollis.municipali.omega.user.async;
 
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
 import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
+import acropollis.municipali.omega.health_check.data.ReloadHealth;
 import acropollis.municipali.omega.user.cache.answer.pending.UserPendingAnswersCache;
 import acropollis.municipali.omega.user.data.converter.answer.UserAnswerDtoConverter;
 import acropollis.municipali.omega.user.data.dto.answer.UserAnswer;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserPendingAnswersPersistJob extends CommonHealthCheck<UserHealth, UserHealth.PendingAnswersPersistJobHealth> {
+public class UserPendingAnswersPersistJob extends CommonHealthCheck<UserHealth, ReloadHealth> {
     private static final Logger log = LogUtils.getPendingAnswersPersistLogger();
 
     @Autowired
@@ -80,12 +81,12 @@ public class UserPendingAnswersPersistJob extends CommonHealthCheck<UserHealth, 
     }
 
     @Override
-    protected UserHealth.PendingAnswersPersistJobHealth getReloadJobHealthEntity() {
-        return new UserHealth.PendingAnswersPersistJobHealth();
+    protected ReloadHealth getReloadJobHealthEntity() {
+        return new ReloadHealth();
     }
 
     @Override
-    protected void updateReloadJobHealth(UserHealth userHealth, UserHealth.PendingAnswersPersistJobHealth reloadJobHealth) {
+    protected void updateReloadJobHealth(UserHealth userHealth, ReloadHealth reloadJobHealth) {
         userHealth.setPendingAnswersPersistJobHealth(reloadJobHealth);
     }
 
