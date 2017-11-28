@@ -74,13 +74,13 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
         try {
             if (lastReloadDate != -1) {
                 int totalAttempts = 0;
-                int successfullAttempts = 0;
+                int successfulAttempts = 0;
 
                 for (Article article : articleReleasePushService.getArticlesToRelease(reloadStartDate)) {
                     totalAttempts++;
 
                     if (sendPush(article)) {
-                        successfullAttempts++;
+                        successfulAttempts++;
                     }
 
                     articleReleasePushService.delete(article.getId());
@@ -88,7 +88,7 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
 
                 updateHealthWithSuccess(
                         totalAttempts,
-                        successfullAttempts,
+                        successfulAttempts,
                         reloadStartDate,
                         new Date().getTime()
                 );
@@ -106,24 +106,18 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
 
     private boolean sendPush(Article article) {
         try {
-            WebResource resource = Client.create().resource("https://fcm.googleapis.com/fcm/send");
+            WebResource resource = Client.create().resource(
+                    "https://fcm.googleapis.com/fcm/send"
+            );
 
             TranslatedArticle translatedArticle = article.getTranslatedArticle().get(getLanguage());
 
             if (translatedArticle != null) {
-                String formattedTitle = translatedArticle.getTitle().substring(0, min(
-                        translatedArticle.getTitle().length(), MAX_TEXT_LENGTH
-                ));
-
-                String formattedText = translatedArticle.getText().substring(0, min(
-                        translatedArticle.getText().length(), MAX_TEXT_LENGTH
-                ));
-
                 ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
                         "/topics/" + config.getId().getValue() + "-User_" + ARTICLE_RELEASE_TOPIC,
                         new ReleaseArticlePushNotificationPayload.Data(
-                                formattedTitle,
-                                formattedText
+                                formatText(translatedArticle.getTitle(), MAX_TEXT_LENGTH),
+                                formatText(translatedArticle.getDescription(), MAX_TEXT_LENGTH)
                         )
                 );
 
@@ -162,6 +156,10 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
     @Override
     protected void updateReloadJobHealth(UserNotificationHealth userHealth, CommonHealth reloadJobHealth) {
         userHealth.setReleasedArticlesNotificationReloadJobHealth(reloadJobHealth);
+    }
+
+    private String formatText(String text, int maxLength) {
+        return text.substring(0, min(text.length(), maxLength));
     }
 
     private void updateHealthWithSuccess(

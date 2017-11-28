@@ -39,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao
                 .findByIsDeletedIsFalse()
                 .stream()
-                .map(ArticleModelConverter::convert)
+                .map(it -> ArticleModelConverter.convert(it, false))
                 .collect(Collectors.toList());
     }
 
@@ -47,7 +47,7 @@ public class ArticleServiceImpl implements ArticleService {
     public Optional<Article> get(long articleId) {
         return Optional
                 .ofNullable(articleDao.findOneByIdAndIsDeletedIsFalse(articleId))
-                .map(ArticleModelConverter::convert);
+                .map(it -> ArticleModelConverter.convert(it, true));
     }
 
     @Override
