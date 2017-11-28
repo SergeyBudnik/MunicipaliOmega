@@ -51,7 +51,7 @@ public class UserArticlesReloadJob extends CommonHealthCheck<UserHealth, ReloadH
                     );
 
             for (ArticleModel articleModel : articlesModels) {
-                visibleArticles.add(convert(articleModel));
+                visibleArticles.add(convert(articleModel, true));
             }
 
             visibleArticlesCache.setArticles(visibleArticles);

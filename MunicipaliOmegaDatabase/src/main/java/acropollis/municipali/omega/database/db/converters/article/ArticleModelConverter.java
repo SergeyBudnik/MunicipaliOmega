@@ -16,29 +16,26 @@ import acropollis.municipali.omega.database.db.model.article.question.Translated
 import acropollis.municipali.omega.database.db.model.article.question.answer.AnswerModel;
 import acropollis.municipali.omega.database.db.model.article.question.answer.TranslatedAnswerModel;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static acropollis.municipali.omega.common.utils.common.EncodingUtils.fromBase64;
 
 public class ArticleModelConverter {
-    public static Article convert(ArticleModel articleModel) {
+    public static Article convert(ArticleModel articleModel, boolean withQuestions) {
         Article article = new Article();
 
         article.setId(articleModel.getId());
         article.setType(articleModel.getType());
         article.setTranslatedArticle(getTranslatedArticle(articleModel));
-        article.setQuestions(
+        article.setQuestions(withQuestions ?
                 articleModel
                         .getQuestions()
                         .stream()
                         .sorted(Comparator.comparingInt(QuestionModel::getOrder))
                         .map(ArticleModelConverter::convert)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()) : Collections.emptyList()
         );
         article.setVideo(articleModel.getVideo());
         article.setSendPushOnRelease(articleModel.isSendPushOnRelease());
