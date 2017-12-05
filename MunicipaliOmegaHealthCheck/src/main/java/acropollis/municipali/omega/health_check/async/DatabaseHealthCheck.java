@@ -2,7 +2,7 @@ package acropollis.municipali.omega.health_check.async;
 
 import acropollis.municipali.omega.health_check.data.CommonComponentHealth;
 import acropollis.municipali.omega.health_check.data.DatabaseHealth;
-import com.zaxxer.hikari.pool.HikariPoolMBean;
+import com.zaxxer.hikari.HikariPoolMXBean;
 
 import javax.management.JMX;
 import javax.management.MBeanServer;
@@ -17,7 +17,7 @@ public abstract class DatabaseHealthCheck<H extends CommonComponentHealth> exten
         try {
             MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
             ObjectName objectPoolName = new ObjectName("com.zaxxer.hikari:type=Pool (" + poolName + ")");
-            HikariPoolMBean poolProxy = JMX.newMBeanProxy(mBeanServer, objectPoolName, HikariPoolMBean.class);
+            HikariPoolMXBean poolProxy = JMX.newMBeanProxy(mBeanServer, objectPoolName, HikariPoolMXBean.class);
 
             int idleConnections = poolProxy.getIdleConnections();
             int activeConnections = poolProxy.getActiveConnections();

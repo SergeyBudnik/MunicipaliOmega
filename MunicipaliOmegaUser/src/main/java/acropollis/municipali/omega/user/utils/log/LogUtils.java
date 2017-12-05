@@ -7,10 +7,6 @@ public class LogUtils {
         return Logger.getLogger("articlesReload");
     }
 
-    public static Logger getBrandingReloadLogger() {
-        return Logger.getLogger("brandingReload");
-    }
-
     public static Logger getUserAnswersReloadLogger() {
         return Logger.getLogger("userAnswersReload");
     }
