@@ -210,7 +210,7 @@
         <dependency>
             <groupId>com.github.sergeybudnik</groupId>
             <artifactId>smart.config.data</artifactId>
-            <version>1.0.1</version>
+            <version>3.0.1</version>
         </dependency>
 
         <dependency>

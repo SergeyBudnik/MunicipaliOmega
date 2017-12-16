@@ -12,6 +12,6 @@ public class UserNotificationHealth extends CommonComponentHealth {
     private CommonHealth releasedArticlesNotificationReloadJobHealth;
 
     public UserNotificationHealth() {
-        setVersion(PropertiesConfig.config.getVersion().getValue());
+        setVersion(PropertiesConfig.config.getVersion());
     }
 }

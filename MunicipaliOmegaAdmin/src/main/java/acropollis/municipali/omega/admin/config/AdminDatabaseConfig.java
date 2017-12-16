@@ -23,7 +23,7 @@ public class AdminDatabaseConfig {
     DataSource dataSource() {
         return getDataSource(
                 "Admin",
-                (int) ((long) config.getDatabaseMaxPoolSizeAdmin().getValue())
+                (int) ((long) config.getDatabaseMaxPoolSizeAdmin())
         );
     }
 

@@ -46,7 +46,7 @@ public class ReportServiceImpl implements ReportService {
 
         if (reportImage != null) {
             imageService.addImage(
-                    PropertiesConfig.config.getImagesReportsLocation().getValue(),
+                    PropertiesConfig.config.getImagesReportsLocation(),
                     String.format("%d", id),
                     "report",
                     reportImage
@@ -59,7 +59,7 @@ public class ReportServiceImpl implements ReportService {
         reportDao.delete(id);
 
         imageService.removeAllImagesRemoveDirectory(
-                PropertiesConfig.config.getImagesReportsLocation().getValue(),
+                PropertiesConfig.config.getImagesReportsLocation(),
                 String.format("%d", id)
         );
     }

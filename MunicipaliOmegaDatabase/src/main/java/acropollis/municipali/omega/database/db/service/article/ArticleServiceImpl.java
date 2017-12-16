@@ -100,24 +100,24 @@ public class ArticleServiceImpl implements ArticleService {
 
     private void clearIcons(ArticleModel article) {
         imageService.removeAllImagesRemoveDirectory(
-                config.getImagesArticlesIconsLocation().getValue(),
+                config.getImagesArticlesIconsLocation(),
                 String.format("%d", article.getId())
         );
 
         imageService.removeAllImagesRemoveDirectory(
-                config.getImagesArticlesImagesLocation().getValue(),
+                config.getImagesArticlesImagesLocation(),
                 String.format("%d", article.getId())
         );
 
         imageService.removeAllImagesRemoveDirectory(
-                config.getImagesArticlesClippedImagesLocation().getValue(),
+                config.getImagesArticlesClippedImagesLocation(),
                 String.format("%d", article.getId())
         );
 
         article.getQuestions().forEach(question ->
                 question.getAnswers().forEach(answer ->
                         imageService.removeAllImagesRemoveDirectory(
-                                config.getImagesAnswersIconsLocation().getValue(),
+                                config.getImagesAnswersIconsLocation(),
                                 String.format("%d", answer.getId())
                         )
                 )
@@ -127,7 +127,7 @@ public class ArticleServiceImpl implements ArticleService {
     private void saveIcons(ArticleModel articleModel, ArticleWithIcon articleWithIcon) {
         articleWithIcon.getIcon().forEach((size, icon) ->
                 imageService.addImage(
-                        config.getImagesArticlesIconsLocation().getValue(),
+                        config.getImagesArticlesIconsLocation(),
                         String.format("%d", articleModel.getId()),
                         String.format("%dx%d", size, size),
                         icon
@@ -136,7 +136,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleWithIcon.getImage().forEach((size, icon) ->
                 imageService.addImage(
-                        config.getImagesArticlesImagesLocation().getValue(),
+                        config.getImagesArticlesImagesLocation(),
                         String.format("%d", articleModel.getId()),
                         String.format("%dx%d", size, size),
                         icon
@@ -145,7 +145,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleWithIcon.getClippedImage().forEach((size, icon) ->
                 imageService.addImage(
-                        config.getImagesArticlesClippedImagesLocation().getValue(),
+                        config.getImagesArticlesClippedImagesLocation(),
                         String.format("%d", articleModel.getId()),
                         String.format("%dx%d", size.getX(), size.getY()),
                         icon
@@ -180,7 +180,7 @@ public class ArticleServiceImpl implements ArticleService {
 
                     answerWithIcon.getIcon().forEach((size, icon) ->
                             imageService.addImage(
-                                    config.getImagesAnswersIconsLocation().getValue(),
+                                    config.getImagesAnswersIconsLocation(),
                                     String.format("%d", answerModel.getId()),
                                     String.format("%dx%d", size, size),
                                     icon

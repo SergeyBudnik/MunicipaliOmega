@@ -51,7 +51,7 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
         private Data notification;
     }
 
-    private static final List<String> SERVER_KEYS = PropertiesConfig.config.getGmsKeys().getValue();
+    private static final List<String> SERVER_KEYS = PropertiesConfig.config.getGmsKeys();
     private static final String ARTICLE_RELEASE_TOPIC = "ArticleRelease";
 
     private static final int MAX_TEXT_LENGTH = 32;
@@ -114,7 +114,7 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
 
             if (translatedArticle != null) {
                 ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
-                        "/topics/" + config.getId().getValue() + "-User_" + ARTICLE_RELEASE_TOPIC,
+                        "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC,
                         new ReleaseArticlePushNotificationPayload.Data(
                                 formatText(translatedArticle.getTitle(), MAX_TEXT_LENGTH),
                                 formatText(translatedArticle.getDescription(), MAX_TEXT_LENGTH)

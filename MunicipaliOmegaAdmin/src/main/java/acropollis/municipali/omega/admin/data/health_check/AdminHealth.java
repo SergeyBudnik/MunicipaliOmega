@@ -19,6 +19,6 @@ public class AdminHealth extends CommonComponentHealth {
     private AdminUIHealth adminUIHealth;
 
     public AdminHealth() {
-        setVersion(PropertiesConfig.config.getVersion().getValue());
+        setVersion(PropertiesConfig.config.getVersion());
     }
 }

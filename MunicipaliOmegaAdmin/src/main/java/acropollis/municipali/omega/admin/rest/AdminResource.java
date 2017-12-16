@@ -26,7 +26,7 @@ public abstract class AdminResource {
     MunicipaliUserToken login(MunicipaliUserCredentials credentials) {
         try {
             return securityUserClient.login(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     credentials
             );
         } catch (MunicipaliSecurityNetworkException e) {
@@ -39,7 +39,7 @@ public abstract class AdminResource {
     void logoff(String authToken) {
         try {
             securityUserClient.logout(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     authToken
             );
         } catch (MunicipaliSecurityNetworkException e) {
@@ -52,7 +52,7 @@ public abstract class AdminResource {
     MunicipaliUserInfo getUserInfo(String authToken) {
         try {
             return securityUserClient.getUserInfo(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     authToken
             );
         } catch (MunicipaliSecurityNetworkException e) {
@@ -65,7 +65,7 @@ public abstract class AdminResource {
     List<MunicipaliUserInfo> getAllCustomers(String authToken) {
         try {
             return securityAdminClient.getAllUsers(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     authToken
             );
         } catch (MunicipaliSecurityNetworkException e) {
@@ -78,7 +78,7 @@ public abstract class AdminResource {
     MunicipaliUserInfo getCustomer(String authToken, String login) {
         try {
             return securityAdminClient.getUser(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     authToken,
                     login
             );
@@ -92,7 +92,7 @@ public abstract class AdminResource {
     void createCustomer(String authToken, MunicipaliUser user) {
         try {
             securityAdminClient.createClient(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     authToken,
                     user
             );
@@ -106,7 +106,7 @@ public abstract class AdminResource {
     void editCustomer(String authToken, MunicipaliUser user) {
         try {
             securityAdminClient.editClient(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     authToken,
                     user
             );
@@ -120,7 +120,7 @@ public abstract class AdminResource {
     void deleteCustomer(String authToken, String login) {
         try {
             securityAdminClient.deleteClient(
-                    config.getSecurityServiceRootUrl().getValue(),
+                    config.getSecurityServiceRootUrl(),
                     authToken,
                     login
             );

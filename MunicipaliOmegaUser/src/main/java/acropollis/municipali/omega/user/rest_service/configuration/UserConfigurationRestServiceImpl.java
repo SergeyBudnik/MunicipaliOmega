@@ -9,8 +9,8 @@ public class UserConfigurationRestServiceImpl implements UserConfigurationRestSe
     @Override
     public LanguageConfiguration getPlatformLanguage() {
         return LanguageConfiguration.fromStrings(
-                PropertiesConfig.config.getPlatformDefaultLanguage().getValue(),
-                PropertiesConfig.config.getPlatformLanguages().getValue()
+                PropertiesConfig.config.getPlatformDefaultLanguage(),
+                PropertiesConfig.config.getPlatformLanguages()
         );
     }
 }

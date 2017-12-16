@@ -9,16 +9,16 @@ public class AdminConfigurationRestServiceImpl implements AdminConfigurationRest
     @Override
     public LanguageConfiguration getInterfaceLanguage() {
         return LanguageConfiguration.fromStrings(
-                PropertiesConfig.config.getClientAdminInterfaceDefaultLanguage().getValue(),
-                PropertiesConfig.config.getClientAdminInterfaceLanguages().getValue()
+                PropertiesConfig.config.getClientAdminInterfaceDefaultLanguage(),
+                PropertiesConfig.config.getClientAdminInterfaceLanguages()
         );
     }
 
     @Override
     public LanguageConfiguration getPlatformLanguage() {
         return LanguageConfiguration.fromStrings(
-                PropertiesConfig.config.getPlatformDefaultLanguage().getValue(),
-                PropertiesConfig.config.getPlatformLanguages().getValue()
+                PropertiesConfig.config.getPlatformDefaultLanguage(),
+                PropertiesConfig.config.getPlatformLanguages()
         );
     }
 }

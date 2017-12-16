@@ -23,7 +23,7 @@ public class UserDatabaseConfig {
     DataSource dataSource() {
         return getDataSource(
                 POOL_NAME,
-                (int) ((long) config.getDatabaseMaxPoolSizeUser().getValue())
+                (int) config.getDatabaseMaxPoolSizeUser()
         );
     }
 

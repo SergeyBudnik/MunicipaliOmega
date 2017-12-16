@@ -22,7 +22,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     public void setBackground(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte[]> background) {
         background.forEach((size, image) ->
                 imageService.addImage(
-                        config.getImagesBrandingBackgroundLocation().getValue(),
+                        config.getImagesBrandingBackgroundLocation(),
                         String.format("%dx%d", size.getX(), size.getY()),
                         image
                 )
@@ -32,7 +32,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     @Override
     public void removeBackground(MunicipaliUserInfo userInfo) {
         imageService.removeAllImagesKeepDirectory(
-                config.getImagesBrandingBackgroundLocation().getValue()
+                config.getImagesBrandingBackgroundLocation()
         );
     }
 
@@ -40,7 +40,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     public void setIcon(MunicipaliUserInfo userInfo, Map<Pair<Integer, Integer>, byte []> icon) {
         icon.forEach((size, image) ->
                 imageService.addImage(
-                        config.getImagesBrandingIconLocation().getValue(),
+                        config.getImagesBrandingIconLocation(),
                         String.format("%dx%d", size.getX(), size.getY()),
                         image
                 )
@@ -50,7 +50,7 @@ public class AdminBrandingModelRestServiceImpl implements AdminBrandingRestServi
     @Override
     public void removeIcon(MunicipaliUserInfo userInfo) {
         imageService.removeAllImagesKeepDirectory(
-                config.getImagesBrandingIconLocation().getValue()
+                config.getImagesBrandingIconLocation()
         );
 
     }
