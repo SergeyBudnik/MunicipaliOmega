@@ -28,7 +28,7 @@ public class AdminUIHealthCheck extends CommonHealthCheck<AdminHealth, AdminHeal
         try {
             String versionJson = lines(
                     FileSystems.getDefault().getPath(
-                            PropertiesConfig.config.getAdminUiVersionPath().getValue()
+                            PropertiesConfig.config.getAdminUiVersionPath()
                     )
             ).reduce((s1, s2) -> s1 + "\n" + s2).orElse("");
 

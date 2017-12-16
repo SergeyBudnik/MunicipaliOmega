@@ -19,6 +19,6 @@ public class UserHealth extends CommonComponentHealth {
     private CommonHealth hostingHealth;
 
     public UserHealth() {
-        setVersion(PropertiesConfig.config.getVersion().getValue());
+        setVersion(PropertiesConfig.config.getVersion());
     }
 }

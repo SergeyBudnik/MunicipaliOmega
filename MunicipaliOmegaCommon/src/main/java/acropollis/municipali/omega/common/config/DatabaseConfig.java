@@ -20,12 +20,12 @@ public class DatabaseConfig {
         HikariConfig dataSourceConfig = new HikariConfig(); {
             dataSourceConfig.setPoolName(poolName);
             dataSourceConfig.setRegisterMbeans(true);
-            dataSourceConfig.setDriverClassName(config.getDatabaseDriver().getValue());
-            dataSourceConfig.setJdbcUrl(config.getDatabaseUrl().getValue());
-            dataSourceConfig.setUsername(config.getDatabaseUsername().getValue());
-            dataSourceConfig.setPassword(config.getDatabasePassword().getValue());
+            dataSourceConfig.setDriverClassName(config.getDatabaseDriver());
+            dataSourceConfig.setJdbcUrl(config.getDatabaseUrl());
+            dataSourceConfig.setUsername(config.getDatabaseUsername());
+            dataSourceConfig.setPassword(config.getDatabasePassword());
             dataSourceConfig.setMaximumPoolSize(maxPoolSize);
-            dataSourceConfig.setMaxLifetime((int) ((long) config.getDatabaseMaxActive().getValue()));
+            dataSourceConfig.setMaxLifetime(config.getDatabaseMaxActive());
         }
 
         return new HikariDataSource(dataSourceConfig);
@@ -41,12 +41,12 @@ public class DatabaseConfig {
 
         Properties jpaProperties = new Properties();
 
-        jpaProperties.put("hibernate.dialect", config.getDatabaseDialect().getValue());
-        jpaProperties.put("hibernate.hbm2ddl.auto", config.getDatabaseStartupAction().getValue());
-        jpaProperties.put("hibernate.show_sql", config.getDatabaseShowSql().getValue());
-        jpaProperties.put("hibernate.format_sql", config.getDatabaseFormatSql().getValue());
-        jpaProperties.put("hibernate.id.new_generator_mappings", config.getDatabaseIdNewGeneratorMappings().getValue());
-        jpaProperties.put("hibernate.connection.release_mode", config.getDatabaseConnectionReleaseMode().getValue());
+        jpaProperties.put("hibernate.dialect", config.getDatabaseDialect());
+        jpaProperties.put("hibernate.hbm2ddl.auto", config.getDatabaseStartupAction());
+        jpaProperties.put("hibernate.show_sql", config.getDatabaseShowSql());
+        jpaProperties.put("hibernate.format_sql", config.getDatabaseFormatSql());
+        jpaProperties.put("hibernate.id.new_generator_mappings", config.getDatabaseIdNewGeneratorMappings());
+        jpaProperties.put("hibernate.connection.release_mode", config.getDatabaseConnectionReleaseMode());
 
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 

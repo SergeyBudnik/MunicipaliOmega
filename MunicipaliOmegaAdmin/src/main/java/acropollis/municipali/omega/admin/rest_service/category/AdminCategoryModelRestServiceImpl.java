@@ -89,7 +89,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
     private void saveIcons(CategoryModel categoryModel, CategoryWithIcon categoryWithIcon) {
         categoryWithIcon.getIcon().forEach((size, icon) ->
                 imageService.addImage(
-                        config.getImagesCategoriesIconsLocation().getValue(),
+                        config.getImagesCategoriesIconsLocation(),
                         String.format("%d", categoryModel.getId()),
                         String.format("%dx%d", size, size),
                         icon
@@ -99,7 +99,7 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
 
     private void clearIcons(long id) {
         imageService.removeAllImagesRemoveDirectory(
-                config.getImagesCategoriesIconsLocation().getValue(),
+                config.getImagesCategoriesIconsLocation(),
                 String.format("%d", id)
         );
     }

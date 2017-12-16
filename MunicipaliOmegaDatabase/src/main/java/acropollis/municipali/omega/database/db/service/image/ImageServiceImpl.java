@@ -81,18 +81,18 @@ public class ImageServiceImpl implements ImageService {
 
         try {
             ftpClient.connect(
-                    config.getImageHostingFtpUrl().getValue(),
-                    (int) ((long) config.getImageHostingFtpPort().getValue())
+                    config.getImageHostingFtpUrl(),
+                    (int) config.getImageHostingFtpPort()
             );
 
             ftpClient.login(
-                    config.getImageHostingFtpUsername().getValue(),
-                    config.getImageHostingFtpPassword().getValue()
+                    config.getImageHostingFtpUsername(),
+                    config.getImageHostingFtpPassword()
             );
 
             ftpClient.enterLocalPassiveMode();
 
-            ftpClient.changeWorkingDirectory(config.getId().getValue());
+            ftpClient.changeWorkingDirectory(config.getId());
 
             for (String rootItem : root) {
                 ftpClient.changeWorkingDirectory(rootItem);

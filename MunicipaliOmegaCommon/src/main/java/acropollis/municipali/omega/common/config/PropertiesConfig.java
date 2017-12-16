@@ -4,11 +4,13 @@ import acropollis.municipali.omega.common.dto.language.Language;
 import acropollis.municipali.omega.common.env.Environment;
 import com.bdev.smart.config.SmartConfig;
 import com.bdev.smart.config.SmartConfigProperties;
+import com.bdev.smart.config.data.SmartConfigValue;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PropertiesConfig {
     public static SmartConfig config;
@@ -21,42 +23,85 @@ public class PropertiesConfig {
                 instanceConfig.getString("db")
         );
 
-        config.getId().override(instanceConfig.getString("id"));
+        override(config.getIdConfig(), instanceConfig);
 
-        config.getDatabaseRemoteConnection().override(instanceConfig.getBoolean("database.remoteConnection"));
+        override(config.getImageHostingHttpUrlConfig(), instanceConfig);
 
-        if (config.getDatabaseRemoteConnection().getValue()) {
-            config.getConnectionHost().override(instanceConfig.getString("connection.host"));
-            config.getConnectionUsername().override(instanceConfig.getString("connection.username"));
-            config.getConnectionPassword().override(instanceConfig.getString("connection.password"));
-        }
+        override(config.getImageHostingFtpUrlConfig(), instanceConfig);
+        override(config.getImageHostingFtpUsernameConfig(), instanceConfig);
+        override(config.getImageHostingFtpPasswordConfig(), instanceConfig);
+        override(config.getImageHostingFtpPortConfig(), instanceConfig);
 
-        config.getImageHostingHttpUrl().override(instanceConfig.getString("imageHosting.http.url"));
+        override(config.getDatabaseUrlConfig(), instanceConfig);
+        override(config.getDatabaseUsernameConfig(), instanceConfig);
+        override(config.getDatabasePasswordConfig(), instanceConfig);
 
-        config.getImageHostingFtpUrl().override(instanceConfig.getString("imageHosting.ftp.url"));
-        config.getImageHostingFtpUsername().override(instanceConfig.getString("imageHosting.ftp.username"));
-        config.getImageHostingFtpPassword().override(instanceConfig.getString("imageHosting.ftp.password"));
-        config.getImageHostingFtpPort().override(instanceConfig.getLong("imageHosting.ftp.port"));
+        override(config.getSecurityServiceRootUrlConfig(), instanceConfig);
 
-        config.getDatabaseUrl().override(instanceConfig.getString("database.url"));
-        config.getDatabaseUsername().override(instanceConfig.getString("database.username"));
-        config.getDatabasePassword().override(instanceConfig.getString("database.password"));
+        override(config.getClientAdminInterfaceDefaultLanguageConfig(), instanceConfig);
+        override(config.getClientAdminInterfaceLanguagesConfig(), instanceConfig);
 
-        config.getSecurityServiceRootUrl().override(instanceConfig.getString("securityService.rootUrl"));
+        override(config.getPlatformDefaultLanguageConfig(), instanceConfig);
+        override(config.getPlatformLanguagesConfig(), instanceConfig);
 
-        config.getClientAdminInterfaceDefaultLanguage().override(instanceConfig.getString("client.admin.interface.defaultLanguage"));
-        config.getClientAdminInterfaceLanguages().override(instanceConfig.getStringList("client.admin.interface.languages"));
+        override(config.getAdminUiVersionPathConfig(), instanceConfig);
 
-        config.getPlatformDefaultLanguage().override(instanceConfig.getString("platform.defaultLanguage"));
-        config.getPlatformLanguages().override(instanceConfig.getStringList("platform.languages"));
-
-        config.getAdminUiVersionPath().override(instanceConfig.getString("admin.ui.version.path"));
-
-        config.getGmsKeys().override((List<String>) instanceConfig.getAnyRefList("gms.keys"));
+        override(config.getGmsKeysConfig(), instanceConfig);
     }
 
     public static Language getLanguage() {
-        return Language.fromName(config.getPlatformDefaultLanguage().getValue());
+        return Language.fromName(config.getPlatformDefaultLanguage());
+    }
+
+    private static void override(SmartConfigValue value, Config instanceConfig) {
+        Object suitableValue = findSuitableInstanceConfigProperty(
+                instanceConfig,
+                value.getName()
+        );
+
+        value.override(suitableValue);
+    }
+
+    private static Object findSuitableInstanceConfigProperty(
+            Config instanceConfig,
+            String key
+    ) {
+        List<Object> values = instanceConfig.entrySet()
+                .stream()
+                .filter(e -> key.equals(normalizeInstanceConfigPropertyKey(e.getKey())))
+                .map(e -> instanceConfig.getAnyRef(e.getKey()))
+                .collect(Collectors.toList());
+
+        if (values.size() == 0) {
+            throw new RuntimeException("Unable to find property with key: '" + key + "'");
+        } else if (values.size() > 1) {
+            throw new RuntimeException("Multiple suitable properties with key: '" + key + "'");
+        } else {
+            Object value = values.get(0);
+
+            if (value instanceof Integer) {
+                return value;
+            } else {
+                return value;
+            }
+        }
+    }
+
+    private static String normalizeInstanceConfigPropertyKey(String key) {
+        StringBuilder sb = new StringBuilder();
+
+        boolean shouldMakeUpper = false;
+
+        for (char ch : key.toCharArray()) {
+            if (ch == '.') {
+                shouldMakeUpper = true;
+            } else {
+                sb.append(shouldMakeUpper ? Character.toUpperCase(ch) : ch);
+                shouldMakeUpper = false;
+            }
+        }
+
+        return sb.toString();
     }
 
     private static Config getInstanceConfig() {

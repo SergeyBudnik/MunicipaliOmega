@@ -33,7 +33,7 @@ public class UserConfigurationResource {
     @GetMapping("/image-hosting")
     public ImageHostingInfo getImageHostingRoot() {
         return new ImageHostingInfo(
-                config.getImageHostingHttpUrl().getValue() + "/" + config.getId().getValue()
+                config.getImageHostingHttpUrl() + "/" + config.getId()
         );
     }
 }

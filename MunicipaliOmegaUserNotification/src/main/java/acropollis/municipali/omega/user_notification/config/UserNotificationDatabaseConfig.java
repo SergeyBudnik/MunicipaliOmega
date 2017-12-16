@@ -23,7 +23,7 @@ public class UserNotificationDatabaseConfig {
     DataSource dataSource() {
         return getDataSource(
                 POOL_NAME,
-                (int) ((long) config.getDatabaseMaxPoolSizeUserNotification().getValue())
+                (int) config.getDatabaseMaxPoolSizeUserNotification()
         );
     }
 

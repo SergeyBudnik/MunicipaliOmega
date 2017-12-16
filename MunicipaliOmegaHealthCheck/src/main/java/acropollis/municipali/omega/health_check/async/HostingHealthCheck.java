@@ -20,13 +20,13 @@ public abstract class HostingHealthCheck<H extends CommonComponentHealth>
 
         try {
             ftpClient.connect(
-                    config.getImageHostingFtpUrl().getValue(),
-                    (int) ((long) config.getImageHostingFtpPort().getValue())
+                    config.getImageHostingFtpUrl(),
+                    (int) config.getImageHostingFtpPort()
             );
 
             boolean result = ftpClient.login(
-                    config.getImageHostingFtpUsername().getValue(),
-                    config.getImageHostingFtpPassword().getValue()
+                    config.getImageHostingFtpUsername(),
+                    config.getImageHostingFtpPassword()
             );
 
             if (result) {
