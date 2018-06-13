@@ -3,6 +3,7 @@ package acropollis.municipali.omega.user_notification.async;
 import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
+import acropollis.municipali.omega.common.dto.language.Language;
 import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
 import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
@@ -110,24 +111,26 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
                     "https://fcm.googleapis.com/fcm/send"
             );
 
-            TranslatedArticle translatedArticle = article.getTranslatedArticle().get(getLanguage());
+            Language language = getLanguage();
+
+            TranslatedArticle translatedArticle = article.getTranslatedArticle().get(language);
 
             if (translatedArticle != null) {
-                ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
-                        "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC,
-                        new ReleaseArticlePushNotificationPayload.Data(
-                                formatText(translatedArticle.getTitle(), MAX_TEXT_LENGTH),
-                                formatText(translatedArticle.getDescription(), MAX_TEXT_LENGTH)
+                sendPushToClients(
+                        resource,
+                        getPayload(
+                                "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC,
+                                translatedArticle
                         )
                 );
 
-                for (String serverKey : SERVER_KEYS) {
-                    resource
-                            .header("Authorization", "key=" + serverKey)
-                            .type(MediaType.APPLICATION_JSON_TYPE)
-                            .accept(MediaType.APPLICATION_JSON_TYPE)
-                            .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
-                }
+                sendPushToClients(
+                        resource,
+                        getPayload(
+                                "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC + "_" + language,
+                                translatedArticle
+                        )
+                );
             }
 
             return true;
@@ -135,6 +138,32 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
             log.error("Released articles push notification sending failed", e);
 
             return false;
+        }
+    }
+
+    private ReleaseArticlePushNotificationPayload getPayload(
+            String topic,
+            TranslatedArticle translatedArticle
+    ) {
+        return new ReleaseArticlePushNotificationPayload(
+                topic,
+                new ReleaseArticlePushNotificationPayload.Data(
+                        formatText(translatedArticle.getTitle(), MAX_TEXT_LENGTH),
+                        formatText(translatedArticle.getDescription(), MAX_TEXT_LENGTH)
+                )
+        );
+    }
+
+    private void sendPushToClients(
+            WebResource resource,
+            ReleaseArticlePushNotificationPayload payload
+    ) throws IOException {
+        for (String serverKey : SERVER_KEYS) {
+            resource
+                    .header("Authorization", "key=" + serverKey)
+                    .type(MediaType.APPLICATION_JSON_TYPE)
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
         }
     }
 
