@@ -28,8 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
-import static acropollis.municipali.omega.common.config.PropertiesConfig.getLanguage;
-import static java.lang.Math.*;
+import static java.lang.Math.min;
 
 @Service
 public class UserNotificationReleasedArticlesNotificationJob extends CommonHealthCheck<UserNotificationHealth, CommonHealth> {
@@ -105,36 +104,46 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
     }
 
     private boolean sendPush(Article article) {
-        try {
-            WebResource resource = Client.create().resource(
-                    "https://fcm.googleapis.com/fcm/send"
-            );
+        WebResource resource = Client.create().resource(
+                "https://fcm.googleapis.com/fcm/send"
+        );
 
-            TranslatedArticle translatedArticle = article.getTranslatedArticle().get(getLanguage());
+        article.getTranslatedArticle().forEach((language, translatedArticle) -> {
+            try {
+                String topic = "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC + "_" + language;
 
-            if (translatedArticle != null) {
-                ReleaseArticlePushNotificationPayload payload = new ReleaseArticlePushNotificationPayload(
-                        "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC,
-                        new ReleaseArticlePushNotificationPayload.Data(
-                                formatText(translatedArticle.getTitle(), MAX_TEXT_LENGTH),
-                                formatText(translatedArticle.getDescription(), MAX_TEXT_LENGTH)
-                        )
-                );
-
-                for (String serverKey : SERVER_KEYS) {
-                    resource
-                            .header("Authorization", "key=" + serverKey)
-                            .type(MediaType.APPLICATION_JSON_TYPE)
-                            .accept(MediaType.APPLICATION_JSON_TYPE)
-                            .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
-                }
+                sendPushToClients(resource, getPayload(topic, translatedArticle));
+            } catch (Exception e) {
+                log.error("Released articles push notification sending failed", e);
             }
+        });
 
-            return true;
-        } catch (IOException e) {
-            log.error("Released articles push notification sending failed", e);
+        return true;
+    }
 
-            return false;
+    private ReleaseArticlePushNotificationPayload getPayload(
+            String topic,
+            TranslatedArticle translatedArticle
+    ) {
+        return new ReleaseArticlePushNotificationPayload(
+                topic,
+                new ReleaseArticlePushNotificationPayload.Data(
+                        formatText(translatedArticle.getTitle(), MAX_TEXT_LENGTH),
+                        formatText(translatedArticle.getDescription(), MAX_TEXT_LENGTH)
+                )
+        );
+    }
+
+    private void sendPushToClients(
+            WebResource resource,
+            ReleaseArticlePushNotificationPayload payload
+    ) throws IOException {
+        for (String serverKey : SERVER_KEYS) {
+            resource
+                    .header("Authorization", "key=" + serverKey)
+                    .type(MediaType.APPLICATION_JSON_TYPE)
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .post(ClientResponse.class, new ObjectMapper().writeValueAsString(payload));
         }
     }
 
