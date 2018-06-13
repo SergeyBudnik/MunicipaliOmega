@@ -98,9 +98,8 @@ public class AdminCategoryModelRestServiceImpl implements AdminCategoryRestServi
     }
 
     private void clearIcons(long id) {
-        imageService.removeAllImagesRemoveDirectory(
-                config.getImagesCategoriesIconsLocation(),
-                String.format("%d", id)
+        imageService.runInFtp(config.getImagesCategoriesIconsLocation(), ftpClient ->
+            imageService.removeAllImagesRemoveDirectory(ftpClient, String.format("%d", id))
         );
     }
 }

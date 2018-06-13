@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
+import static java.lang.String.format;
+
 @Service
 public class ReportServiceImpl implements ReportService {
     @Autowired
@@ -46,10 +49,7 @@ public class ReportServiceImpl implements ReportService {
 
         if (reportImage != null) {
             imageService.addImage(
-                    PropertiesConfig.config.getImagesReportsLocation(),
-                    String.format("%d", id),
-                    "report",
-                    reportImage
+                    config.getImagesReportsLocation(), format("%d", id), "report", reportImage
             );
         }
     }
@@ -58,9 +58,8 @@ public class ReportServiceImpl implements ReportService {
     public void delete(long id) throws EntityDoesNotExist {
         reportDao.delete(id);
 
-        imageService.removeAllImagesRemoveDirectory(
-                PropertiesConfig.config.getImagesReportsLocation(),
-                String.format("%d", id)
+        imageService.runInFtp(config.getImagesReportsLocation(), ftpClient ->
+            imageService.removeAllImagesRemoveDirectory(ftpClient, format("%d", id))
         );
     }
 }

@@ -16,6 +16,8 @@ import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
 
 @Service
 public class ImageServiceImpl implements ImageService {
+    private static final int BUFFER_SIZE = 5 * 1024 * 1024;
+
     @Override
     public void addImage(List<String> root, String fileName, byte[] image) {
         runInFtp(root, ftpClient -> {
@@ -52,14 +54,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @SneakyThrows
-    public void removeAllImagesRemoveDirectory(List<String> root, String directory) {
-        runInFtp(root, ftpClient -> {
-            try {
-                ftpClient.removeDirectory(directory);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+    public void removeAllImagesRemoveDirectory(FTPClient ftpClient, String directory) {
+        try {
+            ftpClient.removeDirectory(directory);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @SneakyThrows
-    private void runInFtp(List<String> root, Consumer<FTPClient> action) {
+    public void runInFtp(List<String> root, Consumer<FTPClient> action) {
         FTPClient ftpClient = new FTPClient();
 
         try {
@@ -90,6 +90,7 @@ public class ImageServiceImpl implements ImageService {
                     config.getImageHostingFtpPassword()
             );
 
+            ftpClient.setBufferSize(BUFFER_SIZE);
             ftpClient.enterLocalPassiveMode();
 
             ftpClient.changeWorkingDirectory(config.getId());
