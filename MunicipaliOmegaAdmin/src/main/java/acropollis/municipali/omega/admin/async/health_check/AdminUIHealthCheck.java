@@ -4,16 +4,16 @@ import acropollis.municipali.omega.admin.data.health_check.AdminHealth;
 import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.FileSystems;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Date;
-
-import static java.nio.file.Files.lines;
 
 @Service
 public class AdminUIHealthCheck extends CommonHealthCheck<AdminHealth, AdminHealth.AdminUIHealth> {
@@ -25,14 +25,12 @@ public class AdminUIHealthCheck extends CommonHealthCheck<AdminHealth, AdminHeal
     public void reload() {
         long t1 = new Date().getTime();
 
-        try {
-            String versionJson = lines(
-                    FileSystems.getDefault().getPath(
-                            PropertiesConfig.config.getAdminUiVersionPath()
-                    )
-            ).reduce((s1, s2) -> s1 + "\n" + s2).orElse("");
+        String adminUIVersionPath = PropertiesConfig.config.getAdminUiVersionPath();
 
-            String version = (String) new JSONObject(versionJson).get("version");
+        try (FileReader fr = new FileReader(new File(adminUIVersionPath))) {
+            JSONObject versionJson = (JSONObject) new JSONParser().parse(fr);
+
+            String version = (String) versionJson.get("version");
 
             onReloadSuccess(t1, new Date().getTime())
                     .getAdminUIHealth()

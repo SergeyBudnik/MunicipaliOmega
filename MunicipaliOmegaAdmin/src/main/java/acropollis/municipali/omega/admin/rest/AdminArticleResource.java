@@ -19,7 +19,7 @@ import static java.lang.String.format;
 
 @RestController
 @RequestMapping("/article")
-@Api(tags = "Article", description = "PROTECTED")
+@Api(tags = "Article", description = "🔒")
 public class AdminArticleResource extends AdminResource {
     private static final Logger log = LogUtils.getArticlesResourceLogger();
 
@@ -43,7 +43,7 @@ public class AdminArticleResource extends AdminResource {
 
         long t3 = System.currentTimeMillis();
 
-        log.info(format("Read all articles: [Auth: %d ms, Reading: %d ms]", t3 - t2, t2 - t1));
+        log.info(format("Read all articles: [Reading: %d ms, Auth: %d ms]", t3 - t2, t2 - t1));
 
         return articles;
     }
@@ -66,7 +66,7 @@ public class AdminArticleResource extends AdminResource {
 
         long t3 = System.currentTimeMillis();
 
-        log.info(format("Read article #%d: [Auth: %d ms, Reading: %d ms]", id, t3 - t2, t2 - t1));
+        log.info(format("Read article #%d: [Reading: %d ms, Auth: %d ms]", id, t3 - t2, t2 - t1));
 
         return article;
     }
@@ -89,7 +89,7 @@ public class AdminArticleResource extends AdminResource {
 
         long t3 = System.currentTimeMillis();
 
-        log.info(format("Create article #%d: [Auth: %d ms, Create: %d ms]", id, t3 - t2, t2 - t1));
+        log.info(format("Create article #%d: [Create: %d ms, Auth: %d ms]", id, t3 - t2, t2 - t1));
 
         return id;
     }
@@ -113,7 +113,7 @@ public class AdminArticleResource extends AdminResource {
 
         long t3 = System.currentTimeMillis();
 
-        log.info(format("Update article #%d: [Auth: %d ms, Update: %d ms]", id, t3 - t2, t2 - t1));
+        log.info(format("Update article #%d: [Update: %d ms, Auth: %d ms]", id, t3 - t2, t2 - t1));
     }
 
     @DeleteMapping("/{id}")
@@ -134,6 +134,6 @@ public class AdminArticleResource extends AdminResource {
 
         long t3 = System.currentTimeMillis();
 
-        log.info(format("Delete article #%d: [Auth: %d ms, Delete: %d ms]", id, t3 - t2, t2 - t1));
+        log.info(format("Delete article #%d: [Delete: %d ms, Auth: %d ms]", id, t3 - t2, t2 - t1));
     }
 }
