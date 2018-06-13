@@ -3,7 +3,6 @@ package acropollis.municipali.omega.user_notification.async;
 import acropollis.municipali.omega.common.config.PropertiesConfig;
 import acropollis.municipali.omega.common.dto.article.Article;
 import acropollis.municipali.omega.common.dto.article.TranslatedArticle;
-import acropollis.municipali.omega.common.dto.language.Language;
 import acropollis.municipali.omega.database.db.service.push.article.ArticleReleasePushService;
 import acropollis.municipali.omega.health_check.async.CommonHealthCheck;
 import acropollis.municipali.omega.health_check.cache.HealthCheckCache;
@@ -29,8 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 import static acropollis.municipali.omega.common.config.PropertiesConfig.config;
-import static acropollis.municipali.omega.common.config.PropertiesConfig.getLanguage;
-import static java.lang.Math.*;
+import static java.lang.Math.min;
 
 @Service
 public class UserNotificationReleasedArticlesNotificationJob extends CommonHealthCheck<UserNotificationHealth, CommonHealth> {
@@ -106,39 +104,21 @@ public class UserNotificationReleasedArticlesNotificationJob extends CommonHealt
     }
 
     private boolean sendPush(Article article) {
-        try {
-            WebResource resource = Client.create().resource(
-                    "https://fcm.googleapis.com/fcm/send"
-            );
+        WebResource resource = Client.create().resource(
+                "https://fcm.googleapis.com/fcm/send"
+        );
 
-            Language language = getLanguage();
+        article.getTranslatedArticle().forEach((language, translatedArticle) -> {
+            try {
+                String topic = "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC + "_" + language;
 
-            TranslatedArticle translatedArticle = article.getTranslatedArticle().get(language);
-
-            if (translatedArticle != null) {
-                sendPushToClients(
-                        resource,
-                        getPayload(
-                                "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC,
-                                translatedArticle
-                        )
-                );
-
-                sendPushToClients(
-                        resource,
-                        getPayload(
-                                "/topics/" + config.getId() + "-User_" + ARTICLE_RELEASE_TOPIC + "_" + language,
-                                translatedArticle
-                        )
-                );
+                sendPushToClients(resource, getPayload(topic, translatedArticle));
+            } catch (Exception e) {
+                log.error("Released articles push notification sending failed", e);
             }
+        });
 
-            return true;
-        } catch (IOException e) {
-            log.error("Released articles push notification sending failed", e);
-
-            return false;
-        }
+        return true;
     }
 
     private ReleaseArticlePushNotificationPayload getPayload(
